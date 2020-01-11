@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "@yelloan/tslint/tslint-config",
+    "tslint-config-prettier"
+  ]
+}

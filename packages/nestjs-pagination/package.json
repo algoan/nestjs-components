@@ -1,0 +1,83 @@
+{
+  "name": "nestjs-link-header",
+  "version": "0.0.1",
+  "description": "NestJS interceptor handling request&#39;s pagination",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p .",
+    "commit": "git-cz",
+    "cover": "nyc --reporter=html --reporter=lcov npm test",
+    "lint": "tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
+    "precommit": "lint-staged",
+    "pretest": "npm run lint && npm run build",
+    "prettier": "prettier --write '{src,test}/**/*.ts'",
+    "semantic-release": "semantic-release",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yelloan/node-helpers.git"
+  },
+  "files": [
+    "dist/src"
+  ],
+  "keywords": [
+    "node",
+    "helpers",
+    "typescript"
+  ],
+  "author": "ccoeurderoy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yelloan/node-helpers/issues"
+  },
+  "homepage": "https://github.com/yelloan/node-helpers#readme",
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --list-different \"{src,test}/**/*.ts\""
+    ]
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "cache": false,
+    "extension": [
+      ".ts"
+    ]
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.4",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@semantic-release/commit-analyzer": "^7.0.0",
+    "@semantic-release/git": "^8.0.0",
+    "@yelloan/tslint": "^0.1.0",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "husky": "^4.0.6",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "semantic-release": "^16.0.1",
+    "ts-node": "^8.6.1",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.4"
+  }
+}
