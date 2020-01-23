@@ -1,4 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import * as contentRange from 'content-range';
 import { Request, Response as ExpressResponse } from 'express';
 import * as formatLinkHeader from 'format-link-header';
 import { Observable } from 'rxjs';
@@ -35,6 +36,9 @@ interface LinkOptions {
  */
 @Injectable()
 export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
+
+  constructor(private readonly resource: string) {}
+
   /**
    * Interceptor core method
    * @param context Current request pipeline details
@@ -50,6 +54,10 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
     return next.handle().pipe(
       map((data: Data<T>) => {
         const response: Response<T> = context.switchToHttp().getResponse();
+
+        /**
+         * Set Link Header
+         */
         const linkHeader: string = this.setLinkHeader({
           page,
           limit,
@@ -58,6 +66,16 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
         });
 
         response.setHeader('Link', linkHeader);
+
+        /**
+         * Set Content-Range header
+         */
+        response.setHeader('Content-Range', this.buildContentRangeHeader({
+          page,
+          limit,
+          resourceUrl,
+          totalDocs: data.totalDocs,
+        }));
       }),
     );
   }
@@ -126,4 +144,25 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
 
     return link;
   };
+
+  /**
+   * Build the content-range header
+   * @param linkOptions Link Options
+   */
+  private buildContentRangeHeader(linkOptions: LinkOptions): string {
+    const limit: number = Number(linkOptions.limit);
+    let endIndex: number = Number(linkOptions.page) * limit;
+    const startIndex: number = endIndex - limit;
+
+    if (endIndex > linkOptions.totalDocs) {
+      endIndex = linkOptions.totalDocs + 1;
+    }
+
+    return contentRange.format({
+      first: startIndex,
+      last: endIndex - 1,
+      length: linkOptions.totalDocs,
+      unit: this.resource,
+    })
+  }
 }

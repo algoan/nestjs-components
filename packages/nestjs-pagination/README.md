@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A <a href="https://github.com/nestjs/nest">Nest</a> interceptor to display the <a href="https://tools.ietf.org/html/rfc5988">Link</a> in the response headers.
+  A <a href="https://github.com/nestjs/nest">Nest</a> interceptor to display the <a href="https://tools.ietf.org/html/rfc5988">Link</a> and the <a href="https://tools.ietf.org/html/rfc7233#section-4.2"> Content Range </a> in the response headers.
 </p>
 
 A simple NestJS interceptor catching `page` and `per_page` query parameters and format a Link Header, based on [GitHub](https://developer.github.com/v3/guides/traversing-with-pagination/) pagination API.
@@ -26,9 +26,11 @@ npm install --save @algoan/nestjs-link-header
 }
 ```
 
+- The resource has to be specified in the interceptor constructor
+
 ## Quick Start
 
-Import `LinkHeaderInterceptor` next to a controller method. 
+Import `LinkHeaderInterceptor` next to a controller method.
 
 ```typescript
 import { LinkHeaderInterceptor } from '@algoan/nestjs-link-header';
@@ -42,7 +44,7 @@ class AppController {
   /**
    * Find all documents
    */
-  @UseInterceptors(LinkHeaderInterceptor)
+  @UseInterceptors(new LinkHeaderInterceptor('data'))
   @Get('/data')
   public async findAll(): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
     const data: DataToReturn = await model.find(...);
@@ -51,4 +53,11 @@ class AppController {
     return { totalDocs: count, resource: data };
   }
 }
+```
+
+For instance, if you have 1015 resources, calling `GET /data?page=4&per_page=100` will return:
+
+```
+Content-Range: data 300-399/1015
+Link: </data?page=1&per_page=100>; rel="first", </data?page=11&per_page=100>; rel="last", </data?page=5&per_page=100>; rel="next", </data?page=3&per_page=100>; rel="prev"
 ```

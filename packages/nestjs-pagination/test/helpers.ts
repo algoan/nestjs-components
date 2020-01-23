@@ -23,7 +23,7 @@ class FakeAppController {
   /**
    * Find all documents
    */
-  @UseInterceptors(LinkHeaderInterceptor)
+  @UseInterceptors(new LinkHeaderInterceptor('data'))
   @Get('/data')
   public async findAll(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
     const data: FakeDataToReturn[] = [];

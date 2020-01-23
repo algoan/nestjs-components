@@ -13,39 +13,12 @@ describe('Tests related to the Link Header interceptor', () => {
     await app.init();
   });
 
-  it('AD01 - should successfully add Link in headers without params', async () => {
-    const res: request.Response = await request(app.getHttpServer())
-      .get('/data')
-      .expect(200);
+  describe('Tests with a limit of 100', () => {
 
-    const expectedResult: formatLinkHeader.Links = {
-      first: {
-        url: '/data?page=1&per_page=100',
-        page: '1',
-        per_page: '100',
-        rel: 'first',
-      },
-      last: {
-        url: '/data?page=11&per_page=100',
-        page: '11',
-        per_page: '100',
-        rel: 'last',
-      },
-      next: {
-        url: '/data?page=2&per_page=100',
-        page: '2',
-        per_page: '100',
-        rel: 'next',
-      }
-    };
-
-    expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
-  });
-
-  it('AD02 - should successfully add Link in headers with params', async () => {
-    const res: request.Response = await request(app.getHttpServer())
-      .get('/data?page=4&per_page=100')
-      .expect(200);
+    it('AD01 - should successfully add Link in headers without params', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data')
+        .expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
@@ -61,48 +34,150 @@ describe('Tests related to the Link Header interceptor', () => {
           rel: 'last',
         },
         next: {
-          url: '/data?page=5&per_page=100',
-          page: '5',
+          url: '/data?page=2&per_page=100',
+          page: '2',
           per_page: '100',
           rel: 'next',
-        },
-        prev: {
-          url: '/data?page=3&per_page=100',
-          page: '3',
-          per_page: '100',
-          rel: 'prev',
         }
       };
 
       expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+      expect(res.header['content-range']).to.equal('data 0-99/1015');
+    });
+
+    it('AD02 - should successfully add Link in headers with params', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data?page=4&per_page=100')
+        .expect(200);
+
+        const expectedResult: formatLinkHeader.Links = {
+          first: {
+            url: '/data?page=1&per_page=100',
+            page: '1',
+            per_page: '100',
+            rel: 'first',
+          },
+          last: {
+            url: '/data?page=11&per_page=100',
+            page: '11',
+            per_page: '100',
+            rel: 'last',
+          },
+          next: {
+            url: '/data?page=5&per_page=100',
+            page: '5',
+            per_page: '100',
+            rel: 'next',
+          },
+          prev: {
+            url: '/data?page=3&per_page=100',
+            page: '3',
+            per_page: '100',
+            rel: 'prev',
+          }
+        };
+
+        expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+        expect(res.header['content-range']).to.equal('data 300-399/1015');
+    });
+
+    it('AD03 - should successfully add Link in headers for the last page', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data?page=11&per_page=100')
+        .expect(200);
+
+        const expectedResult: formatLinkHeader.Links = {
+          first: {
+            url: '/data?page=1&per_page=100',
+            page: '1',
+            per_page: '100',
+            rel: 'first',
+          },
+          last: {
+            url: '/data?page=11&per_page=100',
+            page: '11',
+            per_page: '100',
+            rel: 'last',
+          },
+          prev: {
+            url: '/data?page=10&per_page=100',
+            page: '10',
+            per_page: '100',
+            rel: 'prev',
+          }
+        };
+
+        expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+        expect(res.header['content-range']).to.equal('data 1000-1015/1015');
+    });
   });
 
-  it('AD03 - should successfully add Link in headers for the last page', async () => {
-    const res: request.Response = await request(app.getHttpServer())
-      .get('/data?page=101&per_page=100')
-      .expect(200);
+  describe('Tests with a limit of 25', () => {
 
-      const expectedResult: formatLinkHeader.Links = {
-        first: {
-          url: '/data?page=1&per_page=100',
-          page: '1',
-          per_page: '100',
-          rel: 'first',
-        },
-        last: {
-          url: '/data?page=11&per_page=100',
-          page: '11',
-          per_page: '100',
-          rel: 'last',
-        },
-        prev: {
-          url: '/data?page=100&per_page=100',
-          page: '100',
-          per_page: '100',
-          rel: 'prev',
-        }
-      };
+    it('AD10 - should successfully add Link in headers with params', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data?page=4&per_page=25')
+        .expect(200);
 
-      expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+        const expectedResult: formatLinkHeader.Links = {
+          first: {
+            url: '/data?page=1&per_page=25',
+            page: '1',
+            per_page: '25',
+            rel: 'first',
+          },
+          last: {
+            url: '/data?page=41&per_page=25',
+            page: '41',
+            per_page: '25',
+            rel: 'last',
+          },
+          next: {
+            url: '/data?page=5&per_page=25',
+            page: '5',
+            per_page: '25',
+            rel: 'next',
+          },
+          prev: {
+            url: '/data?page=3&per_page=25',
+            page: '3',
+            per_page: '25',
+            rel: 'prev',
+          }
+        };
+
+        expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+        expect(res.header['content-range']).to.equal('data 75-99/1015');
+    });
+
+    it('AD11 - should successfully add Link in headers for the last page', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data?page=41&per_page=25')
+        .expect(200);
+
+        const expectedResult: formatLinkHeader.Links = {
+          first: {
+            url: '/data?page=1&per_page=25',
+            page: '1',
+            per_page: '25',
+            rel: 'first',
+          },
+          last: {
+            url: '/data?page=41&per_page=25',
+            page: '41',
+            per_page: '25',
+            rel: 'last',
+          },
+          prev: {
+            url: '/data?page=40&per_page=25',
+            page: '40',
+            per_page: '25',
+            rel: 'prev',
+          }
+        };
+
+        expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+        expect(res.header['content-range']).to.equal('data 1000-1015/1015');
+    });
   });
 });
