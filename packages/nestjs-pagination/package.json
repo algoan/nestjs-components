@@ -9,7 +9,6 @@
     "commit": "git-cz",
     "cover": "nyc --reporter=html --reporter=lcov npm test",
     "lint": "tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
-    "precommit": "lint-staged",
     "pretest": "npm run lint && npm run build",
     "prettier": "prettier --write '{src,test}/**/*.ts'",
     "semantic-release": "semantic-release",
@@ -60,7 +59,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
     }
   },
   "devDependencies": {
