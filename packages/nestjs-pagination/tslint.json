@@ -2,5 +2,8 @@
   "extends": [
     "@yelloan/tslint/tslint-config",
     "tslint-config-prettier"
-  ]
+  ],
+  "rules": {
+    "no-unsafe-any": false
+  }
 }
