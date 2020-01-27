@@ -6,16 +6,18 @@
   A <a href="https://github.com/nestjs/nest">Nest</a> interceptor to display the <a href="https://tools.ietf.org/html/rfc5988">Link</a> and the <a href="https://tools.ietf.org/html/rfc7233#section-4.2"> Content Range </a> in the response headers.
 </p>
 
+# NestJS Request Pagination
+
 A simple NestJS interceptor catching `page` and `per_page` query parameters and format a Link Header, based on [GitHub](https://developer.github.com/v3/guides/traversing-with-pagination/) pagination API.
 This module uses [format-link-header](https://github.com/jonathansamines/format-link-header) node module to build the response Link Header.
 
 ## Installation
 
 ```bash
-npm install --save @algoan/nestjs-link-header
+npm install --save @algoan/nestjs-pagination
 ```
 
-## Limits
+## Requirements
 
 - On this version, the API attached with this interceptor needs to return an object:
 
@@ -27,6 +29,10 @@ npm install --save @algoan/nestjs-link-header
 ```
 
 - The resource has to be specified in the interceptor constructor
+
+## Limits
+
+- This module does not take into account what is returned in the `resource` property. It may be inconsistent with headers set by the interceptor.
 
 ## Quick Start
 

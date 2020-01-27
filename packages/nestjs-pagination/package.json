@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-link-header",
+  "name": "@algoan/nestjs-pagination",
   "version": "0.0.1",
   "description": "NestJS interceptor handling request's pagination",
   "main": "dist/src/index.js",
@@ -22,9 +22,11 @@
     "dist/src"
   ],
   "keywords": [
-    "node",
-    "helpers",
-    "typescript"
+    "nodejs",
+    "typescript",
+    "nestjs",
+    "pagination",
+    "interceptor"
   ],
   "author": "ccoeurderoy",
   "license": "ISC",

@@ -1,0 +1,62 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+workflows:
+  version: 2
+  test-publish:
+    jobs:
+      - test
+      - publish:
+          context: semantic_release
+          requires:
+            - test
+          filters:
+            branches:
+               only: master
+
+
+
+imageA: &defaults
+  working_directory: ~/tmp
+  docker:
+    - image: yelloan/node-docker:lts
+  environment:
+    NODE_ENV: test
+
+
+imageB: &SonarScanner
+    working_directory: ~/tmp
+    docker:
+    - image: yelloan/sonar-scanner:${CIRCLE_TAG:-latest}
+
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install node dependencies
+          command: npm ci
+      - run:
+          name: Run tests
+          command: npm run cover
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - persist_to_workspace:
+          root: ~/tmp
+          paths: .
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+      - run:
+          name: Publish package
+          command: npm run semantic-release
