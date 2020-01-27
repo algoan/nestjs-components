@@ -55,6 +55,7 @@ jobs:
   publish:
     <<: *defaults
     steps:
+      - checkout
       - attach_workspace:
           at: ~/tmp
       - run:

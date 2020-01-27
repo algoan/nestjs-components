@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yelloan/node-helpers.git"
+    "url": "git+https://github.com/algoan/nestjs-pagination.git"
   },
   "files": [
     "dist/src"
@@ -31,9 +31,9 @@
   "author": "ccoeurderoy",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yelloan/node-helpers/issues"
+    "url": "https://github.com/algoan/nestjs-pagination/issues"
   },
-  "homepage": "https://github.com/yelloan/node-helpers#readme",
+  "homepage": "https://github.com/algoan/nestjs-pagination#readme",
   "lint-staged": {
     "{src,test}/**/*.ts": [
       "prettier --list-different \"{src,test}/**/*.ts\""
@@ -52,7 +52,7 @@
     ]
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "config": {
     "commitizen": {
