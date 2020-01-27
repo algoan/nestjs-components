@@ -39,7 +39,7 @@ npm install --save @algoan/nestjs-pagination
 Import `LinkHeaderInterceptor` next to a controller method.
 
 ```typescript
-import { LinkHeaderInterceptor } from '@algoan/nestjs-link-header';
+import { LinkHeaderInterceptor } from '@algoan/nestjs-pagination';
 import { Controller, Get, UserInterceptors } from '@nestjs/common';
 
 @Controller()
