@@ -43,6 +43,9 @@ describe('Tests related to the Link Header interceptor', () => {
 
       expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
       expect(res.header['content-range']).to.equal('data 0-99/1015');
+      expect(res.body.totalDocs).to.be.undefined;
+      expect(res.body.resource).to.be.undefined;
+      expect(res.body).to.be.an('array');
     });
 
     it('AD02 - should successfully add Link in headers with params', async () => {
@@ -79,6 +82,9 @@ describe('Tests related to the Link Header interceptor', () => {
 
         expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
         expect(res.header['content-range']).to.equal('data 300-399/1015');
+        expect(res.body.totalDocs).to.be.undefined;
+        expect(res.body.resource).to.be.undefined;
+        expect(res.body).to.be.an('array');
     });
 
     it('AD03 - should successfully add Link in headers for the last page', async () => {
@@ -109,6 +115,9 @@ describe('Tests related to the Link Header interceptor', () => {
 
         expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
         expect(res.header['content-range']).to.equal('data 1000-1015/1015');
+        expect(res.body.totalDocs).to.be.undefined;
+        expect(res.body.resource).to.be.undefined;
+        expect(res.body).to.be.an('array');
     });
   });
 
@@ -148,6 +157,9 @@ describe('Tests related to the Link Header interceptor', () => {
 
         expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
         expect(res.header['content-range']).to.equal('data 75-99/1015');
+        expect(res.body.totalDocs).to.be.undefined;
+        expect(res.body.resource).to.be.undefined;
+        expect(res.body).to.be.an('array');
     });
 
     it('AD11 - should successfully add Link in headers for the last page', async () => {
@@ -178,6 +190,9 @@ describe('Tests related to the Link Header interceptor', () => {
 
         expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
         expect(res.header['content-range']).to.equal('data 1000-1015/1015');
+        expect(res.body.totalDocs).to.be.undefined;
+        expect(res.body.resource).to.be.undefined;
+        expect(res.body).to.be.an('array');
     });
   });
 });

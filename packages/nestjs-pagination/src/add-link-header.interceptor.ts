@@ -35,7 +35,7 @@ interface LinkOptions {
  * RFC 5988 (https://tools.ietf.org/html/rfc5988)
  */
 @Injectable()
-export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
+export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
 
   constructor(private readonly resource: string) {}
 
@@ -44,7 +44,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
    * @param context Current request pipeline details
    * @param next Response stream
    */
-  public intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
+  public intercept(context: ExecutionContext, next: CallHandler): Observable<T[]> {
     const request: Request = context.switchToHttp().getRequest();
 
     const resourceUrl: string = request.url.split('?')[0];
@@ -76,6 +76,8 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, void> {
           resourceUrl,
           totalDocs: data.totalDocs,
         }));
+
+        return data.resource;
       }),
     );
   }
