@@ -40,7 +40,7 @@ Import `LinkHeaderInterceptor` next to a controller method.
 
 ```typescript
 import { LinkHeaderInterceptor } from '@algoan/nestjs-pagination';
-import { Controller, Get, UserInterceptors } from '@nestjs/common';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
 
 @Controller()
 /**
@@ -66,4 +66,28 @@ For instance, if you have 1015 resources, calling `GET /data?page=4&per_page=100
 ```
 Content-Range: data 300-399/1015
 Link: </data?page=1&per_page=100>; rel="first", </data?page=11&per_page=100>; rel="last", </data?page=5&per_page=100>; rel="next", </data?page=3&per_page=100>; rel="prev"
+```
+
+If you use MongoDB as your database, we also provide a `ParamDecorator` you can use to convert the request to a mongo query parameter.
+```typescript
+import { LinkHeaderInterceptor, MongoPaginationParamDecorator, MongoPagination } from '@algoan/nestjs-pagination';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
+
+@Controller()
+/**
+ * Controller returning a lot of documents
+ */
+class AppController {
+  /**
+   * Find all documents
+   */
+  @UseInterceptors(new LinkHeaderInterceptor('data'))
+  @Get('/data')
+  public async findAll(@MongoPaginationParamDecorator() pagination: MongoPagination ): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
+    const data: DataToReturn = await model.find(pagination);
+    const count: number = await model.count(pagination.filter)
+
+    return { totalDocs: count, resource: data };
+  }
+}
 ```

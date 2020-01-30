@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
  * Response extends from Express
  */
 export interface Response<T> extends ExpressResponse {
-  data: Data<T>
+  data: Data<T>;
 }
 
 /**
@@ -36,7 +36,6 @@ interface LinkOptions {
  */
 @Injectable()
 export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
-
   constructor(private readonly resource: string) {}
 
   /**
@@ -70,12 +69,15 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
         /**
          * Set Content-Range header
          */
-        response.setHeader('Content-Range', this.buildContentRangeHeader({
-          page,
-          limit,
-          resourceUrl,
-          totalDocs: data.totalDocs,
-        }));
+        response.setHeader(
+          'Content-Range',
+          this.buildContentRangeHeader({
+            page,
+            limit,
+            resourceUrl,
+            totalDocs: data.totalDocs,
+          }),
+        );
 
         return data.resource;
       }),
@@ -165,6 +167,6 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
       last: endIndex - 1,
       length: linkOptions.totalDocs,
       unit: this.resource,
-    })
+    });
   }
 }
