@@ -25,7 +25,7 @@ class FakeAppController {
   /**
    * Find all documents
    */
-  @UseInterceptors(new LinkHeaderInterceptor('data'))
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
   public async findAll(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
     const data: FakeDataToReturn[] = [];
@@ -36,6 +36,17 @@ class FakeAppController {
     }
 
     return { totalDocs: data.length, resource: data };
+  }
+
+  /**
+   * Find all documents
+   */
+  @UseInterceptors(
+    new LinkHeaderInterceptor({ resource: 'data-custom-query', pageName: '_page', perPageName: 'numberPerPage' }),
+  )
+  @Get('/data-custom-query')
+  public async findAllWithCustomQuery(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
+    return this.findAll();
   }
 }
 

@@ -8,7 +8,7 @@
 
 # NestJS Request Pagination
 
-A simple NestJS interceptor catching `page` and `per_page` query parameters and format a Link Header, based on [GitHub](https://developer.github.com/v3/guides/traversing-with-pagination/) pagination API.
+A simple NestJS interceptor catching query parameters and format a Link Header, based on [GitHub](https://developer.github.com/v3/guides/traversing-with-pagination/) pagination API.
 This module uses [format-link-header](https://github.com/jonathansamines/format-link-header) node module to build the response Link Header.
 
 ## Installation
@@ -50,11 +50,11 @@ class AppController {
   /**
    * Find all documents
    */
-  @UseInterceptors(new LinkHeaderInterceptor('data'))
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
   public async findAll(): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
     const data: DataToReturn = await model.find(...);
-    const count: number = await model.count()
+    const count: number = await model.count();
 
     return { totalDocs: count, resource: data };
   }
@@ -81,13 +81,24 @@ class AppController {
   /**
    * Find all documents
    */
-  @UseInterceptors(new LinkHeaderInterceptor('data'))
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
   public async findAll(@MongoPaginationParamDecorator() pagination: MongoPagination ): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
     const data: DataToReturn = await model.find(pagination);
-    const count: number = await model.count(pagination.filter)
+    const count: number = await model.count(pagination.filter);
 
     return { totalDocs: count, resource: data };
   }
 }
+```
+
+## Usage
+
+By default, the interceptor and the decorator will look for the query parameters `page` and  `per_page`. 
+You can also change the name of those parameters if you want, by passing a configuration object. Beware that if you use both the interceptor and the decorator, you need to pass the configuration to both of them.
+
+```typescript
+new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'numberPerPage' })
+
+@MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage' })
 ```

@@ -36,7 +36,23 @@ interface LinkOptions {
  */
 @Injectable()
 export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
-  constructor(private readonly resource: string) {}
+  private readonly resource: string;
+  private readonly pageName: string = 'page';
+  private readonly perPageName: string = 'per_page';
+
+  constructor({
+    resource,
+    pageName = 'page',
+    perPageName = 'per_page',
+  }: {
+    resource: string;
+    pageName?: string;
+    perPageName?: string;
+  }) {
+    this.resource = resource;
+    this.pageName = pageName;
+    this.perPageName = perPageName;
+  }
 
   /**
    * Interceptor core method
@@ -47,8 +63,8 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     const request: Request = context.switchToHttp().getRequest();
 
     const resourceUrl: string = request.url.split('?')[0];
-    const page: string = request.query.page ?? '1';
-    const limit: string = request.query.per_page ?? '100';
+    const page: string = request.query[this.pageName] ?? '1';
+    const limit: string = request.query[this.perPageName] ?? '100';
 
     return next.handle().pipe(
       map((data: Data<T>) => {
@@ -125,26 +141,27 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
 
     switch (rel) {
       case 'first':
-        link.url += '?page=1';
+        link.page = '1';
+        link.url += `?${this.pageName}=1`;
         break;
 
       case 'prev':
         link.page = (page - 1).toString();
-        link.url += `?page=${page - 1}`;
+        link.url += `?${this.pageName}=${page - 1}`;
         break;
 
       case 'last':
-        link.url += `?page=${Math.floor(linkOptions.totalDocs / Number(linkOptions.limit)) + 1}`;
+        link.url += `?${this.pageName}=${Math.floor(linkOptions.totalDocs / Number(linkOptions.limit)) + 1}`;
         break;
 
       // Next relation
       default:
         link.page = (page + 1).toString();
-        link.url += `?page=${page + 1}`;
+        link.url += `?${this.pageName}=${page + 1}`;
         break;
     }
 
-    link.url += `&per_page=${linkOptions.limit}`;
+    link.url += `&${this.perPageName}=${linkOptions.limit}`;
 
     return link;
   };

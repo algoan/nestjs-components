@@ -16,9 +16,12 @@ export interface MongoPagination {
 
 // tslint:disable-next-line:variable-name
 export const MongoPaginationParamDecorator: () => ParameterDecorator = createParamDecorator(
-  (_data: {}, req: Request): MongoPagination => {
-    const page: number = Number(req.query.page) || FIRST_PAGE;
-    const limit: number = Number(req.query.per_page) || DEFAULT_NUMBER_OF_RESULTS;
+  (
+    { pageName = 'page', perPageName = 'per_page' }: { pageName?: string; perPageName?: string } = {},
+    req: Request,
+  ): MongoPagination => {
+    const page: number = Number(req.query[pageName]) || FIRST_PAGE;
+    const limit: number = Number(req.query[perPageName]) || DEFAULT_NUMBER_OF_RESULTS;
     let filter: {};
     let sort: [];
 

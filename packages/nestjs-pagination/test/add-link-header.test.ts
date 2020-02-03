@@ -193,4 +193,45 @@ describe('Tests related to the Link Header interceptor', () => {
       expect(res.body).to.be.an('array');
     });
   });
+
+  describe('Tests with custom configuration', () => {
+    it('AD12 - should successfully handle custom query parameters', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/data-custom-query?_page=41&numberPerPage=25')
+        .expect(200);
+
+      const expectedResult: formatLinkHeader.Links = {
+        first: {
+          url: '/data-custom-query?_page=1&numberPerPage=25',
+          page: '1',
+          per_page: '25',
+          _page: '1',
+          numberPerPage: '25',
+          rel: 'first',
+        },
+        last: {
+          url: '/data-custom-query?_page=41&numberPerPage=25',
+          page: '41',
+          per_page: '25',
+          _page: '41',
+          numberPerPage: '25',
+          rel: 'last',
+        },
+        prev: {
+          url: '/data-custom-query?_page=40&numberPerPage=25',
+          page: '40',
+          per_page: '25',
+          _page: '40',
+          numberPerPage: '25',
+          rel: 'prev',
+        },
+      };
+
+      expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+      expect(res.header['content-range']).to.equal('data-custom-query 1000-1015/1015');
+      expect(res.body.totalDocs).to.be.undefined;
+      expect(res.body.resource).to.be.undefined;
+      expect(res.body).to.be.an('array');
+    });
+  });
 });
