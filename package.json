@@ -1,0 +1,36 @@
+{
+  "name": "@algoan/nestjs-components",
+  "version": "1.0.0",
+  "description": "NestJS components made by Algoan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified yet\" && exit 0",
+    "commit": "git-cz"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "nestjs",
+    "algoan",
+    "yelloan"
+  ],
+  "bugs": {
+    "url": "https://github.com/algoan/algoan-nestjs-components/issues"
+  },
+  "homepage": "https://github.com/algoan/algoan-nestjs-components#readme",
+  "author": "diephil",
+  "license": "ISC",
+  "devDependencies": {
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.1.0",
+    "lerna": "3.20.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
