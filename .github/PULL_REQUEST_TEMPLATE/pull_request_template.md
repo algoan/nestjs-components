@@ -1,12 +1,3 @@
----
-name: "[FIX/FEAT] Fixed issue / New feature title"
-about: Describe this issue or feature template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## Description
 
 > Add a description and a context
