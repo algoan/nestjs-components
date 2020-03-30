@@ -1,0 +1,45 @@
+{
+  "name": "@algoan/nestjs-components",
+  "version": "1.0.0",
+  "description": "NestJS components made by Algoan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified yet\" && exit 0",
+    "commit": "git-cz"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "nestjs",
+    "algoan",
+    "yelloan"
+  ],
+  "repository": "https://github.com/algoan/nestjs-components",
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "homepage": "https://github.com/algoan/nestjs-components",
+  "author": "diephil",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.1.0",
+    "husky": "^4.2.3",
+    "lerna": "3.20.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "command": {
+    "init": {
+      "exact": true
+    },
+    "publish": {
+      "message": "chore(packages): release",
+      "conventionalCommits": true,
+      "npmClient": "npm"
+    }
+  },
+  "packages": [
+    "packages/*"
+  ],
+  "version": "independent"
+}
