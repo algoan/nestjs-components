@@ -38,7 +38,7 @@ jobs:
           command: npm ci
       - run:
           name: Lerna bootstrap the packages
-          command: lerna bootstrap
+          command: npx lerna bootstrap
       - run:
           name: Lint source code
           command: npm run lint
