@@ -2,19 +2,22 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+
+version: 2.1
+orbs:
+  publish: 'hutson/library-release-workflows@4.3.3'
 workflows:
   version: 2
   test-publish:
     jobs:
       - test
-      - publish:
+      - release-workflows/lerna-deploy:
           context: semantic_release
-          requires:
-            - test
           filters:
             branches:
               only: master
+          requires:
+            - test
 
 
 
@@ -52,12 +55,3 @@ jobs:
       - persist_to_workspace:
           root: ~/tmp
           paths: .
-  publish:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/tmp
-      - run:
-          name: Publish changed packages to npm
-          command: npm run publish
