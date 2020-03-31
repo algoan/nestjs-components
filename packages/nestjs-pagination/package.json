@@ -6,12 +6,8 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc -p .",
-    "commit": "git-cz",
     "cover": "nyc --reporter=html --reporter=lcov npm test",
-    "lint": "tslint ./src/*.ts{,x} ./src/**/*.ts{,x} --project tsconfig.json",
-    "pretest": "npm run lint && npm run build",
-    "prettier": "prettier --write '{src,test}/**/*.ts'",
-    "semantic-release": "semantic-release",
+    "pretest": "npm run build",
     "test": "NODE_ENV=test mocha --reporter spec --exit --require ts-node/register ./test/**/*.test.ts"
   },
   "repository": {
@@ -34,11 +30,6 @@
     "url": "https://github.com/algoan/nestjs-pagination/issues"
   },
   "homepage": "https://github.com/algoan/nestjs-pagination#readme",
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --list-different \"{src,test}/**/*.ts\""
-    ]
-  },
   "nyc": {
     "check-coverage": true,
     "per-file": true,
@@ -54,25 +45,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.4",
-    "@commitlint/config-conventional": "^8.3.4",
     "@nestjs/core": "^6.10.14",
     "@nestjs/platform-express": "^6.10.14",
     "@nestjs/testing": "^6.10.14",
-    "@semantic-release/commit-analyzer": "^7.0.0",
-    "@semantic-release/git": "^8.0.0",
     "@types/chai": "^4.2.7",
     "@types/content-range": "^1.1.0",
     "@types/express": "^4.17.2",
@@ -80,22 +56,13 @@
     "@types/mocha": "^5.2.7",
     "@types/parse-link-header": "^1.0.0",
     "@types/supertest": "^2.0.8",
-    "@yelloan/tslint": "^0.3.0",
     "chai": "^4.2.0",
-    "commitizen": "^4.0.3",
-    "cz-conventional-changelog": "^3.0.2",
-    "husky": "^4.0.6",
-    "lint-staged": "^9.5.0",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "parse-link-header": "^1.0.1",
-    "prettier": "^1.19.1",
-    "semantic-release": "^16.0.1",
     "supertest": "^4.0.2",
     "ts-node": "^8.6.1",
-    "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@nestjs/common": "^6.10.14",
