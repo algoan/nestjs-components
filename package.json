@@ -4,8 +4,13 @@
   "description": "NestJS components made by Algoan",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified yet\" && exit 0",
-    "commit": "git-cz"
+    "test": "npm run test:all",
+    "build": "npm run build:all",
+    "test:all": "lerna run test --parallel",
+    "build:all": "lerna run build --parallel",
+    "commit": "git-cz",
+    "prettier": "prettier --write 'packages/**/*.ts'",
+    "lint": "tslint ./packages/*/src/*.ts{,x} ./packages/*/src/**/*.ts{,x} --project tsconfig.json"
   },
   "publishConfig": {
     "access": "public"
@@ -27,10 +32,21 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@yelloan/tslint": "^0.3.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "husky": "^4.2.3",
-    "lerna": "3.20.2"
+    "lerna": "3.20.2",
+    "lint-staged": "^10.1.0",
+    "prettier": "^2.0.2",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  },
+  "lint-staged": {
+    "packages/**/*.ts": [
+      "prettier --list-different \"packages/**/*.ts\""
+    ]
   },
   "config": {
     "commitizen": {
@@ -39,7 +55,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
     }
   }
 }

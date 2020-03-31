@@ -1,0 +1,44 @@
+{
+  /* Base Typescript configuration for all packages */
+  "compilerOptions": {
+    /* Basic Options */                       
+    "target": "es2017",                    /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
+    "module": "commonjs",                  /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'. */
+    "lib": ["es2015", "es6", "es7", "dom"],/* Specify library files to be included in the compilation:  */
+    "allowJs": false,                      /* Allow javascript files to be compiled. */
+    "checkJs": false,                      /* Report errors in .js files. */
+    "noEmit": true,                       /* Set to true because used only for type checking */
+
+    /* Strict Type-Checking Options */        
+    "strict": true,                        /* Enable all strict type-checking options. */
+
+    /* Additional Checks */                   
+    "noUnusedLocals": true,                /* Report errors on unused locals. */
+    "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+
+    /* Module Resolution Options */           
+    "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+
+    /* Experimental Options */                
+    "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
+    "emitDecoratorMetadata": true          /* Enables experimental support for emitting type metadata for decorators. */
+  },
+  "include": [
+    "packages/*/src/**/*",
+    "packages/*/test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "packages/*/node_modules",
+    "packages/*/lib",
+    "packages/*/dist",
+    "packages/*/coverage",
+    "/lib",
+    "/build",
+    "/.git",
+    "package.json",
+    "lerna.json"
+  ]
+}
