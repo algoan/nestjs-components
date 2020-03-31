@@ -15,9 +15,7 @@ describe('Tests related to the Link Header interceptor', () => {
 
   describe('Tests with a limit of 100', () => {
     it('AD01 - should successfully add Link in headers without params', async () => {
-      const res: request.Response = await request(app.getHttpServer())
-        .get('/data')
-        .expect(200);
+      const res: request.Response = await request(app.getHttpServer()).get('/data').expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
@@ -48,9 +46,7 @@ describe('Tests related to the Link Header interceptor', () => {
     });
 
     it('AD02 - should successfully add Link in headers with params', async () => {
-      const res: request.Response = await request(app.getHttpServer())
-        .get('/data?page=4&per_page=100')
-        .expect(200);
+      const res: request.Response = await request(app.getHttpServer()).get('/data?page=4&per_page=100').expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
@@ -87,9 +83,7 @@ describe('Tests related to the Link Header interceptor', () => {
     });
 
     it('AD03 - should successfully add Link in headers for the last page', async () => {
-      const res: request.Response = await request(app.getHttpServer())
-        .get('/data?page=11&per_page=100')
-        .expect(200);
+      const res: request.Response = await request(app.getHttpServer()).get('/data?page=11&per_page=100').expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
@@ -122,9 +116,7 @@ describe('Tests related to the Link Header interceptor', () => {
 
   describe('Tests with a limit of 25', () => {
     it('AD10 - should successfully add Link in headers with params', async () => {
-      const res: request.Response = await request(app.getHttpServer())
-        .get('/data?page=4&per_page=25')
-        .expect(200);
+      const res: request.Response = await request(app.getHttpServer()).get('/data?page=4&per_page=25').expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
@@ -161,9 +153,7 @@ describe('Tests related to the Link Header interceptor', () => {
     });
 
     it('AD11 - should successfully add Link in headers for the last page', async () => {
-      const res: request.Response = await request(app.getHttpServer())
-        .get('/data?page=41&per_page=25')
-        .expect(200);
+      const res: request.Response = await request(app.getHttpServer()).get('/data?page=41&per_page=25').expect(200);
 
       const expectedResult: formatLinkHeader.Links = {
         first: {
