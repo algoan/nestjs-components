@@ -11,23 +11,20 @@ workflows:
   test-publish:
     jobs:
       - test
-      - release-workflows/lerna-deliver:
+      - deliver:
           context: semantic_release
-          email: bot@algoan.com
           filters:
             branches:
               only: master
-          fingerprint: '1a:a9:39:20:ed:37:35:23:82:d7:d8:62:2e:53:d3:8a'
-          fullname: Algoan bot
           requires:
             - test
-      - release-workflows/lerna-deploy:
+      - deploy:
           context: semantic_release
           filters:
             branches:
               only: master
           requires:
-            - release-workflows/lerna-deliver
+            - deliver
 
 
 
@@ -65,3 +62,28 @@ jobs:
       - persist_to_workspace:
           root: ~/tmp
           paths: .
+  deliver:
+    test:
+    <<: *defaults
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - $CI_FINGERPRINT
+      - run: >-
+          git config --global user.email "${GH_BOT_EMAIL}" && git config --global user.name "${GH_BOT_FULLNAME}"
+      - attach_workspace:
+          at: ~/tmp
+      - run: npx lerna version --yes
+      - persist_to_workspace:
+          root: ~/tmp
+          paths: .
+  deploy:
+    test:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/tmp
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc 
+      - run: npx lerna publish from-git --yes
