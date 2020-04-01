@@ -2,19 +2,32 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+
+version: 2.1
+orbs:
+  release-workflows: 'hutson/library-release-workflows@4.3.3'
 workflows:
   version: 2
   test-publish:
     jobs:
       - test
-      - publish:
+      - release-workflows/lerna-deliver:
           context: semantic_release
-          requires:
-            - test
+          email: bot@algoan.com
           filters:
             branches:
               only: master
+          fingerprint: '1a:a9:39:20:ed:37:35:23:82:d7:d8:62:2e:53:d3:8a'
+          fullname: Algoan bot
+          requires:
+            - test
+      - release-workflows/lerna-deploy:
+          context: semantic_release
+          filters:
+            branches:
+              only: master
+          requires:
+            - release-workflows/lerna-deliver
 
 
 
@@ -52,12 +65,3 @@ jobs:
       - persist_to_workspace:
           root: ~/tmp
           paths: .
-  publish:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/tmp
-      - run:
-          name: Publish changed packages to npm
-          command: npm run publish
