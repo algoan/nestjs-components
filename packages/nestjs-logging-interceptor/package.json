@@ -1,0 +1,39 @@
+{
+  "name": "@algoan/nestjs-logging-interceptor",
+  "version": "1.0.0",
+  "description": "A simple NestJS interceptor to log input/output requests",
+  "keywords": [
+    "nestjs",
+    "typescript",
+    "nodejs",
+    "algoan",
+    "yelloan"
+  ],
+  "author": "diephil",
+  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/nestjs-logging-interceptor#readme",
+  "license": "ISC",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algoan/nestjs-components.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.0.7",
+    "@nestjs/core": "^7.0.7",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.4"
+  }
+}
