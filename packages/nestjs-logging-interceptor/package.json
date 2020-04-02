@@ -22,7 +22,8 @@
     "url": "git+https://github.com/algoan/nestjs-components.git"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:cov": "jest --coverage"
   },
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"

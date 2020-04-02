@@ -1,12 +1,13 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   HttpStatus,
   Injectable,
   Logger,
-  LoggerService,
   NestInterceptor,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -15,7 +16,8 @@ import { tap } from 'rxjs/operators';
  */
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  private readonly logger: Logger = new Logger(LoggingInterceptor.name);
+  private readonly ctxPrefix: string = LoggingInterceptor.name;
+  private readonly logger: Logger = new Logger(this.ctxPrefix);
 
   /**
    * Intercept method, logs before and after the request being processed
@@ -25,49 +27,86 @@ export class LoggingInterceptor implements NestInterceptor {
   public intercept(context: ExecutionContext, call$: CallHandler): Observable<unknown> {
     const req: Request = context.switchToHttp().getRequest();
     const { method, url, body, headers } = req;
-    const message: string = `${method} - ${url}`;
+    const message: string = `${this.ctxPrefix} - ${method} - ${url}`;
 
     this.logger.log(message);
-    this.logger.debug({
+    this.logger.debug(
+      {
+        message,
+        method,
+        body,
+        headers,
+      },
       message,
-      method,
-      body,
-      headers,
-    });
+    );
 
     return call$.handle().pipe(
       tap({
         next: (val: unknown): void => {
-          this.log(val, context);
+          this.logNext(val, context);
+        },
+        error: (err: HttpException): void => {
+          this.logError(err, context);
         },
       }),
     );
   }
 
   /**
-   * Logs the request response
+   * Logs the request response in success cases
    * @param body body returned
    * @param context details about the current request
    */
-  private log(body: unknown, context: ExecutionContext): void {
-    const req: Request = context.switchToHttp().getRequest();
-    const res: Response = context.switchToHttp().getResponse();
+  private logNext(body: unknown, context: ExecutionContext): void {
+    const req: Request = context.switchToHttp().getRequest<Request>();
+    const res: Response = context.switchToHttp().getResponse<Response>();
     const { method, url } = req;
-    const { status } = res;
+    const { statusCode } = res;
+    const resCtx: string = `${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
 
-    const message: string = `${status} - ${method} - ${url}"`;
+    this.logger.log(resCtx);
+    this.logger.debug(
+      {
+        message: resCtx,
+        body,
+      },
+      resCtx,
+    );
+  }
 
-    let logLevel: keyof LoggerService = 'log';
-
-    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
-      logLevel = 'error';
-    } else if (status >= HttpStatus.BAD_REQUEST) {
-      logLevel = 'warn';
+  /**
+   * Logs the request response in success cases
+   * @param error Error object
+   * @param context details about the current request
+   */
+  private logError(error: HttpException, context: ExecutionContext): void {
+    const req: Request = context.switchToHttp().getRequest<Request>();
+    const { method, url, body } = req;
+    const statusCode: number = error.getStatus();
+    const ctx: string = `${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+    // tslint:disable-next-line: prefer-conditional-expression
+    if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        {
+          method,
+          url,
+          body,
+          message: ctx,
+        },
+        error.stack,
+        ctx,
+      );
+    } else {
+      this.logger.warn(
+        {
+          method,
+          url,
+          error,
+          body,
+          message: ctx,
+        },
+        ctx,
+      );
     }
-
-    this.logger[logLevel]({
-      message,
-      body,
-    });
   }
 }
