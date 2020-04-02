@@ -22,7 +22,7 @@
     "url": "git+https://github.com/algoan/nestjs-components.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Tests ran\" && exit 0"
   },
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"
@@ -35,5 +35,8 @@
     "@nestjs/core": "^7.0.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^7.0.7"
   }
 }
