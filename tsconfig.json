@@ -9,6 +9,8 @@
     "checkJs": false,                      /* Report errors in .js files. */
     "noEmit": true,                       /* Set to true because used only for type checking */
 
+    "skipLibCheck": true,
+
     /* Strict Type-Checking Options */        
     "strict": true,                        /* Enable all strict type-checking options. */
 

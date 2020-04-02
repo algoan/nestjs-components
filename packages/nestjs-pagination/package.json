@@ -6,7 +6,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc -p .",
-    "cover": "nyc --reporter=html --reporter=lcov npm test",
+    "test:cov": "nyc --reporter=html --reporter=lcov npm test",
     "pretest": "npm run build",
     "test": "NODE_ENV=test mocha --reporter spec --exit --require ts-node/register ./test/**/*.test.ts"
   },
