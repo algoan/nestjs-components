@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-logging-interceptor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple NestJS interceptor to log input/output requests",
   "keywords": [
     "nestjs",
@@ -32,7 +32,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {},
   "devDependencies": {
     "@nestjs/common": "^7.0.7",
     "@nestjs/core": "^7.0.7",
