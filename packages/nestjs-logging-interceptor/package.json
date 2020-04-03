@@ -6,8 +6,7 @@
     "nestjs",
     "typescript",
     "nodejs",
-    "algoan",
-    "yelloan"
+    "algoan"
   ],
   "author": "diephil",
   "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/nestjs-logging-interceptor#readme",
@@ -33,18 +32,17 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@nestjs/common": "^7.0.7",
     "@nestjs/core": "^7.0.7",
-    "express": "^4.17.1",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.4"
-  },
-  "devDependencies": {
     "@nestjs/platform-express": "^7.0.7",
     "@nestjs/testing": "^7.0.7",
     "@types/express": "^4.17.4",
     "@types/supertest": "^2.0.8",
+    "express": "^4.17.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.5",
     "supertest": "^4.0.2",
     "typescript": "^3.8.3"
   }
