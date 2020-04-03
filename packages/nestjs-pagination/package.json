@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-pagination.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git"
   },
   "files": [
     "dist/src"
@@ -27,9 +27,9 @@
   "author": "ccoeurderoy",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/algoan/nestjs-pagination/issues"
+    "url": "https://github.com/algoan/nestjs-components.git"
   },
-  "homepage": "https://github.com/algoan/nestjs-pagination#readme",
+  "homepage": "https://github.com/algoan/nestjs-components/packages/nestjs-pagination",
   "nyc": {
     "check-coverage": true,
     "per-file": true,
