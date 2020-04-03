@@ -15,6 +15,6 @@ See [the documentation here](./packages/nestjs-pagination/README.md).
 
 ## NestJS Logging interceptor
 
-A simple NestJS interceptor catching request details and loggin it using the built-in [Logger](https://docs.nestjs.com/techniques/logger#logger) class. It will use the default Logger implementation unless you pass your own to your Nest application.
+A simple NestJS interceptor catching request details and logging it using the built-in [Logger](https://docs.nestjs.com/techniques/logger#logger) class. It will use the default Logger implementation unless you pass your own to your Nest application.
 
 See [the documentation here](./packages/nestjs-logging-interceptor/README.md).
