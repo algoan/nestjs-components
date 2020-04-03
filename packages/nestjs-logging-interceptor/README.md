@@ -47,7 +47,7 @@ In the example above, the interceptor is provided by the CoreModule. It could be
 This interceptor logs:
   - incoming request details
 
-Example:
+### Default Logger messages
 ```bash
 # Incoming request details
 
@@ -123,4 +123,60 @@ Error: Internal Server Error
     at MergeMapSubscriber._innerSub (/Users/philippediep/Documents/workspace/algoan/examples/example-manager/node_modules/rxjs/internal/operators/mergeMap.js:82:53)
     at MergeMapSubscriber._tryNext (/Users/philippediep/Documents/workspace/algoan/examples/example-manager/node_modules/rxjs/internal/operators/mergeMap.js:76:14)
 
+```
+
+### Use a custom Logger
+
+#### Nest-pino
+In this example, we are going to override the default Logger implementation with a Pino logger (refer to the [this official NestJS documentation](https://docs.nestjs.com/techniques/logger#using-the-logger-for-application-logging))
+
+```typescript
+import { Module } from '@nestjs/common';
+import { CoreModule } from './core/core.module'; // the module importing the @algoan/nestjs-logging-interceptor
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { LoggerModule } from 'nestjs-pino';
+
+@Module({
+  imports: [LoggerModule.forRoot(), CoreModule],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
+Then in the application boostrap, set the Pino logger as the one to substitute to the default Logger.
+
+```typescript
+import { NestFactory} from '@nestjs/core';
+import { Logger } from "nestjs-pino";
+import { MainModule } from './main.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(MainModule,{
+    logger: false
+  });
+
+  app.useLogger(app.get(Logger))
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+The Pino logger will be set as the Logger implementation to use.
+
+```bash
+# With default Logger
+[Nest] 84392   - 04/03/2020, 2:02:04 PM   [RoutesResolver] AppController {}: +7ms
+[Nest] 84392   - 04/03/2020, 2:02:04 PM   [RouterExplorer] Mapped {, GET} route +3ms
+[Nest] 84392   - 04/03/2020, 2:02:04 PM   [RouterExplorer] Mapped {/badrequest, GET} route +0ms
+[Nest] 84392   - 04/03/2020, 2:02:04 PM   [RouterExplorer] Mapped {/error, GET} route +0ms
+[Nest] 84392   - 04/03/2020, 2:02:04 PM   [NestApplication] Nest application successfully started +3ms
+
+# With Pino Logger
+{"level":30,"time":1585915251917,"pid":83826,"hostname":"computername.local","context":"RoutesResolver","msg":"AppController {}: true","v":1}
+{"level":30,"time":1585915251919,"pid":83826,"hostname":"computername.local","context":"RouterExplorer","msg":"Mapped {, GET} route true","v":1}
+{"level":30,"time":1585915251919,"pid":83826,"hostname":"computername.local","context":"RouterExplorer","msg":"Mapped {/badrequest, GET} route true","v":1}
+{"level":30,"time":1585915251919,"pid":83826,"hostname":"computername.local","context":"RouterExplorer","msg":"Mapped {/error, GET} route true","v":1}
+{"level":30,"time":1585915251921,"pid":83826,"hostname":"computername.local","context":"NestApplication","msg":"Nest application successfully started true","v":1}
 ```
