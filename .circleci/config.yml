@@ -69,7 +69,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - $CI_FINGERPRINT
+            - 1a:a9:39:20:ed:37:35:23:82:d7:d8:62:2e:53:d3:8a
       - run: >-
           git config --global user.email "${GH_BOT_EMAIL}" && git config --global user.name "${GH_BOT_FULLNAME}"
       - attach_workspace:
