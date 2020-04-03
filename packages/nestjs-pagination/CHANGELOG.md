@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.1...@algoan/nestjs-pagination@2.1.2) (2020-04-03)
+
+
+### Bug Fixes
+
+* **dependencies:** move packages from dependencies to devDependencies ([488b886](https://github.com/algoan/nestjs-components/commit/488b8869570bb0b2ccf3dbebff50e5d9bab8c2d6))
+
+
+
+
+
 ## [2.1.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.0...@algoan/nestjs-pagination@2.1.1) (2020-04-03)
 
 **Note:** Version bump only for package @algoan/nestjs-pagination
