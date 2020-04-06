@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@1.1.0...@algoan/nestjs-logging-interceptor@1.2.0) (2020-04-06)
+
+
+### Features
+
+* **nestjs-logging-interceptor:** userPrefix in context,clearer messages ([cf02eb0](https://github.com/algoan/nestjs-components/commit/cf02eb0714ff79e2cc0a185c80ebfe34e7a7dfcd))
+
+
+
+
+
 # 1.1.0 (2020-04-03)
 
 
