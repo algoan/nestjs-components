@@ -17,6 +17,7 @@ npm install --save @algoan/nestjs-logging-interceptor
 ```
 
 ## Usage
+### Default usage
 Use the interceptor as a global interceptor (cf. refer to the [last paragraph](https://docs.nestjs.com/interceptors#binding-interceptors) of this section for more details).
 
 Example:
@@ -42,6 +43,42 @@ export class CoreModule {}
 
 In the example above, the interceptor is provided by the CoreModule. It could be set on any module that your main module is using.
 
+### Factory
+You can also manually pass an interceptor instance through a factory function. This will give the possibility to set a `userPrefix` on the head of the default context message:
+
+Example:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
+
+/**
+ * Core module: This module sets the logging interceptor as a global interceptor
+ */
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: () => {
+        const interceptor: LoggingInterceptor = new LoggingInterceptor();
+        interceptor.setUserPrefix('ExampleApp');
+
+        return interceptor;
+      },
+    },
+  ],
+})
+export class CoreModule {}
+```
+
+The context message will be preprend by the provided `userPrefix`:
+```bash
+[LoggingInterceptor - GET - /error] Incoming request - GET - /error
+==>
+[ExampleApp - LoggingInterceptor - GET - /error] Incoming request - GET - /error
+```
+
 ## Log messages
 
 This interceptor logs:
@@ -52,9 +89,9 @@ This interceptor logs:
 # Incoming request details
 
 # info level
-[Nest] 41835   - 04/02/2020, 5:02:10 PM   [LoggingInterceptor] LoggingInterceptor - GET - /
+[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - GET - /] Incoming request - GET - /
 # debug level
-[Nest] 41835   - 04/02/2020, 5:02:10 PM   [LoggingInterceptor - GET - /] Object:
+[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - GET - /] Object:
 {
   "message": "LoggingInterceptor - GET - /",
   "method": "GET",
@@ -73,9 +110,9 @@ This interceptor logs:
 # Success example
 
 # info level
-[Nest] 41835   - 04/02/2020, 5:02:10 PM   [LoggingInterceptor] LoggingInterceptor - 200 - GET - /
+[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - 200 - GET - /] Outgoing response - 200 - GET - /
 # debug level
-[Nest] 41835   - 04/02/2020, 5:02:10 PM   [LoggingInterceptor - 200 - GET - /] Object:
+[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - 200 - GET - /] Object:
 {
   "message": "LoggingInterceptor - 200 - GET - /",
   "body": "Hello World!"
@@ -84,7 +121,7 @@ This interceptor logs:
 # Warning example
 
 # warn level
-[Nest] 41835   - 04/02/2020, 5:07:44 PM   [LoggingInterceptor - 400 - GET - /badrequest] Object:
+[Nest] 27080   - 04/06/2020, 10:12:44 AM   [LoggingInterceptor - 400 - GET - /badrequest] Object:
 {
   "method": "GET",
   "url": "/badrequest",
@@ -103,7 +140,7 @@ This interceptor logs:
 # Error example
 
 # error level
-[Nest] 41835   - 04/02/2020, 5:10:10 PM   [LoggingInterceptor - 500 - GET - /error] Object:
+[Nest] 27080   - 04/06/2020, 10:12:17 AM   [LoggingInterceptor - 500 - GET - /error] Object:
 {
   "method": "GET",
   "url": "/error",

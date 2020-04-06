@@ -18,6 +18,15 @@ import { tap } from 'rxjs/operators';
 export class LoggingInterceptor implements NestInterceptor {
   private readonly ctxPrefix: string = LoggingInterceptor.name;
   private readonly logger: Logger = new Logger(this.ctxPrefix);
+  private userPrefix: string = '';
+
+  /**
+   * User prefix setter
+   * ex. [MyPrefix - LoggingInterceptor - 200 - GET - /]
+   */
+  public setUserPrefix(prefix: string): void {
+    this.userPrefix = `${prefix} - `;
+  }
 
   /**
    * Intercept method, logs before and after the request being processed
@@ -27,9 +36,10 @@ export class LoggingInterceptor implements NestInterceptor {
   public intercept(context: ExecutionContext, call$: CallHandler): Observable<unknown> {
     const req: Request = context.switchToHttp().getRequest();
     const { method, url, body, headers } = req;
-    const message: string = `${this.ctxPrefix} - ${method} - ${url}`;
+    const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
+    const message: string = `Incoming request - ${method} - ${url}`;
 
-    this.logger.log(message);
+    this.logger.log(message, ctx);
     this.logger.debug(
       {
         message,
@@ -37,7 +47,7 @@ export class LoggingInterceptor implements NestInterceptor {
         body,
         headers,
       },
-      message,
+      ctx,
     );
 
     return call$.handle().pipe(
@@ -62,15 +72,16 @@ export class LoggingInterceptor implements NestInterceptor {
     const res: Response = context.switchToHttp().getResponse<Response>();
     const { method, url } = req;
     const { statusCode } = res;
-    const resCtx: string = `${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+    const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+    const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
-    this.logger.log(resCtx);
+    this.logger.log(message, ctx);
     this.logger.debug(
       {
-        message: resCtx,
+        message,
         body,
       },
-      resCtx,
+      ctx,
     );
   }
 
@@ -83,7 +94,9 @@ export class LoggingInterceptor implements NestInterceptor {
     const req: Request = context.switchToHttp().getRequest<Request>();
     const { method, url, body } = req;
     const statusCode: number = error.getStatus();
-    const ctx: string = `${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+    const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+    const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
+
     // tslint:disable-next-line: prefer-conditional-expression
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(
@@ -91,7 +104,7 @@ export class LoggingInterceptor implements NestInterceptor {
           method,
           url,
           body,
-          message: ctx,
+          message,
         },
         error.stack,
         ctx,
@@ -103,7 +116,7 @@ export class LoggingInterceptor implements NestInterceptor {
           url,
           error,
           body,
-          message: ctx,
+          message,
         },
         ctx,
       );
