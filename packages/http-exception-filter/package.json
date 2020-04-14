@@ -11,23 +11,25 @@
   "author": "\"\"\"Philippe Diep\"\"\" <\"\"\"philippe.diep@algoan.com\"\"\">",
   "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/http-exception-filter#readme",
   "license": "ISC",
-  "main": "lib/http-exception-filter.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "files": [
-    "lib"
+    "dist/src"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/algoan/nestjs-components.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 0"
+    "build": "tsc -p .",
+    "test": "echo \"Error: run tests from root\" && exit 0",
+    "pretest": "npm run build"
   },
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@nestjs/common": "^7.0.7",
@@ -35,8 +37,11 @@
     "@nestjs/platform-express": "^7.0.7",
     "@nestjs/testing": "^7.0.7",
     "@types/express": "^4.17.6",
+    "@types/lodash": "^4.14.149",
     "@types/supertest": "^2.0.8",
+    "class-validator": "^0.11.1",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
     "supertest": "^4.0.2",
