@@ -30,13 +30,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error({
-        message: `${status} [${request.method} ${request.url}] throw a critical error`,
+        message: `${status} [${request.method} ${request.url}] has thrown a critical error`,
         headers: request.headers,
         exception,
       });
     } else if (status >= HttpStatus.BAD_REQUEST) {
       this.logger.warn({
-        message: `${status} [${request.method} ${request.url}] throw an HTTP client error`,
+        message: `${status} [${request.method} ${request.url}] has thrown an HTTP client error`,
         exception,
         headers: request.headers,
       });

@@ -28,7 +28,11 @@ export function getErrorMessage(exResponse: ExceptionResponse | string): string 
   }
 
   if (Array.isArray(exResponse.message)) {
-    const error: ValidationError = exResponse.message[0];
+    // process the first error message
+    const error: ValidationError | string = exResponse.message[0];
+    if (typeof error === 'string') {
+      return error;
+    }
     const validationError: string = parseErrorMessage(error);
     if (validationError) {
       return validationError;
@@ -44,7 +48,7 @@ export function getErrorMessage(exResponse: ExceptionResponse | string): string 
  * @param error - string
  * @returns - ex `Bad Request` become `BAD_REQUEST`
  */
-function formatErrorCode(error: string = 'INTERNAL_SERVER_ERROR'): string {
+function formatErrorCode(error?: string): string {
   return toUpper(snakeCase(error));
 }
 
@@ -85,5 +89,5 @@ interface Constraint {
  */
 interface ExceptionResponse {
   error?: string;
-  message?: string | ValidationError[];
+  message?: string | string[] | ValidationError[];
 }
