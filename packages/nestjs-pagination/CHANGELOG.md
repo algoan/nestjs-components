@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.2...@algoan/nestjs-pagination@2.1.3) (2020-04-14)
+
+
+### Bug Fixes
+
+* **nestjs-pagination:** fetch correctly the limit and the page ([85bbee8](https://github.com/algoan/nestjs-components/commit/85bbee8e214518778ef4d9f19de4ddbc0baad8cf))
+
+
+
+
+
 ## [2.1.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.1...@algoan/nestjs-pagination@2.1.2) (2020-04-03)
 
 
