@@ -83,4 +83,29 @@ describe('Http Exception Filter', () => {
       status: 500,
     });
   });
+
+  it('returns a formatted bad request after failing DTO validation', async () => {
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const url: string = `/cats/create`;
+
+    const { body: resBody } = await request(app.getHttpServer()).post(url).send(new Array(10000).fill({
+      name: 'Garfield',
+      email: 'garfield-the-cat@yopmail.com'
+    })).expect(HttpStatus.PAYLOAD_TOO_LARGE);
+
+    expect(warnSpy).toHaveBeenCalledWith({
+      message: `413 [POST ${url}] has thrown an HTTP client error`,
+      exception: expect.any(Error),
+      headers: expect.anything(),
+    });
+
+    expect(resBody).toEqual({
+      code: 'PAYLOAD_TOO_LARGE',
+      message: `
+        Your request entity size is too big for the server to process it:
+          - request size: 590001;
+          - request limit: 102400.`,
+      status: 413,
+    });
+  });
 });
