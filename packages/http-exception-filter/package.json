@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "test": "echo \"Error: run tests from root\" && exit 0",
+    "test": "jest",
+    "test:cov": "jest --coverage",
     "pretest": "npm run build"
   },
   "bugs": {
@@ -41,6 +42,7 @@
     "@types/supertest": "^2.0.8",
     "class-validator": "^0.11.1",
     "express": "^4.17.1",
+    "jest": "^25.3.0",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
