@@ -70,4 +70,17 @@ describe('Tests related to the MongoPagination ParamDecorator', () => {
       sort: [],
     });
   });
+
+  it('MPPD06 - should successfully parse filters (per_page: 0)', () => {
+    const req: {} = { query: { page: '1', per_page: '0', filter: '{"key": "value"}', sort: '[]' } };
+
+    const result: MongoPagination = factory({}, req as Request);
+
+    expect(result).to.deep.equal({
+      filter: { key: 'value' },
+      limit: 0,
+      skip: 0,
+      sort: [],
+    });
+  });
 });

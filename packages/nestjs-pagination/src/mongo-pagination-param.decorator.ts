@@ -20,8 +20,8 @@ export const MongoPaginationParamDecorator: () => ParameterDecorator = createPar
     { pageName = 'page', perPageName = 'per_page' }: { pageName?: string; perPageName?: string } = {},
     req: Request,
   ): MongoPagination => {
-    const page: number = Number(req.query[pageName]) || FIRST_PAGE;
-    const limit: number = Number(req.query[perPageName]) || DEFAULT_NUMBER_OF_RESULTS;
+    const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
+    const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : DEFAULT_NUMBER_OF_RESULTS;
     let filter: {};
     let sort: [];
 
