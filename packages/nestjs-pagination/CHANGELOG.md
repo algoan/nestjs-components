@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.3...@algoan/nestjs-pagination@2.2.0) (2020-04-15)
+
+
+### Features
+
+* **http-exception-filter:** init package ([e474567](https://github.com/algoan/nestjs-components/commit/e4745671c3450134ae83f2b9412551e1dc1a30d8))
+
+
+
+
+
 ## [2.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.1.2...@algoan/nestjs-pagination@2.1.3) (2020-04-14)
 
 
