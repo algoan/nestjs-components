@@ -12,7 +12,11 @@ export function getCode(exResponse: ExceptionResponse | string): string {
     return formatErrorCode(exResponse);
   }
 
-  return formatErrorCode(exResponse.error);
+  if ('error' in exResponse && typeof exResponse.error === 'string') {
+    return formatErrorCode(exResponse.error);
+  }
+
+  return '';
 }
 
 /*
@@ -48,7 +52,7 @@ export function getErrorMessage(exResponse: ExceptionResponse | string): string 
  * @param error - string
  * @returns - ex `Bad Request` become `BAD_REQUEST`
  */
-function formatErrorCode(error?: string): string {
+function formatErrorCode(error: string): string {
   return toUpper(snakeCase(error));
 }
 

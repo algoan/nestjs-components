@@ -8,7 +8,7 @@
 
 # NestJS Http Exception Filter
 
-A simple NestJS Http [Exception Filter](https://docs.nestjs.com/exception-filters).
+A simple NestJS Http [Exception Filter](https://docs.nestjs.com/exception-filters) logging the HTTP response and formatting errors returned by the API.
 
 ## Installation
 
@@ -18,7 +18,7 @@ npm install --save @algoan/http-exception-filter
 
 ## Usage
 ### Default usage
-Use the interceptor as a global interceptor (cf. refer to the [last paragraph](https://docs.nestjs.com/interceptors#binding-interceptors) of this section for more details).
+Use the http exception filter as a global filter (cf. refer to the [last paragraph](https://docs.nestjs.com/exception-filters#binding-filters) of this section for more details).
 
 Example:
 
@@ -28,7 +28,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from '@algoan/http-exception-filter';
 
 /**
- * Core module: This module sets the logging interceptor as a global interceptor
+ * Core module: This module sets the http exception filter globally
  */
 @Module({
   providers: [

@@ -8,7 +8,7 @@
     "algoan",
     "filter"
   ],
-  "author": "\"\"\"Philippe Diep\"\"\" <\"\"\"philippe.diep@algoan.com\"\"\">",
+  "author": "diephil",
   "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/http-exception-filter#readme",
   "license": "ISC",
   "main": "dist/src/index.js",

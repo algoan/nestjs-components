@@ -3,7 +3,7 @@ import { APP_FILTER } from '@nestjs/core';
 import {HttpExceptionFilter} from '../../../src';
 
 /**
- * Core module: This module sets the logging interceptor as a global interceptor
+ * Core module: This module sets the http exception filter globally
  */
 @Module({
   providers: [
