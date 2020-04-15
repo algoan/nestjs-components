@@ -1,0 +1,54 @@
+{
+  "name": "@algoan/http-exception-filter",
+  "version": "0.0.1",
+  "description": "A simple http exception filter for NestJS applications",
+  "keywords": [
+    "nestjs",
+    "typescript",
+    "algoan",
+    "filter"
+  ],
+  "author": "diephil",
+  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/http-exception-filter#readme",
+  "license": "ISC",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algoan/nestjs-components.git"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "jest",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config ./jest.config.js",
+    "test:cov": "jest --coverage",
+    "pretest": "npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^7.0.7",
+    "@nestjs/core": "^7.0.7",
+    "@nestjs/platform-express": "^7.0.7",
+    "@nestjs/testing": "^7.0.7",
+    "@types/express": "^4.17.6",
+    "@types/lodash": "^4.14.149",
+    "@types/supertest": "^2.0.8",
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.1",
+    "express": "^4.17.1",
+    "jest": "^25.3.0",
+    "lodash": "^4.17.15",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.5",
+    "supertest": "^4.0.2",
+    "typescript": "^3.8.3"
+  }
+}

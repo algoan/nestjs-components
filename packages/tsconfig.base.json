@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    
+    /* Configuration for these projects */ 
+    "removeComments": true,                /* Do not emit comments to output. */
+    "noEmit": false,                       /* Do not emit outputs. */
+    "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
+    "isolatedModules": false,              /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+
+    /* Source Map Options */                  
+    "inlineSourceMap": true,              /* Emit a single file with source maps instead of having a separate file. */
+    "inlineSources": false,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
+  }
+}
