@@ -3,6 +3,8 @@
 </p>
 
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 # Algoan NestJS components
 
 A collection of [NestJS](https://docs.nestjs.com) components.
