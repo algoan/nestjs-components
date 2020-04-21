@@ -38,6 +38,9 @@
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
+  "peerDependencies": {
+    "@algoan/pubsub": "2.x.x"
+  },
   "devDependencies": {
     "@nestjs/common": "^7.0.8",
     "@nestjs/core": "^7.0.8",
