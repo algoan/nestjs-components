@@ -1,22 +1,32 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ExecutionContext } from '@nestjs/common';
 import { expect } from 'chai';
-import { Request } from 'express';
 import { MongoPaginationParamDecorator } from '../src';
 import { MongoPagination } from '../src/mongo-pagination-param.decorator';
 import { getParamDecoratorFactory } from './helpers';
 
 describe('Tests related to the MongoPagination ParamDecorator', () => {
   // @ts-ignore
-  let factory: (_data?: {}, req: Request) => MongoPagination;
+  let factory: (_data?: {}, ctx: ExecutionContext) => MongoPagination;
+  let req: {} = {};
+
+  const ctx = {
+    switchToHttp() {
+      return {
+        getRequest() {
+          return req;
+        },
+      };
+    },
+  };
 
   before(() => {
     factory = getParamDecoratorFactory(MongoPaginationParamDecorator);
   });
 
   it('MPPD01 - should successfully return default value on empty query', () => {
-    const req: {} = { query: {} };
+    req = { query: {} };
 
-    const result: MongoPagination = factory(undefined, req as Request);
+    const result: MongoPagination = factory(undefined, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: {},
@@ -27,9 +37,9 @@ describe('Tests related to the MongoPagination ParamDecorator', () => {
   });
 
   it('MPPD02 - should successfully handle another page', () => {
-    const req: {} = { query: { page: '2', per_page: '20' } };
+    req = { query: { page: '2', per_page: '20' } };
 
-    const result: MongoPagination = factory({}, req as Request);
+    const result: MongoPagination = factory({}, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: {},
@@ -40,9 +50,9 @@ describe('Tests related to the MongoPagination ParamDecorator', () => {
   });
 
   it('MPPD03 - should successfully parse filters', () => {
-    const req: {} = { query: { page: '1', per_page: '20', filter: '{"key": "value"}', sort: '[]' } };
+    req = { query: { page: '1', per_page: '20', filter: '{"key": "value"}', sort: '[]' } };
 
-    const result: MongoPagination = factory({}, req as Request);
+    const result: MongoPagination = factory({}, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: { key: 'value' },
@@ -53,15 +63,15 @@ describe('Tests related to the MongoPagination ParamDecorator', () => {
   });
 
   it('MPPD04 - should throw bad request exception on parse error', () => {
-    const req: {} = { query: { filter: '{invalidJson}' } };
+    req = { query: { filter: '{invalidJson}' } };
 
-    expect(() => factory({}, req as Request)).to.throw(BadRequestException);
+    expect(() => factory({}, ctx as ExecutionContext)).to.throw(BadRequestException);
   });
 
   it('MPPD05 - should handle custom query params name', () => {
-    const req: {} = { query: { _page: '1', _per_page: '20', filter: '{"key": "value"}', sort: '[]' } };
+    req = { query: { _page: '1', _per_page: '20', filter: '{"key": "value"}', sort: '[]' } };
 
-    const result: MongoPagination = factory({ pageName: '_page', perPageName: '_per_page' }, req as Request);
+    const result: MongoPagination = factory({ pageName: '_page', perPageName: '_per_page' }, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: { key: 'value' },
@@ -72,9 +82,9 @@ describe('Tests related to the MongoPagination ParamDecorator', () => {
   });
 
   it('MPPD06 - should successfully parse filters (per_page: 0)', () => {
-    const req: {} = { query: { page: '1', per_page: '0', filter: '{"key": "value"}', sort: '[]' } };
+    req = { query: { page: '1', per_page: '0', filter: '{"key": "value"}', sort: '[]' } };
 
-    const result: MongoPagination = factory({}, req as Request);
+    const result: MongoPagination = factory({}, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: { key: 'value' },
