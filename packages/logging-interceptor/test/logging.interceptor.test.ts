@@ -15,7 +15,6 @@ describe('Logging interceptor', () => {
     app = moduleRef.createNestApplication();
     app.useLogger(Logger);
 
-    
     await app.init();
   });
 
@@ -76,8 +75,7 @@ describe('Logging interceptor', () => {
     const url: string = `/cats/badrequest`;
 
     await request(app.getHttpServer()).get(url).expect(HttpStatus.BAD_REQUEST);
-    
-    
+
     const ctx: string = `LoggingInterceptor - GET - ${url}`;
     const resCtx: string = `LoggingInterceptor - 400 - GET - ${url}`;
     const incomingMsg: string = `Incoming request - GET - ${url}`;

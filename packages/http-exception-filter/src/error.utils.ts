@@ -33,7 +33,7 @@ export function getErrorMessage(exResponse: ExceptionResponse | string): string 
 
   if (Array.isArray(exResponse.message)) {
     // process the first error message
-    const error: ValidationError | string = exResponse.message[0];
+    const error: ValidationError | string = exResponse.message[0];
     if (typeof error === 'string') {
       return error;
     }

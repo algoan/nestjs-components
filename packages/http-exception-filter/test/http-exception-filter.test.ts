@@ -88,10 +88,15 @@ describe('Http Exception Filter', () => {
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
     const url: string = `/cats/create`;
 
-    const { body: resBody } = await request(app.getHttpServer()).post(url).send(new Array(10000).fill({
-      name: 'Garfield',
-      email: 'garfield-the-cat@yopmail.com'
-    })).expect(HttpStatus.PAYLOAD_TOO_LARGE);
+    const { body: resBody } = await request(app.getHttpServer())
+      .post(url)
+      .send(
+        new Array(10000).fill({
+          name: 'Garfield',
+          email: 'garfield-the-cat@yopmail.com',
+        }),
+      )
+      .expect(HttpStatus.PAYLOAD_TOO_LARGE);
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `413 [POST ${url}] has thrown an HTTP client error`,

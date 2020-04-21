@@ -1,4 +1,4 @@
-import {  IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 /**
  * Dto to create a new cat
@@ -6,5 +6,4 @@ import {  IsNotEmpty } from 'class-validator';
 export class CreateCatDto {
   @IsNotEmpty()
   public name: string | undefined;
-
 }
