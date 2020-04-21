@@ -74,7 +74,7 @@ jobs:
           git config --global user.email "${GH_BOT_EMAIL}" && git config --global user.name "${GH_BOT_FULLNAME}"
       - attach_workspace:
           at: ~/tmp
-      - run: npx lerna version --yes
+      - run: npx lerna version --conventional-commits --yes
       - persist_to_workspace:
           root: ~/tmp
           paths: .

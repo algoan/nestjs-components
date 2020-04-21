@@ -12,7 +12,7 @@
     "publish": "lerna publish --yes",
     "commit": "git-cz",
     "prettier": "prettier --write 'packages/**/*.ts'",
-    "lint": "tslint ./packages/*/src/*.ts{,x} ./packages/*/src/**/*.ts{,x} --project tsconfig.json"
+    "lint": "tslint ./packages/*/src/*.ts{,x} ./packages/*/src/**/*.ts{,x} --project tsconfig.json -e \"**/*.test.ts\""
   },
   "publishConfig": {
     "access": "public"
@@ -49,9 +49,9 @@
     "typescript": "^3.8.3"
   },
   "lint-staged": {
-    "**/*.ts,!**/*.+(test|spec).tsx?": [
-      "tslint --project tsconfig.json",
-      "prettier --write"
+    "**/*.ts": [
+      "prettier --list-different",
+      "tslint --project tsconfig.json -e \"**/*.test.ts\""
     ]
   },
   "config": {

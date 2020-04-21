@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { Response } from 'express';
-import {get} from 'lodash';
+import { get } from 'lodash';
 import { getCode, getErrorMessage } from './error.utils';
 
 /**
