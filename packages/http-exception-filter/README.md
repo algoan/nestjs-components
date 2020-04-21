@@ -13,7 +13,7 @@ A simple NestJS Http [Exception Filter](https://docs.nestjs.com/exception-filter
 ## Installation
 
 ```bash
-npm install --save @algoan/http-exception-filter
+npm install --save @algoan/nestjs-http-exception-filter
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ Example:
 ```typescript
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from '@algoan/http-exception-filter';
+import { HttpExceptionFilter } from '@algoan/nestjs-http-exception-filter';
 
 /**
  * Core module: This module sets the http exception filter globally
@@ -45,7 +45,7 @@ Example 2:
 
 ```typescript
 import { NestFactory} from '@nestjs/core';
-import {HttpExceptionFilter} from '@algoan/http-exception-filter';
+import {HttpExceptionFilter} from '@algoan/nestjs-http-exception-filter';
 import { MainModule } from './main.module';
 
 async function bootstrap() {
