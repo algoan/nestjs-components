@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-logging-interceptor",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A simple NestJS interceptor to log input/output requests",
   "keywords": [
     "nestjs",
