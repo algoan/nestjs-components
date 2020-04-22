@@ -13,6 +13,10 @@ describe('Tests related to the Link Header interceptor', () => {
     await app.init();
   });
 
+  after(async () => {
+    await app.close();
+  });
+
   describe('Tests with a limit of 100', () => {
     it('AD01 - should successfully add Link in headers without params', async () => {
       const res: request.Response = await request(app.getHttpServer()).get('/data').expect(200);

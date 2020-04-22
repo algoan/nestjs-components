@@ -71,5 +71,10 @@
   "dependencies": {
     "content-range": "^1.1.0",
     "format-link-header": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "7.x.x",
+    "@nestjs/core": "7.x.x",
+    "@nestjs/platform-express": "7.x.x"
   }
 }
