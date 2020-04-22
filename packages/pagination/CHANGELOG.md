@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.2.3...@algoan/nestjs-pagination@3.0.0) (2020-04-22)
+
+
+### Features
+
+* **nestjs-pagination:** migrate the custom decorator to nest 7 ([963d304](https://github.com/algoan/nestjs-components/commit/963d304d347ea50718efd28f328b617df4532a56))
+
+
+### BREAKING CHANGES
+
+* **nestjs-pagination:** The new decorator works with nest7. This do not work with nest 6
+
+
+
+
+
 ## [2.2.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@2.2.2...@algoan/nestjs-pagination@2.2.3) (2020-04-21)
 
 **Note:** Version bump only for package @algoan/nestjs-pagination
