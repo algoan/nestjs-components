@@ -6,7 +6,11 @@
     "publish": {
       "message": "chore(packages): release",
       "conventionalCommits": true,
-      "npmClient": "npm"
+      "npmClient": "npm",
+      "ignoreChanges": [
+        "**/tests/**",
+        "**/*.md"
+      ]
     }
   },
   "packages": [

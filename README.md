@@ -26,3 +26,9 @@ See [the documentation here](./packages/logging-interceptor/).
 A simple NestJS Http Exception Filter.
 
 See [the documentation here](./packages/http-exception-filter/).
+
+## NestJS Google Cloud PubSub MicroService
+
+A Google Cloud PubSub transport strategy for NestJS.
+
+See [the documentation here](./packages/google-pubsub-microservice/).
