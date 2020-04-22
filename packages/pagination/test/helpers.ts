@@ -3,7 +3,7 @@ import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { CustomParamFactory } from '@nestjs/common/interfaces/features/custom-route-param-factory.interface';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { LinkHeaderInterceptor } from '../src';
+import { LinkHeaderInterceptor, MongoPagination, MongoPaginationParamDecorator } from '../src';
 
 /**
  * Fake data format
@@ -47,6 +47,14 @@ class FakeAppController {
   @Get('/data-custom-query')
   public async findAllWithCustomQuery(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
     return this.findAll();
+  }
+
+  /**
+   * Test the pagination decorator
+   */
+  @Get('/pagination')
+  public async testPagination(@MongoPaginationParamDecorator() pagination: MongoPagination): Promise<{}> {
+    return { pagination };
   }
 }
 
