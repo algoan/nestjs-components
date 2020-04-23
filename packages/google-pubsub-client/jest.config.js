@@ -7,4 +7,5 @@ module.exports = {
   coverageDirectory: "coverage",
   collectCoverageFrom: ["./src/**/*.ts"],
   rootDir: ".",
+  testTimeout: 10000,
 };
