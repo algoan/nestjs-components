@@ -11,7 +11,7 @@
     "build:all": "lerna run build --parallel",
     "publish": "lerna publish --yes",
     "commit": "git-cz",
-    "prettier": "prettier --write 'packages/*/{src,test}/*.ts'",
+    "prettier": "prettier --write 'packages/*/{src,test}/**/*.ts'",
     "lint": "tslint ./packages/*/src/*.ts{,x} ./packages/*/src/**/*.ts{,x} --project tsconfig.json -e \"**/*.test.ts\""
   },
   "publishConfig": {
