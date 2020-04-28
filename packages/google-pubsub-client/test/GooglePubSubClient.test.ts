@@ -1,55 +1,70 @@
 const Emulator = require('google-pubsub-emulator');
-import { GCPubSubClient } from '../src';
-import { PubSub, Subscription } from '@google-cloud/pubsub';
+import { GCPubSubServer } from '@algoan/nestjs-google-pubsub-microservice';
+import { INestApplication, INestMicroservice } from '@nestjs/common';
+import { TestingModule } from '@nestjs/testing';
+import * as delay from 'delay';
+import * as request from 'supertest';
+import { getTestingApplication } from './client-app/main';
+import { AppService } from './server-app/app.service';
+import { getTestingServer } from './server-app/main';
 
-describe.only('GooglePubSubServer', () => {
+describe('GooglePubSubServer', () => {
   const projectId: string = 'algoan-test';
-  const topicName: string = 'test-topic';
-  const subscriptionName: string = 'test-subs';
-  const data: { foo: string } = { foo: 'bar' };
+  let server: INestApplication;
+  let mServer: INestMicroservice;
   let emulator: any;
+  let gPubSubServer: GCPubSubServer;
+  let msModule: TestingModule;
 
-  beforeAll(async () => {
+  beforeAll(async (done: jest.DoneCallback) => {
     /**
      * Start a new Google PubSub simulator
      */
-
     emulator = new Emulator({
       projectId,
       port: 4000,
     });
     await emulator.start();
+
+    /**
+     * Start the client app
+     */
+    const { app } = await getTestingApplication();
+    server = await app.init();
+
+    /**
+     * Start the server app using the pubsub microservice
+     */
+    gPubSubServer = new GCPubSubServer({
+      projectId,
+      port: 4000,
+    });
+    const { app: mApp, module } = await getTestingServer(gPubSubServer);
+    msModule = module;
+    await mApp.init();
+    mServer = await mApp.listen(() => done());
   });
 
   afterAll(async () => {
+    await server.close();
+    await mServer.close();
     /**
      * Close the fake server and the simulator
      */
     await emulator.stop();
   });
 
-  it('GCPSC01 - should properly emit an event', async (done: jest.DoneCallback) => {
-    /**
-     * Create a pubsub client
-     */
-    const pubsub: PubSub = new PubSub({ projectId });
+  it('GCPSC01 - should properly emit an event', async () => {
+    const appService: AppService = msModule.get(AppService);
+    const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
+    await request(server.getHttpServer()).post('/emit').send({}).expect(201);
 
-    /**
-     * Subscribe to the topic
-     */
-    await pubsub.createTopic(topicName);
-    await pubsub.topic(topicName).createSubscription(subscriptionName);
-    const subscription: Subscription = pubsub.subscription(subscriptionName);
+    await delay(100);
 
-    subscription.on('message', (message) => {
-      expect(message.data.toString()).toEqual(JSON.stringify(data));
-      done();
-    });
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 
-    const client: GCPubSubClient = new GCPubSubClient({
-      projectId,
-    });
-
-    client.emit(topicName, data);
+  it('GCPSC02 - should throw an error - method send not implemented', () => {
+    return request(server.getHttpServer()).post('/send').send({}).expect(500);
   });
 });
