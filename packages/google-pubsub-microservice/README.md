@@ -80,6 +80,7 @@ This module uses [@algoan/pubsub](https://github.com/algoan/pubsub) library whic
 Create a new Server instance of Google PubSub. It retrieves all message handlers patterns and creates [subscriptions](https://cloud.google.com/pubsub/docs/pull).
 
 - `options`: Algoan PubSub options. More information [here](https://github.com/algoan/pubsub/#pubsubfactorycreate-transport-options-).
+- `options.listenOptions`: Global options which will be applied to all subscriptions.
 
 ## Other NestJS Google Cloud PubSub server
 
