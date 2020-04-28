@@ -2,13 +2,13 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": [
     "./src/**/*",
     "./test/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
+    "node_modules"
   ]
 }
