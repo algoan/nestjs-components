@@ -32,3 +32,9 @@ See [the documentation here](./packages/http-exception-filter/).
 A Google Cloud PubSub transport strategy for NestJS.
 
 See [the documentation here](./packages/google-pubsub-microservice/).
+
+## NestJS Google Cloud PubSub Client Proxy
+
+An extended [Client Proxy](https://docs.nestjs.com/microservices/basics#client) for Google Cloud PubSub.
+
+See [the documentation here](./packages/google-pubsub-client/).

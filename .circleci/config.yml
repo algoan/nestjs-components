@@ -45,7 +45,7 @@ jobs:
           - dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
-          command: npm ci
+          command: npm i
       - run:
           name: Lerna bootstrap the packages
           command: npx lerna bootstrap

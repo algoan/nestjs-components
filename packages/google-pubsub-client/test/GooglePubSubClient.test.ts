@@ -16,7 +16,7 @@ describe('GooglePubSubServer', () => {
   let gPubSubServer: GCPubSubServer;
   let msModule: TestingModule;
 
-  beforeAll(async (done: jest.DoneCallback) => {
+  beforeAll(async () => {
     /**
      * Start a new Google PubSub simulator
      */
@@ -25,7 +25,9 @@ describe('GooglePubSubServer', () => {
       port: 4000,
     });
     await emulator.start();
+  });
 
+  beforeEach(async (done: jest.DoneCallback) => {
     /**
      * Start the client app
      */
@@ -41,13 +43,16 @@ describe('GooglePubSubServer', () => {
     });
     const { app: mApp, module } = await getTestingServer(gPubSubServer);
     msModule = module;
-    await mApp.init();
-    mServer = await mApp.listen(() => done());
+    mServer = await mApp.init();
+    await mApp.listen(() => done());
+  });
+
+  afterEach(async () => {
+    await server.close();
+    await mServer.close();
   });
 
   afterAll(async () => {
-    await server.close();
-    await mServer.close();
     /**
      * Close the fake server and the simulator
      */
@@ -59,12 +64,12 @@ describe('GooglePubSubServer', () => {
     const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
     await request(server.getHttpServer()).post('/emit').send({}).expect(201);
 
-    await delay(100);
+    await delay(1000);
 
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('GCPSC02 - should throw an error - method send not implemented', () => {
+  it('GCPSC02 - should throw an error - method send not implemented', async () => {
     return request(server.getHttpServer()).post('/send').send({}).expect(500);
   });
 });
