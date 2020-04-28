@@ -1,0 +1,63 @@
+{
+  "name": "@algoan/nestjs-google-pubsub-client",
+  "version": "0.0.1",
+  "description": "A NestJS ClientProxy for Google Cloud PubSub",
+  "keywords": [
+    "nestjs",
+    "nodejs",
+    "typescript",
+    "google-cloud-pubsub"
+  ],
+  "author": "ccoeurderoy",
+  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/google-pubsub-client#readme",
+  "license": "ISC",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/src"
+  ],
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algoan/nestjs-components.git"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "jest --detectOpenHandles --verbose",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config ./jest.config.js",
+    "test:cov": "npm t -- --coverage",
+    "pretest": "npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "peerDependencies": {
+    "@algoan/pubsub": "2.x.x"
+  },
+  "devDependencies": {
+    "@algoan/nestjs-google-pubsub-microservice": "^0.1.0",
+    "@google-cloud/pubsub": "^1.7.2",
+    "@nestjs/common": "^7.0.8",
+    "@nestjs/core": "^7.0.8",
+    "@nestjs/microservices": "^7.0.8",
+    "@nestjs/platform-express": "^7.0.9",
+    "@nestjs/testing": "^7.0.8",
+    "@types/supertest": "^2.0.8",
+    "delay": "^4.3.0",
+    "google-pubsub-emulator": "^3.0.2",
+    "jest": "^25.4.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.5",
+    "supertest": "^4.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@algoan/pubsub": "^2.0.1"
+  }
+}

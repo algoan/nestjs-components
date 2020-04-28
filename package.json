@@ -6,12 +6,12 @@
   "scripts": {
     "test": "npm run test:all",
     "build": "npm run build:all",
-    "test:all": "lerna run test --parallel",
+    "test:all": "lerna run test",
     "test:cov:all": "lerna run test:cov --parallel",
-    "build:all": "lerna run build --parallel",
+    "build:all": "lerna run build",
     "publish": "lerna publish --yes",
     "commit": "git-cz",
-    "prettier": "prettier --write 'packages/*/{src,test}/*.ts'",
+    "prettier": "prettier --write 'packages/*/{src,test}/**/*.ts'",
     "lint": "tslint ./packages/*/src/*.ts{,x} ./packages/*/src/**/*.ts{,x} --project tsconfig.json -e \"**/*.test.ts\""
   },
   "publishConfig": {

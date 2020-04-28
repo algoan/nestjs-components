@@ -1,0 +1,1 @@
+export { GCPubSubClient } from './GooglePubSubClient';
