@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@0.1.0...@algoan/nestjs-google-pubsub-microservice@0.2.0) (2020-04-28)
+
+
+### Features
+
+* **google-pubsub-microservice:** add listenOptions to the server ([1e2869b](https://github.com/algoan/nestjs-components/commit/1e2869b9c04929b4658bdc9cf6e75757a5ad5017))
+
+
+
+
+
 # 0.1.0 (2020-04-22)
 
 
