@@ -1,57 +1,91 @@
-import { EmitOptions, GCListenOptions, GCPubSub, GooglePubSubOptions, PubSubFactory, Transport } from '@algoan/pubsub';
-import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
-import { Observable, of } from 'rxjs';
+import { GCPubSub, GooglePubSubOptions, PubSubFactory, Transport } from '@algoan/pubsub';
+import { Logger } from '@nestjs/common';
+import { ClientProxy, ReadPacket } from '@nestjs/microservices';
 
+export type GCPubSubClientOptions = GooglePubSubOptions;
 /**
  * Algoan pub sub client
  */
 export class GCPubSubClient extends ClientProxy {
-  public pubSub: GCPubSub;
+  /**
+   * Logger
+   */
+  protected logger: Logger = new Logger(GCPubSubClient.name);
+  /**
+   * Algoan PubSub client
+   */
+  protected pubSub?: GCPubSub;
 
-  constructor(options: GooglePubSubOptions) {
+  /**
+   * Algoan PubSub client
+   */
+  private readonly options?: GCPubSubClientOptions;
+
+  constructor(options?: GCPubSubClientOptions) {
     super();
-    this.pubSub = PubSubFactory.create({
-      transport: Transport.GOOGLE_PUBSUB,
-      options,
-    });
+    this.options = options;
   }
 
   /**
    * Connect
    */
   public async connect(): Promise<void> {
-    return Promise.resolve();
+    const isPubSubInstanceExisting: boolean = this.pubSub !== undefined;
+    this.logger.debug(
+      {
+        isPubSubInstanceExisting,
+      },
+      `Trying to connect to the Google PubSub Client Proxy`,
+    );
+
+    if (isPubSubInstanceExisting) {
+      return;
+    }
+
+    this.pubSub = PubSubFactory.create({
+      transport: Transport.GOOGLE_PUBSUB,
+      options: this.options,
+    });
   }
 
   /**
-   * Close
+   * Close the connection with the client
    */
   public async close(): Promise<void> {
-    return Promise.resolve();
+    this.logger.debug('Closing the GooglePubSubClient Proxy');
+    if (this.pubSub !== undefined) {
+      await this.pubSub.client.close();
+    }
+    this.pubSub = undefined;
   }
 
   /**
-   * Publish
+   * Override the abstract "dispatchEvent" by simply emitting an Event
+   * @param _packet Containing the event pattern and the payload sent
    */
-  // tslint:disable-next-line
-  public publish(_packet: ReadPacket, _callback: (packet: WritePacket) => void): any {
-    return undefined;
-  }
-
-  /**
-   *
-   * dispatchEvent
-   */
-  // tslint:disable-next-line
+  // tslint:disable-next-line: no-any
   public async dispatchEvent(_packet: ReadPacket): Promise<any> {
-    return undefined;
+    if (this.pubSub === undefined) {
+      return undefined;
+    }
+
+    const pattern: string = this.normalizePattern(_packet.pattern);
+    this.logger.debug(
+      {
+        pattern,
+        data: _packet.data,
+      },
+      'Emitting an event through the GCPubSubClient',
+    );
+
+    return this.pubSub.emit(pattern, _packet.data);
   }
 
   /**
-   * Emit an event
+   * NOTE: this method has not been yet implemented
+   * It will be in the future 😉
    */
-  // tslint:disable-next-line
-  public emit(pattern: string, data: any, options?: EmitOptions<GCListenOptions>): Observable<any> {
-    return of(this.pubSub.emit(pattern, data, options));
+  public publish(): Function {
+    throw new Error('NOT_YET_IMPLEMENTED');
   }
 }
