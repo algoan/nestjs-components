@@ -1,4 +1,11 @@
-import { EmittedMessage, GCPubSub, GooglePubSubOptions, PubSubFactory, Transport } from '@algoan/pubsub';
+import {
+  EmittedMessage,
+  GCListenOptions,
+  GCPubSub,
+  GooglePubSubOptions,
+  PubSubFactory,
+  Transport,
+} from '@algoan/pubsub';
 import { Logger } from '@nestjs/common';
 import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
 
@@ -16,7 +23,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    */
   protected readonly logger: Logger = new Logger(GCPubSubServer.name);
 
-  constructor(private readonly options?: GooglePubSubOptions) {
+  constructor(private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions }) {
     super();
   }
 
@@ -39,6 +46,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
         gcPubSub.listen(subscriptionName, {
           onMessage: this.handleMessage(subscriptionName),
           onError: this.handleError,
+          options: this.options?.listenOptions,
         }),
       );
     }
