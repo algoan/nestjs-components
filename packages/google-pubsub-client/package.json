@@ -58,6 +58,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@algoan/pubsub": "^2.0.1"
+    "@algoan/pubsub": "^3.0.1"
   }
 }

@@ -39,7 +39,7 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "peerDependencies": {
-    "@algoan/pubsub": "3.x.x"
+    "@algoan/pubsub": ">=3.0.1"
   },
   "devDependencies": {
     "@nestjs/common": "^7.0.8",
@@ -54,6 +54,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@algoan/pubsub": "^3.0.0"
+    "@algoan/pubsub": "^3.0.1"
   }
 }
