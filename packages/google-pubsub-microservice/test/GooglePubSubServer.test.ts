@@ -49,7 +49,15 @@ describe('GooglePubSubServer', () => {
     const server: GCPubSubServer = new GCPubSubServer({
       subscriptionsPrefix: 'test-app',
       projectId: 'algoan-test',
-      debug: true,
+      listenOptions: {
+        subscriptionOptions: {
+          sub: {
+            streamingOptions: {
+              maxStreams: 1,
+            },
+          },
+        },
+      },
     });
     const { app } = await getTestingApplication(server);
     const subscriptionName: string = `test-app%${SUBSCRIPTION_NAME}`;
