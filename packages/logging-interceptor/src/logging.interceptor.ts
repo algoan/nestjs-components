@@ -39,8 +39,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
 
-    this.logger.log(message, ctx);
-    this.logger.debug(
+    this.logger.log(
       {
         message,
         method,
@@ -75,8 +74,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
     const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
-    this.logger.log(message, ctx);
-    this.logger.debug(
+    this.logger.log(
       {
         message,
         body,
