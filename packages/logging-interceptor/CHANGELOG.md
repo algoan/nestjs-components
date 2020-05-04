@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.0.0...@algoan/nestjs-logging-interceptor@2.1.0) (2020-05-04)
+
+
+### Features
+
+* **logging-interceptor:** add the error object in the error log context ([6dee059](https://github.com/algoan/nestjs-components/commit/6dee059908b69550af2e81e491e9974ae9cfac30))
+
+
+
+
+
 # [2.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@1.2.4...@algoan/nestjs-logging-interceptor@2.0.0) (2020-05-04)
 
 
