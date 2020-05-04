@@ -95,7 +95,6 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
     const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
-    // tslint:disable-next-line: prefer-conditional-expression
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(
         {
@@ -103,6 +102,7 @@ export class LoggingInterceptor implements NestInterceptor {
           url,
           body,
           message,
+          error,
         },
         error.stack,
         ctx,
