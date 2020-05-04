@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@1.2.4...@algoan/nestjs-logging-interceptor@2.0.0) (2020-05-04)
+
+
+### Bug Fixes
+
+* **logging.interceptor:** log as info level requests and responses ([d32bd8e](https://github.com/algoan/nestjs-components/commit/d32bd8e01c6a53747e2ddfb4f2df9b7539408c0c))
+
+
+### BREAKING CHANGES
+
+* **logging.interceptor:** Info level replaced by debug
+
+
+
+
+
 ## [1.2.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@1.2.3...@algoan/nestjs-logging-interceptor@1.2.4) (2020-04-28)
 
 **Note:** Version bump only for package @algoan/nestjs-logging-interceptor
