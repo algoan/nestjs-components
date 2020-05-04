@@ -89,8 +89,6 @@ This interceptor logs:
 # Incoming request details
 
 # info level
-[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - GET - /] Incoming request - GET - /
-# debug level
 [Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - GET - /] Object:
 {
   "message": "LoggingInterceptor - GET - /",
@@ -104,14 +102,13 @@ This interceptor logs:
   }
 }
 ```
-  - outgoing request details (info + (debug | warn | error))
+
+- outgoing request details (info + (debug | warn | error))
 
 ```bash
 # Success example
 
-# info level
-[Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - 200 - GET - /] Outgoing response - 200 - GET - /
-# debug level
+# Info level
 [Nest] 27080   - 04/06/2020, 10:11:54 AM   [LoggingInterceptor - 200 - GET - /] Object:
 {
   "message": "LoggingInterceptor - 200 - GET - /",
@@ -165,6 +162,7 @@ Error: Internal Server Error
 ### Use a custom Logger
 
 #### Nest-pino
+
 In this example, we are going to override the default Logger implementation with a Pino logger (refer to the [this official NestJS documentation](https://docs.nestjs.com/techniques/logger#using-the-logger-for-application-logging))
 
 ```typescript
@@ -182,7 +180,7 @@ import { LoggerModule } from 'nestjs-pino';
 export class AppModule {}
 ```
 
-Then in the application boostrap, set the Pino logger as the one to substitute to the default Logger.
+Then in the application bootstrap, set the [Pino logger](https://github.com/iamolegga/nestjs-pino) as the one to substitute to the default Logger.
 
 ```typescript
 import { NestFactory} from '@nestjs/core';
