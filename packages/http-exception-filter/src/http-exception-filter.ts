@@ -14,7 +14,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
   /**
    * Catch and format thrown exception
    */
-  public catch(exception: unknown, host: ArgumentsHost): void {
+  // tslint:disable-next-line: no-any
+  public catch(exception: any, host: ArgumentsHost): void {
     const ctx: HttpArgumentsHost = host.switchToHttp();
     const request: Request = ctx.getRequest();
     const response: Response = ctx.getResponse();
@@ -44,16 +45,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
           - request size: ${get(exception, 'length')};
           - request limit: ${get(exception, 'limit')}.`;
     }
+    const exceptionStack: string = 'stack' in exception ? exception.stack : '';
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error({
         message: `${status} [${request.method} ${request.url}] has thrown a critical error`,
         headers: request.headers,
-        exception,
+        exceptionStack,
       });
     } else if (status >= HttpStatus.BAD_REQUEST) {
       this.logger.warn({
         message: `${status} [${request.method} ${request.url}] has thrown an HTTP client error`,
-        exception,
+        exceptionStack,
         headers: request.headers,
       });
     }

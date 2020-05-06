@@ -35,7 +35,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [GET ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
@@ -54,7 +54,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [POST ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
@@ -73,7 +73,7 @@ describe('Http Exception Filter', () => {
 
     expect(errorSpy).toHaveBeenCalledWith({
       message: `500 [GET ${url}] has thrown a critical error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
@@ -100,7 +100,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `413 [POST ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
