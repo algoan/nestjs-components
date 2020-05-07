@@ -47,11 +47,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
     const exceptionStack: string = 'stack' in exception ? exception.stack : '';
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
-      this.logger.error({
-        message: `${status} [${request.method} ${request.url}] has thrown a critical error`,
-        headers: request.headers,
+      this.logger.error(
+        {
+          message: `${status} [${request.method} ${request.url}] has thrown a critical error`,
+          headers: request.headers,
+        },
         exceptionStack,
-      });
+      );
     } else if (status >= HttpStatus.BAD_REQUEST) {
       this.logger.warn({
         message: `${status} [${request.method} ${request.url}] has thrown an HTTP client error`,
