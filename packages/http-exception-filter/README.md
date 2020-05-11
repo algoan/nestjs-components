@@ -98,14 +98,7 @@ bootstrap();
 [Nest] 96665   - 04/14/2020, 6:35:27 PM   [HttpExceptionFilter] Object:
 {
   "message": "400 [GET /badrequest] has thrown an HTTP client error",
-  "exception": {
-    "response": {
-      "statusCode": 400,
-      "message": "Bad Request"
-    },
-    "status": 400,
-    "message": "Bad Request"
-  },
+  "exceptionStack": "stackTrace",
   "headers": {
     "host": "localhost:3000",
     "user-agent": "insomnia/7.1.1",
@@ -122,14 +115,7 @@ bootstrap();
     "user-agent": "insomnia/7.1.1",
     "accept": "*/*"
   },
-  "exception": {
-    "response": {
-      "statusCode": 500,
-      "message": "Internal Server Error"
-    },
-    "status": 500,
-    "message": "Internal Server Error"
-  }
+  "exceptionStack": "stackTrace",
 }
 ```
  

@@ -1,4 +1,4 @@
-import { INestApplication, Logger, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { CatsModule } from './test-app/cats/cats.module';
@@ -35,7 +35,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [GET ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
@@ -54,7 +54,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [POST ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
@@ -71,11 +71,13 @@ describe('Http Exception Filter', () => {
 
     const { body: resBody } = await request(app.getHttpServer()).get(url).expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    expect(errorSpy).toHaveBeenCalledWith({
-      message: `500 [GET ${url}] has thrown a critical error`,
-      exception: expect.any(Error),
-      headers: expect.anything(),
-    });
+    expect(errorSpy).toHaveBeenCalledWith(
+      {
+        message: `500 [GET ${url}] has thrown a critical error`,
+        headers: expect.anything(),
+      },
+      expect.any(String),
+    );
 
     expect(resBody).toEqual({
       code: 'INTERNAL_SERVER_ERROR',
@@ -100,7 +102,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `413 [POST ${url}] has thrown an HTTP client error`,
-      exception: expect.any(Error),
+      exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
 
