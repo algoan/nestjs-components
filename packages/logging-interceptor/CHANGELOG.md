@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.1.0...@algoan/nestjs-logging-interceptor@2.1.1) (2020-05-11)
+
+
+### Bug Fixes
+
+* **logging-interceptor:** provide a fallback if not a HttpException ([cfc602b](https://github.com/algoan/nestjs-components/commit/cfc602b89180737d1a41a1c33d92a18886df3f2b))
+
+
+
+
+
 # [2.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.0.0...@algoan/nestjs-logging-interceptor@2.1.0) (2020-05-04)
 
 
