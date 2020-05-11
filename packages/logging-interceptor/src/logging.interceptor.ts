@@ -54,7 +54,7 @@ export class LoggingInterceptor implements NestInterceptor {
         next: (val: unknown): void => {
           this.logNext(val, context);
         },
-        error: (err: HttpException): void => {
+        error: (err: Error): void => {
           this.logError(err, context);
         },
       }),
@@ -88,35 +88,46 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param error Error object
    * @param context details about the current request
    */
-  private logError(error: HttpException, context: ExecutionContext): void {
+  private logError(error: Error, context: ExecutionContext): void {
     const req: Request = context.switchToHttp().getRequest<Request>();
     const { method, url, body } = req;
-    const statusCode: number = error.getStatus();
-    const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
-    const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
-    if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
+    if (error instanceof HttpException) {
+      const statusCode: number = error.getStatus();
+      const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
+      const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
+
+      if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
+        this.logger.error(
+          {
+            method,
+            url,
+            body,
+            message,
+            error,
+          },
+          error.stack,
+          ctx,
+        );
+      } else {
+        this.logger.warn(
+          {
+            method,
+            url,
+            error,
+            body,
+            message,
+          },
+          ctx,
+        );
+      }
+    } else {
       this.logger.error(
         {
-          method,
-          url,
-          body,
-          message,
-          error,
+          message: `Outgoing response - ${method} - ${url}`,
         },
         error.stack,
-        ctx,
-      );
-    } else {
-      this.logger.warn(
-        {
-          method,
-          url,
-          error,
-          body,
-          message,
-        },
-        ctx,
+        `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`,
       );
     }
   }
