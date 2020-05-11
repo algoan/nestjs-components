@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.1...@algoan/nestjs-http-exception-filter@1.0.2) (2020-05-11)
+
+
+### Bug Fixes
+
+* **httpexceptionfilter:** logging the trace instead of the error object ([7831479](https://github.com/algoan/nestjs-components/commit/7831479c012c06bcb2fc53f2b1c4a72c97835d77))
+
+
+
+
+
 ## [1.0.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.0...@algoan/nestjs-http-exception-filter@1.0.1) (2020-04-28)
 
 **Note:** Version bump only for package @algoan/nestjs-http-exception-filter
