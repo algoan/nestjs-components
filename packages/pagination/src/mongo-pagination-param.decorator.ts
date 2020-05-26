@@ -8,7 +8,10 @@ const DEFAULT_NUMBER_OF_RESULTS: number = 10;
  * Mongo query
  */
 export interface MongoPagination {
-  filter: {};
+  filter: {
+    // tslint:disable-next-line: no-any
+    [key: string]: any;
+  };
   limit: number;
   skip: number;
   sort: [];
