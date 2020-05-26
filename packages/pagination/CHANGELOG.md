@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.1...@algoan/nestjs-pagination@3.0.2) (2020-05-26)
+
+
+### Bug Fixes
+
+* **mongo-pagination:** update the filter type to be more generic ([538b626](https://github.com/algoan/nestjs-components/commit/538b626ea4330da28d9d0fcea924a8cf0d70286b))
+
+
+
+
+
 ## [3.0.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.0...@algoan/nestjs-pagination@3.0.1) (2020-04-28)
 
 **Note:** Version bump only for package @algoan/nestjs-pagination
