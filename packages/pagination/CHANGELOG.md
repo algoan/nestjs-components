@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.2...@algoan/nestjs-pagination@3.0.3) (2020-05-27)
+
+
+### Bug Fixes
+
+* **pagination:** return a 0 content range header ([c282f52](https://github.com/algoan/nestjs-components/commit/c282f52d8ff9a2613a289cf411dab9cbaf1c793f))
+
+
+
+
+
 ## [3.0.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.1...@algoan/nestjs-pagination@3.0.2) (2020-05-26)
 
 
