@@ -186,10 +186,35 @@ describe('Tests related to the Link Header interceptor', () => {
       expect(res.body.resource).to.be.undefined;
       expect(res.body).to.be.an('array');
     });
+
+    it('AD12 - should add link even if no document where found', async () => {
+      const res: request.Response = await request(app.getHttpServer()).get('/resources').expect(200);
+
+      const expectedResult: formatLinkHeader.Links = {
+        first: {
+          url: '/resources?page=1&per_page=100',
+          page: '1',
+          per_page: '100',
+          rel: 'first',
+        },
+        last: {
+          url: '/resources?page=1&per_page=100',
+          page: '1',
+          per_page: '100',
+          rel: 'last',
+        },
+      };
+
+      expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+      expect(res.header['content-range']).to.equal('resources 0-0/0');
+      expect(res.body.totalDocs).to.be.undefined;
+      expect(res.body.resource).to.be.undefined;
+      expect(res.body).to.be.an('array');
+    });
   });
 
   describe('Tests with custom configuration', () => {
-    it('AD12 - should successfully handle custom query parameters', async () => {
+    it('AD20 - should successfully handle custom query parameters', async () => {
       const res: request.Response = await request(app.getHttpServer())
         .get('/data-custom-query?_page=41&numberPerPage=25')
         .expect(200);

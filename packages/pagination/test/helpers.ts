@@ -39,6 +39,15 @@ class FakeAppController {
   }
 
   /**
+   * Find no documents
+   */
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'resources' }))
+  @Get('/resources')
+  public async find(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
+    return { totalDocs: 0, resource: [] };
+  }
+
+  /**
    * Find all documents
    */
   @UseInterceptors(

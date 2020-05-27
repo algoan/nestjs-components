@@ -175,6 +175,14 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     let endIndex: number = Number(linkOptions.page) * limit;
     const startIndex: number = endIndex - limit;
 
+    /**
+     * If there is no document, return a "{resource} 0-0/0"
+     * NOTE: Otherwise the contentRange lib is returning "{resource} 0-NaN/0"
+     */
+    if (linkOptions.totalDocs === 0) {
+      return `${this.resource} 0-0/0`;
+    }
+
     if (endIndex > linkOptions.totalDocs) {
       endIndex = linkOptions.totalDocs + 1;
     }
