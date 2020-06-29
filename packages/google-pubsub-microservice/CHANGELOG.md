@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@1.0.1...@algoan/nestjs-google-pubsub-microservice@2.0.0) (2020-06-29)
+
+
+### Bug Fixes
+
+* **deps:** upgrade @algoan/pubsub to its latest version ([bf68f0b](https://github.com/algoan/nestjs-components/commit/bf68f0bbf7f3b90fe9dcefbbaba47e88dd6ff13e))
+
+
+### BREAKING CHANGES
+
+* **deps:** As google cloud pubsub has been updated to v2.0, it does not support anymore NodeJS
+v8
+
+
+
+
+
 ## [1.0.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@1.0.0...@algoan/nestjs-google-pubsub-microservice@1.0.1) (2020-04-29)
 
 

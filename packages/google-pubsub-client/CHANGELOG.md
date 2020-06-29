@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.1.3...@algoan/nestjs-google-pubsub-client@0.2.0) (2020-06-29)
+
+
+### Bug Fixes
+
+* **deps:** upgrade @algoan/pubsub to v4.0.1 ([17fa7e9](https://github.com/algoan/nestjs-components/commit/17fa7e9fcbf327856ced5bdb430a7493fe4852bb))
+
+
+### BREAKING CHANGES
+
+* **deps:** Does not support node v8 anymore
+
+
+
+
+
 ## [0.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.1.2...@algoan/nestjs-google-pubsub-client@0.1.3) (2020-04-29)
 
 
