@@ -39,9 +39,13 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "peerDependencies": {
-    "@algoan/pubsub": ">=3.0.1"
+    "@algoan/pubsub": ">=4.x.x",
+    "@nestjs/common": "^7.x.x",
+    "@nestjs/core": "^7.x.x",
+    "@nestjs/microservices": "^7.x.x"
   },
   "devDependencies": {
+    "@algoan/pubsub": "^4.0.1",
     "@nestjs/common": "^7.0.8",
     "@nestjs/core": "^7.0.8",
     "@nestjs/microservices": "^7.0.8",
@@ -52,8 +56,5 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
     "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "@algoan/pubsub": "^3.0.1"
   }
 }
