@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.2...@algoan/nestjs-http-exception-filter@1.0.3) (2020-06-30)
+
+
+### Bug Fixes
+
+* **deps:** add lodash as a dependency ([8ba8264](https://github.com/algoan/nestjs-components/commit/8ba826467b8ff6ddaf36003ae1199c635dbdf724))
+
+
+
+
+
 ## [1.0.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.1...@algoan/nestjs-http-exception-filter@1.0.2) (2020-05-11)
 
 
