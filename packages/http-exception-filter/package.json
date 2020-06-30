@@ -45,10 +45,12 @@
     "class-validator": "^0.11.1",
     "express": "^4.17.1",
     "jest": "^25.3.0",
-    "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
     "supertest": "^4.0.2",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
   }
 }
