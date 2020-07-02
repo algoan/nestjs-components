@@ -1,6 +1,6 @@
 {
   "name": "nestjs-custom-decorators-decorators",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "custom nest decorators for nestjs-custom-decorators",
   "keywords": [
     "nest",
@@ -33,16 +33,16 @@
     "jwt-decode": "^2.2.0"
   },
   "devDependencies": {
-    "@types/jwt-decode": "^2.2.1",
-    "@types/mocha": "^5.2.7",
-    "@types/supertest": "^2.0.10",
-    "ts-node": "^8.10.2",
-    "supertest": "^4.0.2",
-    "mocha": "^7.0.0",
     "@nestjs/core": "^7.0.7",
     "@nestjs/platform-express": "^7.0.7",
     "@nestjs/testing": "^7.0.7",
-    "reflect-metadata": "^0.1.13"
+    "@types/jwt-decode": "^2.2.1",
+    "@types/mocha": "^5.2.7",
+    "@types/supertest": "^2.0.10",
+    "mocha": "^7.0.0",
+    "reflect-metadata": "^0.1.13",
+    "supertest": "^4.0.2",
+    "ts-node": "^8.10.2"
   },
   "peerDependencies": {
     "@nestjs/common": ">=7.x.x",
