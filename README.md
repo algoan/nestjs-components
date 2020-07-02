@@ -38,3 +38,9 @@ See [the documentation here](./packages/google-pubsub-microservice/).
 An extended [Client Proxy](https://docs.nestjs.com/microservices/basics#client) for Google Cloud PubSub.
 
 See [the documentation here](./packages/google-pubsub-client/).
+
+# NestJs custom decorators
+
+A set of decorators for nest js
+
+See [the documentation here](./packages/nestjs-custom-decorators).

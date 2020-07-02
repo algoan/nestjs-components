@@ -1,0 +1,52 @@
+{
+  "name": "nestjs-custom-decorators-decorators",
+  "version": "1.0.0",
+  "description": "custom nest decorators for nestjs-custom-decorators",
+  "keywords": [
+    "nest",
+    "decorator",
+    "jwt"
+  ],
+  "author": "meriamBenSassi <meriam.bensassi@algoan.com>",
+  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/nestjs-custom-decorators-decorators#readme",
+  "license": "ISC",
+  "main": "lib/nestjs-custom-decorators-decorators.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algoan/nestjs-components.git"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha --reporter spec --exit --require ts-node/register ./test/**/*.test.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components/issues"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.0.7",
+    "jwt-decode": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/jwt-decode": "^2.2.1",
+    "@types/mocha": "^5.2.7",
+    "@types/supertest": "^2.0.10",
+    "ts-node": "^8.10.2",
+    "supertest": "^4.0.2",
+    "mocha": "^7.0.0",
+    "@nestjs/core": "^7.0.7",
+    "@nestjs/platform-express": "^7.0.7",
+    "@nestjs/testing": "^7.0.7",
+    "reflect-metadata": "^0.1.13"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=7.x.x",
+    "@nestjs/core": ">=7.x.x",
+    "@nestjs/platform-express": ">=7.x.x"
+  }
+}
