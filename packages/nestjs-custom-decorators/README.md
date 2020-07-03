@@ -2,6 +2,12 @@
 
 A set of nestjs custom decorators.
 
+## Installation
+
+```bash
+npm install --save @algoan/nestjs-custom-decoratos
+```
+
 ## User decorator
 
 A param decorator that fetches the `request.user` (could be added by a middleware or a guard) and add it to the params.

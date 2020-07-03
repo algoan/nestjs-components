@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-custom-decorators-decorators",
+  "name": "@algoan/nestjs-custom-decorators",
   "version": "1.1.0",
   "description": "custom nest decorators for nestjs-custom-decorators",
   "keywords": [
@@ -8,21 +8,27 @@
     "jwt"
   ],
   "author": "meriamBenSassi <meriam.bensassi@algoan.com>",
-  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/nestjs-custom-decorators-decorators#readme",
+  "homepage": "https://github.com/algoan/nestjs-components/tree/master/packages/nestjs-custom-decorators#readme",
   "license": "ISC",
-  "main": "lib/nestjs-custom-decorators-decorators.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "directories": {
-    "lib": "lib",
+    "lib": "src",
     "test": "test"
   },
   "files": [
-    "lib"
+    "dist/src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/algoan/nestjs-components.git"
   },
   "scripts": {
+    "build": "tsc -p .",
+    "pretest": "npm run build",
     "test": "NODE_ENV=test mocha --reporter spec --exit --require ts-node/register ./test/**/*.test.ts"
   },
   "bugs": {
