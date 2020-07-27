@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.2.0...@algoan/nestjs-google-pubsub-client@0.2.1) (2020-07-27)
+
+
+### Bug Fixes
+
+* **deps:** upgrade dependencies ([c62a9b6](https://github.com/algoan/nestjs-components/commit/c62a9b6f9cf84ffe1794c3f9cd60cd98cb68e044))
+
+
+
+
+
 # [0.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.1.3...@algoan/nestjs-google-pubsub-client@0.2.0) (2020-06-29)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@2.0.0...@algoan/nestjs-google-pubsub-microservice@2.0.1) (2020-07-27)
+
+
+### Bug Fixes
+
+* **deps:** upgrade dependencies ([c62a9b6](https://github.com/algoan/nestjs-components/commit/c62a9b6f9cf84ffe1794c3f9cd60cd98cb68e044))
+
+
+
+
+
 # [2.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@1.0.1...@algoan/nestjs-google-pubsub-microservice@2.0.0) (2020-06-29)
 
 
