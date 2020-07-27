@@ -61,7 +61,12 @@ function formatErrorCode(error: string): string {
   */
 function parseErrorMessage(error: ValidationError): string {
   let message: string = '';
-  const messages: Constraint = findConstraints(error);
+  const messages: Constraint | undefined = findConstraints(error);
+
+  if (messages === undefined) {
+    return 'Invalid parameter';
+  }
+
   Object.keys(messages).forEach((key: string): void => {
     message += `${message === '' ? '' : ' -- '}${messages[key]}`;
   });
@@ -72,7 +77,7 @@ function parseErrorMessage(error: ValidationError): string {
 /**
  * Find contraints in an error oject
  */
-function findConstraints(error: ValidationError): Constraint {
+function findConstraints(error: ValidationError): Constraint | undefined {
   let objectToIterate: ValidationError = error;
   while (!isEmpty(objectToIterate.children)) {
     objectToIterate = objectToIterate.children[0];

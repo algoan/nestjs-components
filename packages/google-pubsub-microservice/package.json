@@ -45,16 +45,16 @@
     "@nestjs/microservices": "^7.x.x"
   },
   "devDependencies": {
-    "@algoan/pubsub": "^4.0.1",
-    "@nestjs/common": "^7.0.8",
-    "@nestjs/core": "^7.0.8",
-    "@nestjs/microservices": "^7.0.8",
-    "@nestjs/testing": "^7.0.8",
-    "delay": "^4.3.0",
+    "@algoan/pubsub": "^4.1.1",
+    "@nestjs/common": "^7.3.2",
+    "@nestjs/core": "^7.3.2",
+    "@nestjs/microservices": "^7.3.2",
+    "@nestjs/testing": "^7.3.2",
+    "delay": "^4.4.0",
     "google-pubsub-emulator": "^3.0.2",
     "jest": "^25.4.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.0",
     "typescript": "^3.8.3"
   }
 }
