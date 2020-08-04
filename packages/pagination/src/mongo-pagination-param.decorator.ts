@@ -15,6 +15,7 @@ export interface MongoPagination {
   limit: number;
   skip: number;
   sort: [];
+  project: [];
 }
 
 export const getMongoQuery = (
@@ -28,12 +29,14 @@ export const getMongoQuery = (
     : DEFAULT_NUMBER_OF_RESULTS;
   let filter: {};
   let sort: [];
+  let project: [];
 
   try {
     filter = req.query.filter !== undefined ? JSON.parse(req.query.filter) : {};
     sort = req.query.sort !== undefined ? JSON.parse(req.query.sort) : [];
+    project = req.query.project !== undefined ? JSON.parse(req.query.project) : [];
   } catch (exception) {
-    throw new BadRequestException('The sort or filter parameter cannot be parsed');
+    throw new BadRequestException('Either the sort, filter or project parameter cannot be parsed');
   }
 
   return {
@@ -41,6 +44,7 @@ export const getMongoQuery = (
     limit,
     skip: (page - 1) * limit,
     sort,
+    project,
   };
 };
 
