@@ -26,6 +26,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       limit: 10,
       skip: 0,
       sort: [],
+      project: [],
     });
   });
 
@@ -39,6 +40,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       limit: 20,
       skip: 20,
       sort: [],
+      project: [],
     });
   });
 
@@ -52,6 +54,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       limit: 20,
       skip: 0,
       sort: [],
+      project: [],
     });
   });
 
@@ -74,6 +77,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       limit: 20,
       skip: 0,
       sort: [],
+      project: [],
     });
   });
 
@@ -87,6 +91,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       limit: 0,
       skip: 0,
       sort: [],
+      project: [],
     });
   });
 });
