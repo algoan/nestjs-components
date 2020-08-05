@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.4...@algoan/nestjs-pagination@3.2.0) (2020-08-05)
+
+
+### Features
+
+* **nestjs-pagination:** allow projection ([c216100](https://github.com/algoan/nestjs-components/commit/c216100f8a445fb902b6b780e52f23c4ea11adab))
+
+
+
+
+
 ## [3.0.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.0.3...@algoan/nestjs-pagination@3.0.4) (2020-07-27)
 
 
