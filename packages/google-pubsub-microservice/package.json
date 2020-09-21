@@ -51,7 +51,7 @@
     "@nestjs/microservices": "^7.3.2",
     "@nestjs/testing": "^7.3.2",
     "delay": "^4.4.0",
-    "google-pubsub-emulator": "^3.0.2",
+    "google-pubsub-emulator": "^4.0.0",
     "jest": "^25.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.0",
