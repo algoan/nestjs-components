@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-custom-decorators",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "custom nest decorators for nestjs-custom-decorators",
   "keywords": [
     "nest",
