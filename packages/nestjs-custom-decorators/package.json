@@ -35,7 +35,7 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "dependencies": {
-    "@nestjs/common": "^7.0.7",
+    "@nestjs/common": "^7.4.4",
     "jwt-decode": "^2.2.0"
   },
   "devDependencies": {
