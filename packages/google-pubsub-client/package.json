@@ -46,19 +46,19 @@
   },
   "devDependencies": {
     "@algoan/nestjs-google-pubsub-microservice": "^2.0.3",
-    "@algoan/pubsub": "^4.1.1",
-    "@nestjs/common": "^7.3.2",
+    "@algoan/pubsub": "^4.1.2",
+    "@nestjs/common": "^7.4.4",
     "@nestjs/core": "^7.4.4",
-    "@nestjs/microservices": "^7.3.2",
-    "@nestjs/platform-express": "^7.3.2",
-    "@nestjs/testing": "^7.3.2",
+    "@nestjs/microservices": "^7.4.4",
+    "@nestjs/platform-express": "^7.4.4",
+    "@nestjs/testing": "^7.4.4",
     "@types/supertest": "^2.0.10",
     "delay": "^4.4.0",
-    "google-pubsub-emulator": "^3.0.2",
-    "jest": "^25.4.0",
+    "google-pubsub-emulator": "^4.0.0",
+    "jest": "^26.4.2",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.6.0",
+    "rxjs": "^6.6.3",
     "supertest": "^4.0.2",
-    "typescript": "^3.8.3"
+    "typescript": "^4.0.3"
   }
 }
