@@ -63,8 +63,8 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     const request: Request = context.switchToHttp().getRequest();
 
     const resourceUrl: string = request.url.split('?')[0];
-    const page: string = request.query[this.pageName] ?? '1';
-    const limit: string = request.query[this.perPageName] ?? '100';
+    const page: string = (request.query[this.pageName] as string) ?? '1';
+    const limit: string = (request.query[this.perPageName] as string) ?? '100';
 
     return next.handle().pipe(
       map((data: Data<T>) => {

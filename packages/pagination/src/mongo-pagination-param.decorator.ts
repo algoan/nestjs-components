@@ -32,9 +32,9 @@ export const getMongoQuery = (
   let project: [];
 
   try {
-    filter = req.query.filter !== undefined ? JSON.parse(req.query.filter) : {};
-    sort = req.query.sort !== undefined ? JSON.parse(req.query.sort) : [];
-    project = req.query.project !== undefined ? JSON.parse(req.query.project) : [];
+    filter = req.query.filter !== undefined ? JSON.parse(req.query.filter as string) : {};
+    sort = req.query.sort !== undefined ? JSON.parse(req.query.sort as string) : [];
+    project = req.query.project !== undefined ? JSON.parse(req.query.project as string) : [];
   } catch (exception) {
     throw new BadRequestException('Either the sort, filter or project parameter cannot be parsed');
   }
