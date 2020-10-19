@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.1.3...@algoan/nestjs-logging-interceptor@2.1.4) (2020-10-19)
+
+**Note:** Version bump only for package @algoan/nestjs-logging-interceptor
+
+
+
+
+
 ## [2.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.1.2...@algoan/nestjs-logging-interceptor@2.1.3) (2020-09-21)
 
 **Note:** Version bump only for package @algoan/nestjs-logging-interceptor
