@@ -142,26 +142,24 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     switch (rel) {
       case 'first':
         link.page = '1';
-        link.url += `?${this.pageName}=1`;
         break;
 
       case 'prev':
         link.page = (page - 1).toString();
-        link.url += `?${this.pageName}=${page - 1}`;
         break;
 
       case 'last':
-        link.url += `?${this.pageName}=${Math.floor(linkOptions.totalDocs / Number(linkOptions.limit)) + 1}`;
+        link.page = `${Math.ceil(linkOptions.totalDocs / Number(linkOptions.limit))}`;
+        link.page = link.page === '0' ? '1' : link.page;
         break;
 
       // Next relation
       default:
         link.page = (page + 1).toString();
-        link.url += `?${this.pageName}=${page + 1}`;
         break;
     }
 
-    link.url += `&${this.perPageName}=${linkOptions.limit}`;
+    link.url += `?${this.pageName}=${link.page}&${this.perPageName}=${linkOptions.limit}`;
 
     return link;
   };
