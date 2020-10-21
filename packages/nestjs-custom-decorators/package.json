@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.0.7",
-    "jwt-decode": "^2.2.0"
+    "jwt-decode": "^3.0.0"
   },
   "devDependencies": {
     "@nestjs/core": "^7.4.4",
