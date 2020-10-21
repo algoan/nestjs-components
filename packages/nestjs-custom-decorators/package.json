@@ -48,7 +48,7 @@
     "mocha": "^7.0.0",
     "reflect-metadata": "^0.1.13",
     "supertest": "^5.0.0",
-    "ts-node": "^8.10.2"
+    "ts-node": "^9.0.0"
   },
   "peerDependencies": {
     "@nestjs/common": ">=7.x.x",
