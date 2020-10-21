@@ -59,7 +59,7 @@
     "@types/supertest": "^2.0.10",
     "chai": "^4.2.0",
     "express": "^4.17.1",
-    "mocha": "^7.0.0",
+    "mocha": "^8.2.0",
     "nyc": "^15.1.0",
     "parse-link-header": "^1.0.1",
     "reflect-metadata": "^0.1.13",
