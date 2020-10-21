@@ -106,7 +106,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
    */
   private readonly setLinkHeader = (linkOptions: LinkOptions): string => {
     const page: number = Number(linkOptions.page);
-    const hasNextPage: boolean = page <= Math.floor(linkOptions.totalDocs / Number(linkOptions.limit));
+    const hasNextPage: boolean = page < Math.ceil(linkOptions.totalDocs / Number(linkOptions.limit));
     const isFirstPage: boolean = page === 1;
 
     const linkObject: formatLinkHeader.Links = {
@@ -182,7 +182,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     }
 
     if (endIndex > linkOptions.totalDocs) {
-      endIndex = linkOptions.totalDocs + 1;
+      endIndex = linkOptions.totalDocs;
     }
 
     return contentRange.format({
