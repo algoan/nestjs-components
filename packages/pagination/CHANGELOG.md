@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.3.0...@algoan/nestjs-pagination@3.4.0) (2020-10-22)
+
+
+### Features
+
+* set default limit ([85f7c32](https://github.com/algoan/nestjs-components/commit/85f7c3298b8244b8dd1442f42debc4998f2f9aa4))
+
+
+
+
+
 # [3.3.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.2.4...@algoan/nestjs-pagination@3.3.0) (2020-10-21)
 
 
