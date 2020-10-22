@@ -5,17 +5,19 @@ import * as formatLinkHeader from 'format-link-header';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+const DEFAULT_LIMIT: number = 100;
+
 /**
  * Response extends from Express
  */
 export interface Response<T> extends ExpressResponse {
-  data: Data<T>;
+  data: Pageable<T>;
 }
 
 /**
- * Data interface
+ * Pageable interface
  */
-interface Data<T> {
+export interface Pageable<T> {
   resource: T[];
   totalDocs: number;
 }
@@ -30,6 +32,17 @@ interface LinkOptions {
   resourceUrl: string;
   totalDocs: number;
 }
+
+/**
+ * Configuration options
+ */
+interface LinkHeaderInterceptorOptions {
+  resource: string;
+  pageName?: string;
+  perPageName?: string;
+  defaultLimit?: number;
+}
+
 /**
  * Interceptor adding a Link Header
  * RFC 5988 (https://tools.ietf.org/html/rfc5988)
@@ -37,21 +50,17 @@ interface LinkOptions {
 @Injectable()
 export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
   private readonly resource: string;
-  private readonly pageName: string = 'page';
-  private readonly perPageName: string = 'per_page';
+  private readonly pageName: string;
+  private readonly perPageName: string;
+  private readonly defaultLimit: string;
 
-  constructor({
-    resource,
-    pageName = 'page',
-    perPageName = 'per_page',
-  }: {
-    resource: string;
-    pageName?: string;
-    perPageName?: string;
-  }) {
+  constructor(options: LinkHeaderInterceptorOptions) {
+    const { resource, defaultLimit = DEFAULT_LIMIT, pageName = 'page', perPageName = 'per_page' } = options;
+
     this.resource = resource;
     this.pageName = pageName;
     this.perPageName = perPageName;
+    this.defaultLimit = `${defaultLimit}`;
   }
 
   /**
@@ -64,10 +73,10 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
 
     const resourceUrl: string = request.url.split('?')[0];
     const page: string = (request.query[this.pageName] as string) ?? '1';
-    const limit: string = (request.query[this.perPageName] as string) ?? '100';
+    const limit: string = (request.query[this.perPageName] as string) ?? this.defaultLimit;
 
     return next.handle().pipe(
-      map((data: Data<T>) => {
+      map((data: Pageable<T>) => {
         const response: Response<T> = context.switchToHttp().getResponse();
 
         /**

@@ -2,9 +2,9 @@ import { Controller, Get, INestApplication, Module, UseInterceptors } from '@nes
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { CustomParamFactory } from '@nestjs/common/interfaces/features/custom-route-param-factory.interface';
 import { Test, TestingModule } from '@nestjs/testing';
+import { LinkHeaderInterceptor, MongoPagination, MongoPaginationParamDecorator, Pageable } from '../src';
 
-import { LinkHeaderInterceptor, MongoPagination, MongoPaginationParamDecorator } from '../src';
-
+const CUSTOM_LIMIT: number = 50;
 /**
  * Fake data format
  */
@@ -27,7 +27,7 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
-  public async findAll(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
+  public async findAll(): Promise<Pageable<FakeDataToReturn>> {
     const data: FakeDataToReturn[] = [];
     const maxDocuments: number = 1015;
 
@@ -43,7 +43,7 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'resources' }))
   @Get('/resources')
-  public async find(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
+  public async find(): Promise<Pageable<FakeDataToReturn>> {
     return { totalDocs: 0, resource: [] };
   }
 
@@ -54,8 +54,23 @@ class FakeAppController {
     new LinkHeaderInterceptor({ resource: 'data-custom-query', pageName: '_page', perPageName: 'numberPerPage' }),
   )
   @Get('/data-custom-query')
-  public async findAllWithCustomQuery(): Promise<{ totalDocs: number; resource: FakeDataToReturn[] }> {
+  public async findAllWithCustomQuery(): Promise<Pageable<FakeDataToReturn>> {
     return this.findAll();
+  }
+
+  /**
+   * Find all documents
+   */
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data', defaultLimit: CUSTOM_LIMIT }))
+  @Get('/data-limit')
+  public async findAllWithLimit(): Promise<Pageable<FakeDataToReturn>> {
+    const data: FakeDataToReturn[] = [];
+
+    for (let i: number = 0; i < CUSTOM_LIMIT; i++) {
+      data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
+    }
+
+    return { totalDocs: 1015, resource: data };
   }
 
   /**

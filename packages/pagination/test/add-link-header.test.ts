@@ -254,6 +254,45 @@ describe('Tests related to the Link Header interceptor', () => {
     });
   });
 
+  describe('Test with custom default limit', () => {
+    it('AD21 - should successfully add Link with custom default limit', async () => {
+      const res: request.Response = await request(app.getHttpServer()).get('/data-limit?page=4').expect(200);
+
+      const expectedResult: formatLinkHeader.Links = {
+        first: {
+          url: '/data-limit?page=1&per_page=50',
+          page: '1',
+          per_page: '50',
+          rel: 'first',
+        },
+        last: {
+          url: '/data-limit?page=21&per_page=50',
+          page: '21',
+          per_page: '50',
+          rel: 'last',
+        },
+        next: {
+          url: '/data-limit?page=5&per_page=50',
+          page: '5',
+          per_page: '50',
+          rel: 'next',
+        },
+        prev: {
+          url: '/data-limit?page=3&per_page=50',
+          page: '3',
+          per_page: '50',
+          rel: 'prev',
+        },
+      };
+
+      expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+      expect(res.header['content-range']).to.equal('data 150-199/1015');
+      expect(res.body.totalDocs).to.be.undefined;
+      expect(res.body.resource).to.be.undefined;
+      expect(res.body).to.be.an('array');
+    });
+  });
+
   describe('Tests with a limit of 1015', () => {
     it('AD21 - should not add Link in headers for the next page', async () => {
       const res: request.Response = await request(app.getHttpServer()).get('/data?page=1&per_page=1015').expect(200);
