@@ -70,7 +70,7 @@ Link: </data?page=1&per_page=100>; rel="first", </data?page=11&per_page=100>; re
 
 If you use MongoDB as your database, we also provide a `ParamDecorator` you can use to convert the request to a mongo query parameter.
 ```typescript
-import { LinkHeaderInterceptor, MongoPaginationParamDecorator, MongoPagination } from '@algoan/nestjs-pagination';
+import { LinkHeaderInterceptor, MongoPaginationParamDecorator, MongoPagination, Pageable } from '@algoan/nestjs-pagination';
 import { Controller, Get, UseInterceptors } from '@nestjs/common';
 
 @Controller()
@@ -83,8 +83,8 @@ class AppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
-  public async findAll(@MongoPaginationParamDecorator() pagination: MongoPagination ): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
-    const data: DataToReturn = await model.find(pagination);
+  public async findAll(@MongoPaginationParamDecorator() pagination: MongoPagination ): Promise<Pageable<DataToReturn>> {
+    const data: DataToReturn[] = await model.find(pagination);
     const count: number = await model.count(pagination.filter);
 
     return { totalDocs: count, resource: data };
@@ -94,11 +94,11 @@ class AppController {
 
 ## Usage
 
-By default, the interceptor and the decorator will look for the query parameters `page` and  `per_page`. 
-You can also change the name of those parameters if you want, by passing a configuration object. Beware that if you use both the interceptor and the decorator, you need to pass the configuration to both of them.
+By default, the interceptor and the decorator will look for the query parameters `page` and  `per_page` (which is 100 by default).
+You can also change the name of those parameters and the default per page limit if you want, by passing a configuration object. Beware that if you use both the interceptor and the decorator, you need to pass the configuration to both of them.
 
 ```typescript
-new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'numberPerPage' })
+new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50 })
 
-@MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage' })
+@MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50  })
 ```

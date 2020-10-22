@@ -18,15 +18,22 @@ export interface MongoPagination {
   project: [];
 }
 
-export const getMongoQuery = (
-  { pageName = 'page', perPageName = 'per_page' }: { pageName?: string; perPageName?: string } = {},
-  ctx: ExecutionContext,
-): MongoPagination => {
+/**
+ * Configuration Options
+ */
+interface MongoPaginationOptions {
+  pageName?: string;
+  perPageName?: string;
+  defaultLimit?: number;
+}
+
+export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: ExecutionContext): MongoPagination => {
   const req: Request = ctx.switchToHttp().getRequest();
+
+  const { pageName = 'page', perPageName = 'per_page', defaultLimit = DEFAULT_NUMBER_OF_RESULTS } = options;
+
   const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
-  const limit: number = !isNaN(Number(req.query[perPageName]))
-    ? Number(req.query[perPageName])
-    : DEFAULT_NUMBER_OF_RESULTS;
+  const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : defaultLimit;
   let filter: {};
   let sort: [];
   let project: [];
