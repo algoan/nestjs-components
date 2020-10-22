@@ -1,2 +1,2 @@
-export { LinkHeaderInterceptor, Response } from './add-link-header.interceptor';
-export { MongoPaginationParamDecorator, MongoPagination, getMongoQuery } from './mongo-pagination-param.decorator';
+export { LinkHeaderInterceptor, Pageable, Response } from './add-link-header.interceptor';
+export { getMongoQuery, MongoPagination, MongoPaginationParamDecorator } from './mongo-pagination-param.decorator';
