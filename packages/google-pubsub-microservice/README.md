@@ -27,7 +27,7 @@ To start a new Google Cloud PubSub server:
 import { GooglePubSubOptions } from '@algoan/pubsub';
 import { INestMicroservice } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { GCPubSubServer } from '@algoan/nestjs-google-pubsub-microservice':
+import { GCPubSubServer } from '@algoan/nestjs-google-pubsub-microservice';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
