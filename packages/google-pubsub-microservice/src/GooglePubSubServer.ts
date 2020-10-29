@@ -39,7 +39,10 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
     this.gcClient = gcPubSub;
     const handlers: Promise<void>[] = [];
 
-    for (const subscriptionName of this.messageHandlers.keys()) {
+    this.messageHandlers.forEach((messageHandler: MessageHandler, subscriptionName: string) => {
+      if (!messageHandler.isEventHandler) {
+        return;
+      }
       this.logger.debug(`Registered new subscription "${subscriptionName}"`);
 
       handlers.push(
@@ -49,7 +52,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
           options: this.options?.listenOptions,
         }),
       );
-    }
+    });
 
     Promise.all(handlers).then(callback).catch(this.handleError);
   }
