@@ -206,7 +206,7 @@ describe('Tests related to the Link Header interceptor', () => {
       };
 
       expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
-      expect(res.header['content-range']).to.equal('resources 0-0/0');
+      expect(res.header['content-range']).to.equal('resources */0');
       expect(res.body.totalDocs).to.be.undefined;
       expect(res.body.resource).to.be.undefined;
       expect(res.body).to.be.an('array');
