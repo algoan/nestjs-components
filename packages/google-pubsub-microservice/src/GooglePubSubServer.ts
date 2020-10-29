@@ -42,7 +42,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
     const handlers: Promise<void>[] = [];
 
     for (const subscriptionName of this.messageHandlers.keys()) {
-      if (this.options?.topicsNames && !this.options?.topicsNames?.includes(subscriptionName)) {
+      if (this.options?.topicsNames !== undefined && !this.options?.topicsNames?.includes(subscriptionName)) {
         continue;
       }
       this.logger.debug(`Registered new subscription "${subscriptionName}"`);
