@@ -23,7 +23,9 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    */
   protected readonly logger: Logger = new Logger(GCPubSubServer.name);
 
-  constructor(private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions }) {
+  constructor(
+    private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions } & { topicsNames?: string[] },
+  ) {
     super();
   }
 
@@ -40,6 +42,9 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
     const handlers: Promise<void>[] = [];
 
     for (const subscriptionName of this.messageHandlers.keys()) {
+      if (this.options?.topicsNames && !this.options?.topicsNames?.includes(subscriptionName)) {
+        continue;
+      }
       this.logger.debug(`Registered new subscription "${subscriptionName}"`);
 
       handlers.push(
