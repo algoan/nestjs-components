@@ -211,6 +211,31 @@ describe('Tests related to the Link Header interceptor', () => {
       expect(res.body.resource).to.be.undefined;
       expect(res.body).to.be.an('array');
     });
+
+    it('AD13 - should add link even if 1 document where found', async () => {
+      const res: request.Response = await request(app.getHttpServer()).get('/one-data').expect(200);
+
+      const expectedResult: formatLinkHeader.Links = {
+        first: {
+          url: '/one-data?page=1&per_page=100',
+          page: '1',
+          per_page: '100',
+          rel: 'first',
+        },
+        last: {
+          url: '/one-data?page=1&per_page=100',
+          page: '1',
+          per_page: '100',
+          rel: 'last',
+        },
+      };
+
+      expect(parseLinkHeader(res.header.link)).to.deep.equal(expectedResult);
+      expect(res.header['content-range']).to.equal('data 0-0/1');
+      expect(res.body.totalDocs).to.be.undefined;
+      expect(res.body.resource).to.be.undefined;
+      expect(res.body).to.be.an('array');
+    });
   });
 
   describe('Tests with custom configuration', () => {
