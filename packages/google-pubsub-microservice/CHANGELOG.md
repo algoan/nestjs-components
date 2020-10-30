@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@2.0.4...@algoan/nestjs-google-pubsub-microservice@2.1.0) (2020-10-30)
+
+
+### Bug Fixes
+
+* lint rule ([70b6486](https://github.com/algoan/nestjs-components/commit/70b648650b0771833ab1169f2ca07bbd3f660a39))
+
+
+### Features
+
+* be able to filter topic names to subscribe ([8539740](https://github.com/algoan/nestjs-components/commit/8539740f93a315f314340029b9d3cf237ab493a5))
+
+
+
+
+
 ## [2.0.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@2.0.3...@algoan/nestjs-google-pubsub-microservice@2.0.4) (2020-09-21)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-microservice
