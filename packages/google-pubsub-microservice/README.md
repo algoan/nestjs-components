@@ -37,7 +37,7 @@ async function bootstrap() {
   }
 
   const app: INestMicroservice = await NestFactory.create(AppModule, {
-    strategy
+    strategy: new GCPubSubServer(options)
   })
 
   await app.listen(() => console.log('Server running!'));
@@ -81,6 +81,7 @@ Create a new Server instance of Google PubSub. It retrieves all message handlers
 
 - `options`: Algoan PubSub options. More information [here](https://github.com/algoan/pubsub/#pubsubfactorycreate-transport-options-).
 - `options.listenOptions`: Global options which will be applied to all subscriptions.
+- `options.topicsNames`: Only subscribe to topics included in this whitelist.
 
 ## Other NestJS Google Cloud PubSub server
 
