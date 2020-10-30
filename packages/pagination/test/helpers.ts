@@ -48,6 +48,15 @@ class FakeAppController {
   }
 
   /**
+   * Find 1 document
+   */
+  @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
+  @Get('/one-data')
+  public async findOneDocument(): Promise<Pageable<FakeDataToReturn>> {
+    return { totalDocs: 1, resource: [{ name: `doc_1`, index: 1, createdAt: new Date() }] };
+  }
+
+  /**
    * Find all documents
    */
   @UseInterceptors(

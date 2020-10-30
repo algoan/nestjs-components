@@ -186,8 +186,8 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
      * If there is no document, return a "{resource} 0-0/0"
      * NOTE: Otherwise the contentRange lib is returning "{resource} 0-NaN/0"
      */
-    if (linkOptions.totalDocs === 0) {
-      return `${this.resource} 0-0/0`;
+    if (linkOptions.totalDocs === 1) {
+      return `${this.resource} 0-0/1`;
     }
 
     if (endIndex > linkOptions.totalDocs) {
@@ -198,6 +198,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
       first: startIndex,
       last: endIndex - 1,
       length: linkOptions.totalDocs,
+      limit,
       unit: this.resource,
     });
   }
