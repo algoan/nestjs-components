@@ -24,7 +24,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   protected readonly logger: Logger = new Logger(GCPubSubServer.name);
 
   constructor(
-    private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions } & { topicsNames?: string[] },
+    private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions; topicsNames?: string[] },
   ) {
     super();
   }
