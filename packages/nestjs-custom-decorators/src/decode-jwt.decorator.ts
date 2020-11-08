@@ -1,11 +1,11 @@
 import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 // tslint:disable-next-line:variable-name
 export const DecodeJWT: () => ParameterDecorator = createParamDecorator(
   async (_data: unknown, ctx: ExecutionContext) => {
     const request: { accessTokenJWT: string } = ctx.switchToHttp().getRequest();
     const jwt: string = request.accessTokenJWT;
-    let decodedJwt: object;
+    let decodedJwt: unknown;
     try {
       decodedJwt = jwtDecode(jwt);
     } catch (err) {
