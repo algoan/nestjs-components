@@ -19,7 +19,6 @@ export class AppController {
    */
   @EventPattern(SUBSCRIPTION_NAME)
   public async handleTestEvent(@Payload() data: EmittedMessage<{ hello: string }>): Promise<void> {
-    this.logger.debug(data, `Received an event on channel ${SUBSCRIPTION_NAME}`);
     this.appService.handleTestEvent(data);
   }
 }
