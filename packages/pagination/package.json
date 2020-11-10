@@ -69,7 +69,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "content-range": "^1.1.0",
+    "content-range": "^1.1.1",
     "format-link-header": "^3.1.0"
   },
   "peerDependencies": {
