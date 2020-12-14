@@ -14,8 +14,8 @@ export interface MongoPagination {
   };
   limit: number;
   skip: number;
-  sort: [];
-  project: [];
+  sort: {};
+  project: {};
 }
 
 /**
@@ -35,13 +35,13 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
   const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
   const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : defaultLimit;
   let filter: {};
-  let sort: [];
-  let project: [];
+  let sort: {};
+  let project: {};
 
   try {
     filter = req.query.filter !== undefined ? JSON.parse(req.query.filter as string) : {};
-    sort = req.query.sort !== undefined ? JSON.parse(req.query.sort as string) : [];
-    project = req.query.project !== undefined ? JSON.parse(req.query.project as string) : [];
+    sort = req.query.sort !== undefined ? JSON.parse(req.query.sort as string) : {};
+    project = req.query.project !== undefined ? JSON.parse(req.query.project as string) : {};
   } catch (exception) {
     throw new BadRequestException('Either the sort, filter or project parameter cannot be parsed');
   }
