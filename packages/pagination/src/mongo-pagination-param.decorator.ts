@@ -14,9 +14,19 @@ export interface MongoPagination {
   };
   limit: number;
   skip: number;
-  sort: {};
-  project: {};
+  sort?: {
+    [key: string]: SortValue;
+  };
+  project?: {
+    [key: string]: 0 | 1;
+  };
 }
+
+/**
+ * Sort values available for Mongoose
+ * Ref: https://mongoosejs.com/docs/api/query.html#query_Query-sort
+ */
+type SortValue = 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
 
 /**
  * Configuration Options
