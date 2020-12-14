@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.4.2...@algoan/nestjs-pagination@4.0.0) (2020-12-14)
+
+
+### Bug Fixes
+
+* **mongo-pagination-param.decorator:** change default value of "sort" and "project" from [] to {} ([f182562](https://github.com/algoan/nestjs-components/commit/f182562504ea4e0821bf5056169979cb975ee60a)), closes [#112](https://github.com/algoan/nestjs-components/issues/112)
+* **mongo-pagination-param.decorator:** specify the value range for sort and project fields ([34c0a5d](https://github.com/algoan/nestjs-components/commit/34c0a5d1ee69ea3ebe36f0061ddc8969918afb3c))
+
+
+### BREAKING CHANGES
+
+* **mongo-pagination-param.decorator:** Modify the default value of "sort" and "project" fields in MongoPagination from []
+to {} to conform with the Mongoose documentation.
+
+
+
+
+
 ## [3.4.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.4.1...@algoan/nestjs-pagination@3.4.2) (2020-11-09)
 
 **Note:** Version bump only for package @algoan/nestjs-pagination
