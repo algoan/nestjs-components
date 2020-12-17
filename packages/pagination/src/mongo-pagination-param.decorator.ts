@@ -35,18 +35,20 @@ interface MongoPaginationOptions {
   pageName?: string;
   perPageName?: string;
   defaultLimit?: number;
+  exclude?: string[];
 }
 
 export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: ExecutionContext): MongoPagination => {
   const req: Request = ctx.switchToHttp().getRequest();
 
-  const { pageName = 'page', perPageName = 'per_page', defaultLimit = DEFAULT_NUMBER_OF_RESULTS } = options;
+  const { pageName = 'page', perPageName = 'per_page', defaultLimit = DEFAULT_NUMBER_OF_RESULTS, exclude } = options;
 
   const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
   const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : defaultLimit;
   let filter: {};
   let sort: {};
   let project: {};
+  let excludePattern: string = '';
 
   try {
     filter = req.query.filter !== undefined ? JSON.parse(req.query.filter as string) : {};
@@ -54,6 +56,22 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
     project = req.query.project !== undefined ? JSON.parse(req.query.project as string) : {};
   } catch (exception) {
     throw new BadRequestException('Either the sort, filter or project parameter cannot be parsed');
+  }
+
+  if (Array.isArray(exclude)) {
+    const excludeStrings: string[] = exclude.filter((elem: unknown): boolean => typeof elem === 'string');
+
+    if (excludeStrings.length > 0) {
+      excludePattern = buildExcludePattern(excludeStrings);
+    }
+  }
+
+  if (excludePattern) {
+    const excludeRegex: RegExp = new RegExp(excludePattern);
+
+    filter = sanitize(filter, excludeRegex) as object;
+    sort = sanitize(sort, excludeRegex) as object;
+    project = sanitize(project, excludeRegex) as object;
   }
 
   return {
@@ -65,5 +83,41 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
   };
 };
 
-// tslint:disable-next-line:variable-name
-export const MongoPaginationParamDecorator: () => ParameterDecorator = createParamDecorator(getMongoQuery);
+const buildExcludePattern = (excludeArray: string[]): string => {
+  // Traverse the list of excluding keywords to build a regex pattern, e.g. ^(\$where|mapreduce|\$function)$
+  return excludeArray
+    .reduce((previousValue: string, currentValue: string, currentIndex: number): string => {
+      let accumulator: string = previousValue;
+
+      if (currentIndex > 0) {
+        accumulator += '|';
+      }
+
+      if (currentValue && currentValue.charAt(0) === '$') {
+        accumulator += '\\';
+      }
+
+      return accumulator + currentValue;
+    }, '^(')
+    .concat(')$');
+};
+
+const sanitize = (value: unknown, excludeRegex: RegExp): unknown => {
+  // Recursively traverse the keys to detect and remove the matching ones
+  if (value instanceof Object) {
+    for (const key in value) {
+      if (excludeRegex.test(key)) {
+        // tslint:disable-next-line
+        delete (value as any)[key];
+      } else {
+        // tslint:disable-next-line
+        sanitize((value as any)[key], excludeRegex);
+      }
+    }
+  }
+
+  return value;
+};
+
+// tslint:disable-next-line
+export const MongoPaginationParamDecorator = createParamDecorator(getMongoQuery);
