@@ -102,4 +102,29 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       project: {},
     });
   });
+
+  it('MPPD07 - should successfully sanitize the keys', () => {
+    req = {
+      query: {
+        page: '1',
+        per_page: '0',
+        filter:
+          '{"key": "value", "mapreduce": "", "$expr": {"$function": { "body": "function () { return true; }", "args": [], "lang": "js" } } }',
+        project: '{"$where": "function () { return true; }"}',
+      },
+    };
+
+    const result: MongoPagination = getMongoQuery(
+      { exclude: ['$where', 'mapreduce', '$accumulator', '$function'] },
+      ctx as ExecutionContext,
+    );
+
+    expect(result).to.deep.equal({
+      filter: { key: 'value', $expr: {} },
+      limit: 0,
+      skip: 0,
+      sort: {},
+      project: {},
+    });
+  });
 });

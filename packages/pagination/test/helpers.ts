@@ -86,7 +86,9 @@ class FakeAppController {
    * Test the pagination decorator
    */
   @Get('/pagination')
-  public async testPagination(@MongoPaginationParamDecorator() pagination: MongoPagination): Promise<{}> {
+  public async testPagination(
+    @MongoPaginationParamDecorator({ exclude: ['$where'] }) pagination: MongoPagination,
+  ): Promise<{}> {
     return { pagination };
   }
 }
