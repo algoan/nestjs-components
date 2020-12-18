@@ -115,7 +115,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
     };
 
     const result: MongoPagination = getMongoQuery(
-      { exclude: ['$where', 'mapreduce', '$accumulator', '$function'] },
+      { excludedKeys: ['$where', 'mapreduce', '$function'] },
       ctx as ExecutionContext,
     );
 

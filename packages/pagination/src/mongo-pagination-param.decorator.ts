@@ -35,13 +35,18 @@ interface MongoPaginationOptions {
   pageName?: string;
   perPageName?: string;
   defaultLimit?: number;
-  exclude?: string[];
+  excludedKeys?: string[];
 }
 
 export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: ExecutionContext): MongoPagination => {
   const req: Request = ctx.switchToHttp().getRequest();
 
-  const { pageName = 'page', perPageName = 'per_page', defaultLimit = DEFAULT_NUMBER_OF_RESULTS, exclude } = options;
+  const {
+    pageName = 'page',
+    perPageName = 'per_page',
+    defaultLimit = DEFAULT_NUMBER_OF_RESULTS,
+    excludedKeys = ['$where', 'mapreduce', '$accumulator', '$function'],
+  } = options;
 
   const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
   const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : defaultLimit;
@@ -58,8 +63,8 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
     throw new BadRequestException('Either the sort, filter or project parameter cannot be parsed');
   }
 
-  if (Array.isArray(exclude)) {
-    const excludeStrings: string[] = exclude.filter((elem: unknown): boolean => typeof elem === 'string');
+  if (Array.isArray(excludedKeys)) {
+    const excludeStrings: string[] = excludedKeys.filter((elem: unknown): boolean => typeof elem === 'string');
 
     if (excludeStrings.length > 0) {
       excludePattern = buildExcludePattern(excludeStrings);
