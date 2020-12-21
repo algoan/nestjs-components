@@ -19,7 +19,7 @@ describe('E2e tests related to the MongoPagination ParamDecorator', () => {
     it('MPPDE01 - should successfully create the mongoQuery from the request', async () => {
       const res: request.Response = await request(app.getHttpServer())
         .get(
-          '/pagination?page=5&per_page=35&sort=%7B%22createdAt%22%3A-1%7D&project=%7B%22id%22%3A1%2C%22applicationId%22%3A1%7D&filter=%7B%22status%22%3A%7B%22%24options%22%3A%22i%22%2C%22%24regex%22%3A%22ACCEPTED%22%7D%7D',
+          '/pagination?page=5&per_page=35&sort=%7B%22createdAt%22%3A-1%7D&project=%7B%22id%22%3A1%2C%22applicationId%22%3A1%7D&filter=%7B%22status%22%3A%7B%22%24options%22%3A%22i%22%2C%22%24regex%22%3A%22ACCEPTED%22%7D%2C%22%24where%22%3A%22function%20%28%29%20%7B%20return%20true%3B%20%7D%22%7D',
         )
         .expect(200);
 
