@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@4.0.0...@algoan/nestjs-pagination@4.1.0) (2020-12-21)
+
+
+### Features
+
+* **mongo-pagination-param:** filter the keys in the query based on a list provided in the options ([c9a8cda](https://github.com/algoan/nestjs-components/commit/c9a8cda6533ffcf551388c41e4d95a7df4357d94))
+* **mongo-pagination-param.decorator:** change option param name and set its default value ([cd1785c](https://github.com/algoan/nestjs-components/commit/cd1785c5cd2654394f8cddd880da2b80a2828f9d))
+
+
+
+
+
 # [4.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@3.4.2...@algoan/nestjs-pagination@4.0.0) (2020-12-14)
 
 
