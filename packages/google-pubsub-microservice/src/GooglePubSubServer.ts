@@ -51,7 +51,10 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
         gcPubSub.listen(subscriptionName, {
           onMessage: this.handleMessage(subscriptionName),
           onError: this.handleError,
-          options: this.options?.listenOptions,
+          options: {
+            autoAck: true,
+            ...this.options?.listenOptions,
+          },
         }),
       );
     }
