@@ -31,7 +31,7 @@ export class GCPubSubClient extends ClientProxy {
    */
   public async connect(): Promise<void> {
     const isPubSubInstanceExisting: boolean = this.pubSub !== undefined;
-    this.logger.debug(
+    this.options?.debug && this.logger.debug(
       {
         isPubSubInstanceExisting,
       },
@@ -52,7 +52,7 @@ export class GCPubSubClient extends ClientProxy {
    * Close the connection with the client
    */
   public async close(): Promise<void> {
-    this.logger.debug('Closing the GooglePubSubClient Proxy');
+    this.options?.debug && this.logger.debug('Closing the GooglePubSubClient Proxy');
     if (this.pubSub !== undefined) {
       await this.pubSub.client.close();
     }
@@ -70,7 +70,7 @@ export class GCPubSubClient extends ClientProxy {
     }
 
     const pattern: string = this.normalizePattern(_packet.pattern);
-    this.logger.debug(
+    this.options?.debug && this.logger.debug(
       {
         pattern,
         data: _packet.data,
