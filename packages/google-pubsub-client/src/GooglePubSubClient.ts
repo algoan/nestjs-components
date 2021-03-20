@@ -31,12 +31,14 @@ export class GCPubSubClient extends ClientProxy {
    */
   public async connect(): Promise<void> {
     const isPubSubInstanceExisting: boolean = this.pubSub !== undefined;
-    this.options?.debug && this.logger.debug(
+    if ( this.options?.debug === true ) {
+      this.logger.debug(
       {
         isPubSubInstanceExisting,
       },
       `Trying to connect to the Google PubSub Client Proxy`,
-    );
+      );
+    }
 
     if (isPubSubInstanceExisting) {
       return;
@@ -52,11 +54,13 @@ export class GCPubSubClient extends ClientProxy {
    * Close the connection with the client
    */
   public async close(): Promise<void> {
-    this.options?.debug && this.logger.debug('Closing the GooglePubSubClient Proxy');
-    if (this.pubSub !== undefined) {
-      await this.pubSub.client.close();
+    if ( this.options?.debug === true ) {
+      this.logger.debug('Closing the GooglePubSubClient Proxy');
+      if (this.pubSub !== undefined) {
+        await this.pubSub.client.close();
+      }
+      this.pubSub = undefined;
     }
-    this.pubSub = undefined;
   }
 
   /**
@@ -70,13 +74,15 @@ export class GCPubSubClient extends ClientProxy {
     }
 
     const pattern: string = this.normalizePattern(_packet.pattern);
-    this.options?.debug && this.logger.debug(
-      {
-        pattern,
-        data: _packet.data,
-      },
-      'Emitting an event through the GCPubSubClient',
-    );
+    if ( this.options?.debug === true ) {
+       this.logger.debug(
+        {
+          pattern,
+          data: _packet.data,
+        },
+        'Emitting an event through the GCPubSubClient',
+      );
+    }
 
     return this.pubSub.emit(pattern, _packet.data);
   }
