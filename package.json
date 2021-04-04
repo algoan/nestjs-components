@@ -29,24 +29,24 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "homepage": "https://github.com/algoan/nestjs-components",
-  "author": "diephil",
+  "author": "algoan",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@types/jest": "^26.0.15",
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
+    "@types/jest": "^26.0.22",
     "@yelloan/tslint": "^0.3.0",
-    "commitizen": "^4.2.2",
+    "commitizen": "^4.2.3",
     "cz-conventional-changelog": "^3.3.0",
-    "husky": "^4.3.0",
+    "husky": "^6.0.0",
     "jest": "^26.6.3",
-    "lerna": "^3.22.1",
-    "lint-staged": "^10.5.1",
-    "prettier": "^2.1.2",
-    "ts-jest": "^26.4.4",
-    "tslint": "^5.20.1",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.4",
+    "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.2.3"
   },
   "lint-staged": {
     "**/*.ts": [
