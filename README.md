@@ -55,4 +55,4 @@ See [the documentation here](./packages/google-pubsub-client/).
 
 A set of custom decorators for NestJS.
 
-See [the documentation here](./packages/nestjs-custom-decorators).
+See [the documentation here](./packages/custom-decorators).
