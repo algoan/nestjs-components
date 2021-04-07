@@ -1,5 +1,5 @@
 import { ValidationError } from 'class-validator';
-import { isEmpty, snakeCase, toUpper } from 'lodash';
+import { snakeCase, toUpper } from 'lodash';
 /**
  *
  * Extract the stringified error code
@@ -79,7 +79,7 @@ function parseErrorMessage(error: ValidationError): string {
  */
 function findConstraints(error: ValidationError): Constraint | undefined {
   let objectToIterate: ValidationError = error;
-  while (!isEmpty(objectToIterate.children)) {
+  while (objectToIterate.children !== undefined) {
     objectToIterate = objectToIterate.children[0];
   }
 
