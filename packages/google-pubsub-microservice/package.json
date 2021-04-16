@@ -45,7 +45,7 @@
     "@nestjs/microservices": "^7.6.15"
   },
   "devDependencies": {
-    "@algoan/pubsub": "4.4.1",
+    "@algoan/pubsub": "4.5.0",
     "@nestjs/common": "7.6.15",
     "@nestjs/core": "7.6.15",
     "@nestjs/microservices": "7.6.15",
