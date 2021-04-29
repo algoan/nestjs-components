@@ -36,7 +36,7 @@ async function bootstrap() {
     subscriptionsPrefix: 'test-app',
   }
 
-  const app: INestMicroservice = await NestFactory.create(AppModule, {
+  const app: INestMicroservice = await NestFactory.createMicroservice(AppModule, {
     strategy: new GCPubSubServer(options)
   })
 
