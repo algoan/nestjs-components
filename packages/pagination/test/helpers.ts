@@ -2,7 +2,14 @@ import { Controller, Get, INestApplication, Module, UseInterceptors } from '@nes
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { CustomParamFactory } from '@nestjs/common/interfaces/features/custom-route-param-factory.interface';
 import { Test, TestingModule } from '@nestjs/testing';
-import { LinkHeaderInterceptor, MongoPagination, MongoPaginationParamDecorator, Pageable } from '../src';
+import {
+  DataToPaginate,
+  LinkHeaderInterceptor,
+  MongoPagination,
+  MongoPaginationParamDecorator,
+  Pageable,
+  PaginationBodyInterceptor,
+} from '../src';
 
 const CUSTOM_LIMIT: number = 50;
 /**
@@ -88,6 +95,22 @@ class FakeAppController {
   @Get('/pagination')
   public async testPagination(@MongoPaginationParamDecorator({}) pagination: MongoPagination): Promise<{}> {
     return { pagination };
+  }
+
+  /**
+   * Find all documents with the new query pagination
+   */
+  @UseInterceptors(new PaginationBodyInterceptor())
+  @Get('/resource')
+  public async findAllWithQueryParam(): Promise<DataToPaginate<FakeDataToReturn>> {
+    const data: FakeDataToReturn[] = [];
+    const maxDocuments: number = 1015;
+
+    for (let i: number = 0; i < maxDocuments; i++) {
+      data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
+    }
+
+    return { totalResources: data.length, resources: data };
   }
 }
 

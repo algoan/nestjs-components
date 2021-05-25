@@ -15,7 +15,7 @@ const defaultLimit: number = 200;
  * PaginationInterceptor
  */
 @Injectable()
-export class PaginationInterceptor<T> implements NestInterceptor<DataToPaginate<T>, PaginatedData<T>> {
+export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPaginate<T>, PaginatedData<T>> {
   /**
    * Interceptor core method
    * @param context Current request pipeline details

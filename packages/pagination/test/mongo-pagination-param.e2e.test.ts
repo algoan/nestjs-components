@@ -41,5 +41,17 @@ describe('E2e tests related to the MongoPagination ParamDecorator', () => {
         },
       });
     });
+
+    it('MPPDE02 - should successfully create the mongoQuery from the request with query pagination', async () => {
+      const res: request.Response = await request(app.getHttpServer()).get('/pagination?page=5&limit=10').expect(200);
+
+      expect(res.body.pagination).to.deep.equal({
+        filter: {},
+        limit: 10,
+        project: {},
+        skip: 40,
+        sort: {},
+      });
+    });
   });
 });
