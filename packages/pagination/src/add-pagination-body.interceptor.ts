@@ -30,7 +30,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
   private readonly defaultLimit: number;
 
   constructor(options: PaginationBodyInterceptorOptions) {
-    const { defaultLimit = DEFAULT_LIMIT, pageName = 'page', perPageName = 'limit' } = options;
+    const { defaultLimit = DEFAULT_LIMIT, pageName = 'page', perPageName = 'per_page' } = options;
 
     this.pageName = pageName;
     this.perPageName = perPageName;
