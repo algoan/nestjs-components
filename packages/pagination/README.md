@@ -32,7 +32,7 @@ npm install --save @algoan/nestjs-pagination
 
 ## Limits
 
-- This module does not take into account what is returned in the `resource` property. It may be inconsistent with headers set by the interceptor.
+- This module does not take into account what is returned in the `resources` property. It may be inconsistent with headers set by the interceptor.
 
 ## Quick Start
 
@@ -103,10 +103,45 @@ new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'n
 @MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50  })
 ```
 
-You can also have the pagination in the response body by using the PaginationBodyInterceptor.
+You can also have the pagination in the response body by using the PaginationBodyInterceptor. By using this interceptor, the pagination is included in the response body instead of the header.
+
+A paginated data response is returned.
+
+```json 
+{
+  resources: T[];
+  pagination: {
+    next: string | null;
+    previous: string | null;
+    first: string | null;
+    last: string | null;
+    totalPages: number | null;
+    totalResources: number | null;
+  };
+}
+```
+
+We import the `PaginationBodyInterceptor` next to a controller method.
 
 ```typescript
-new PaginationBodyInterceptor({pageName: 'page', perPageName: 'limit'})
+import { PaginationBodyInterceptor } from '@algoan/nestjs-pagination';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
 
-@MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'})
+@Controller()
+/**
+ * Controller returning a lot of documents
+ */
+class AppController {
+  /**
+   * Find all documents
+   */
+  @UseInterceptors(new PaginationBodyInterceptor({pageName: 'page', perPageName: 'limit'}))
+  @Get('/data')
+  public async findAll(@MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'}) pagination: MongoPagination): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
+    const data: DataToReturn = await model.find(...);
+    const count: number = await model.count();
+
+    return { totalDocs: count, resource: data };
+  }
+}
 ```

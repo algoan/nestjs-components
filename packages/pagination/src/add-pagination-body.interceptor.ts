@@ -1,10 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-// tslint:disable-next-line
-import { map } from 'rxjs/operators';
-// tslint:disable-next-line
-import { Observable } from 'rxjs';
-// tslint:disable-next-line
 import { Request } from 'express';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DataToPaginate } from './interfaces';
 
 const FIRST_PAGE: number = 1;
 const DEFAULT_LIMIT: number = 200;
@@ -85,7 +83,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
   /**
    * Build url
    */
-  public buildUrl = (
+  private readonly buildUrl = (
     path: string,
     page: number,
     limit: number,
@@ -110,14 +108,6 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
 
     return url;
   };
-}
-
-/**
- * Data
- */
-export interface DataToPaginate<T> {
-  resources: T[];
-  totalResources: number;
 }
 
 /**

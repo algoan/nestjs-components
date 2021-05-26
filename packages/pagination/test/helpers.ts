@@ -7,7 +7,6 @@ import {
   LinkHeaderInterceptor,
   MongoPagination,
   MongoPaginationParamDecorator,
-  Pageable,
   PaginationBodyInterceptor,
 } from '../src';
 
@@ -34,7 +33,7 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
-  public async findAll(): Promise<Pageable<FakeDataToReturn>> {
+  public async findAll(): Promise<DataToPaginate<FakeDataToReturn>> {
     const data: FakeDataToReturn[] = [];
     const maxDocuments: number = 1015;
 
@@ -42,7 +41,7 @@ class FakeAppController {
       data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
     }
 
-    return { totalDocs: data.length, resource: data };
+    return { totalResources: data.length, resources: data };
   }
 
   /**
@@ -50,8 +49,8 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'resources' }))
   @Get('/resources')
-  public async find(): Promise<Pageable<FakeDataToReturn>> {
-    return { totalDocs: 0, resource: [] };
+  public async find(): Promise<DataToPaginate<FakeDataToReturn>> {
+    return { totalResources: 0, resources: [] };
   }
 
   /**
@@ -59,8 +58,8 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/one-data')
-  public async findOneDocument(): Promise<Pageable<FakeDataToReturn>> {
-    return { totalDocs: 1, resource: [{ name: `doc_1`, index: 1, createdAt: new Date() }] };
+  public async findOneDocument(): Promise<DataToPaginate<FakeDataToReturn>> {
+    return { totalResources: 1, resources: [{ name: `doc_1`, index: 1, createdAt: new Date() }] };
   }
 
   /**
@@ -70,7 +69,7 @@ class FakeAppController {
     new LinkHeaderInterceptor({ resource: 'data-custom-query', pageName: '_page', perPageName: 'numberPerPage' }),
   )
   @Get('/data-custom-query')
-  public async findAllWithCustomQuery(): Promise<Pageable<FakeDataToReturn>> {
+  public async findAllWithCustomQuery(): Promise<DataToPaginate<FakeDataToReturn>> {
     return this.findAll();
   }
 
@@ -79,14 +78,14 @@ class FakeAppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data', defaultLimit: CUSTOM_LIMIT }))
   @Get('/data-limit')
-  public async findAllWithLimit(): Promise<Pageable<FakeDataToReturn>> {
+  public async findAllWithLimit(): Promise<DataToPaginate<FakeDataToReturn>> {
     const data: FakeDataToReturn[] = [];
 
     for (let i: number = 0; i < CUSTOM_LIMIT; i++) {
       data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
     }
 
-    return { totalDocs: 1015, resource: data };
+    return { totalResources: 1015, resources: data };
   }
 
   /**
