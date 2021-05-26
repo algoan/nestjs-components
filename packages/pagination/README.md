@@ -23,8 +23,8 @@ npm install --save @algoan/nestjs-pagination
 
 ```json
 {
-  "totalDocs": 1530,
-  "resource": [ { ... }, ..., { ... }]
+  "totalResources": 1530,
+  "resources": [ { ... }, ..., { ... }]
 }
 ```
 
@@ -52,11 +52,11 @@ class AppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
-  public async findAll(): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
+  public async findAll(): Promise<{ totalResources: number; resources: DataToReturn[] }> {
     const data: DataToReturn = await model.find(...);
     const count: number = await model.count();
 
-    return { totalDocs: count, resource: data };
+    return { totalResources: count, resources: data };
   }
 }
 ```
@@ -87,7 +87,7 @@ class AppController {
     const data: DataToReturn[] = await model.find(pagination);
     const count: number = await model.count(pagination.filter);
 
-    return { totalDocs: count, resource: data };
+    return { totalResources: count, resources: data };
   }
 }
 ```
@@ -109,15 +109,15 @@ A paginated data response is returned.
 
 ```json 
 {
-  resources: T[];
-  pagination: {
-    next: string | null;
-    previous: string | null;
-    first: string | null;
-    last: string | null;
-    totalPages: number | null;
-    totalResources: number | null;
-  };
+  "resources": [],
+  "pagination": {
+    "next": null,
+    "previous": null,
+    "first": null,
+    "last": null,
+    "totalPages": 1,
+    "totalResources": 0,
+  }
 }
 ```
 
@@ -137,11 +137,11 @@ class AppController {
    */
   @UseInterceptors(new PaginationBodyInterceptor({pageName: 'page', perPageName: 'limit'}))
   @Get('/data')
-  public async findAll(@MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'}) pagination: MongoPagination): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
+  public async findAll(@MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'}) pagination: MongoPagination): Promise<{ totalResources: number; resources: DataToReturn[] }> {
     const data: DataToReturn = await model.find(...);
     const count: number = await model.count();
 
-    return { totalDocs: count, resource: data };
+    return { totalResources: count, resources: data };
   }
 }
 ```
