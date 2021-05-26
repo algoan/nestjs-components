@@ -6,6 +6,8 @@ import { DataToPaginate } from './interfaces';
 
 const FIRST_PAGE: number = 1;
 const DEFAULT_LIMIT: number = 200;
+const PAGE_NAME: string = 'page';
+const PER_PAGE_NAME: string = 'per_page';
 
 /* tslint:disable no-null-keyword */
 
@@ -28,7 +30,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
   private readonly defaultLimit: number;
 
   constructor(options: PaginationBodyInterceptorOptions) {
-    const { defaultLimit = DEFAULT_LIMIT, pageName = 'page', perPageName = 'per_page' } = options;
+    const { defaultLimit = DEFAULT_LIMIT, pageName = PAGE_NAME, perPageName = PER_PAGE_NAME } = options;
 
     this.pageName = pageName;
     this.perPageName = perPageName;
