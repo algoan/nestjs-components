@@ -6,16 +6,37 @@ import { Observable } from 'rxjs';
 // tslint:disable-next-line
 import { Request } from 'express';
 
-const firstPage: number = 1;
-const defaultLimit: number = 200;
+const FIRST_PAGE: number = 1;
+const DEFAULT_LIMIT: number = 200;
 
 /* tslint:disable no-null-keyword */
+
+/**
+ * Configuration options
+ */
+interface PaginationBodyInterceptorOptions {
+  pageName?: string;
+  perPageName?: string;
+  defaultLimit?: number;
+}
 
 /**
  * PaginationInterceptor
  */
 @Injectable()
 export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPaginate<T>, PaginatedData<T>> {
+  private readonly pageName: string;
+  private readonly perPageName: string;
+  private readonly defaultLimit: number;
+
+  constructor(options: PaginationBodyInterceptorOptions) {
+    const { defaultLimit = DEFAULT_LIMIT, pageName = 'page', perPageName = 'limit' } = options;
+
+    this.pageName = pageName;
+    this.perPageName = perPageName;
+    this.defaultLimit = defaultLimit;
+  }
+
   /**
    * Interceptor core method
    * @param context Current request pipeline details
@@ -24,9 +45,11 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
   public intercept(context: ExecutionContext, next: CallHandler): Observable<PaginatedData<T>> {
     const req: Request = context.switchToHttp().getRequest();
     const path: string = req.path;
-    const page: number = !isNaN(Number(req.query.page)) ? Number(req.query.page) : firstPage;
+    const page: number = !isNaN(Number(req.query[this.pageName])) ? Number(req.query[this.pageName]) : FIRST_PAGE;
     const limit: number =
-      !isNaN(Number(req.query.limit)) && Number(req.query.limit) !== 0 ? Number(req.query.limit) : defaultLimit;
+      !isNaN(Number(req.query.limit)) && Number(req.query[this.perPageName]) !== 0
+        ? Number(req.query[this.perPageName])
+        : this.defaultLimit;
     const filter: unknown = req.query.filter;
     const sort: unknown = req.query.sort;
     const project: unknown = req.query.project;
@@ -40,7 +63,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
         const previousUri: string | null =
           page > 1 && page <= totalPages ? this.buildUrl(path, page - 1, limit, filter, sort, project) : null;
         const firstUri: string | null =
-          data.totalResources > 0 ? this.buildUrl(path, firstPage, limit, filter, sort, project) : null;
+          data.totalResources > 0 ? this.buildUrl(path, FIRST_PAGE, limit, filter, sort, project) : null;
         const lastUri: string | null =
           data.totalResources > 0 ? this.buildUrl(path, totalPages, limit, filter, sort, project) : null;
 

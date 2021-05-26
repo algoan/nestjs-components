@@ -103,10 +103,10 @@ new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'n
 @MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50  })
 ```
 
-You can also use the pagination in body interceptor by passing the configuration object
+You can also have the pagination in the response body by using the PaginationBodyInterceptor.
 
 ```typescript
-new LinkHeaderInterceptor({pageName: 'page', perPageName: 'limit'})
+new PaginationBodyInterceptor({pageName: 'page', perPageName: 'limit'})
 
 @MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'})
 ```

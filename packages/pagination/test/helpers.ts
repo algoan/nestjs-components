@@ -100,7 +100,7 @@ class FakeAppController {
   /**
    * Find all documents with the new query pagination
    */
-  @UseInterceptors(new PaginationBodyInterceptor())
+  @UseInterceptors(new PaginationBodyInterceptor({ defaultLimit: 200, pageName: 'page', perPageName: 'limit' }))
   @Get('/resource')
   public async findAllWithQueryParam(): Promise<DataToPaginate<FakeDataToReturn>> {
     const data: FakeDataToReturn[] = [];
