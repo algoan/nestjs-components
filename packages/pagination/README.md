@@ -121,7 +121,7 @@ A paginated data response is returned.
 }
 ```
 
-We import the `PaginationBodyInterceptor` next to a controller method.
+Import the `PaginationBodyInterceptor` next to a controller method.
 
 ```typescript
 import { PaginationBodyInterceptor } from '@algoan/nestjs-pagination';
