@@ -127,4 +127,98 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
       project: {},
     });
   });
+
+  it('MPPQD08 - should successfully return default value on empty query using the query parameter pagination', () => {
+    req = { query: {} };
+
+    const defaultLimit = 200;
+
+    const result: MongoPagination = getMongoQuery(
+      { pageName: 'page', perPageName: 'limit', defaultLimit: defaultLimit },
+      ctx as ExecutionContext,
+    );
+
+    expect(result).to.deep.equal({
+      filter: {},
+      limit: 200,
+      skip: 0,
+      sort: {},
+      project: {},
+    });
+  });
+
+  it('MPPQD09 - should successfully handle another page with the query parameter pagination', () => {
+    req = { query: { page: '2', limit: '20' } };
+
+    const defaultLimit = 200;
+
+    const result: MongoPagination = getMongoQuery(
+      { pageName: 'page', perPageName: 'limit', defaultLimit: defaultLimit },
+      ctx as ExecutionContext,
+    );
+
+    expect(result).to.deep.equal({
+      filter: {},
+      limit: 20,
+      skip: 20,
+      sort: {},
+      project: {},
+    });
+  });
+
+  it('MPPQD10 - should successfully parse filters with the query parameter pagination', () => {
+    req = {
+      query: {
+        page: '1',
+        limit: '20',
+        filter: '{"key": "value"}',
+        sort: '{"key": 1, "value": -1}',
+        project: '{"key": 1, "value": 1}',
+      },
+    };
+
+    const defaultLimit = 200;
+
+    const result: MongoPagination = getMongoQuery(
+      { pageName: 'page', perPageName: 'limit', defaultLimit: defaultLimit },
+      ctx as ExecutionContext,
+    );
+
+    expect(result).to.deep.equal({
+      filter: { key: 'value' },
+      limit: 20,
+      skip: 0,
+      sort: { key: 1, value: -1 },
+      project: { key: 1, value: 1 },
+    });
+  });
+
+  it('MPPQD11 - should throw bad request exception on parse error with the query parameter pagination', () => {
+    req = { query: { filter: '{invalidJson} ' } };
+
+    const defaultLimit = 200;
+
+    expect(() =>
+      getMongoQuery({ pageName: 'page', perPageName: 'limit', defaultLimit: defaultLimit }, ctx as ExecutionContext),
+    ).to.throw(BadRequestException);
+  });
+
+  it('MPPQD12 - should successfully parse filters (limit: 0) with the query parameter pagination', () => {
+    req = { query: { page: '1', limit: '0', filter: '{"key": "value"}', sort: '{}' } };
+
+    const defaultLimit = 200;
+
+    const result: MongoPagination = getMongoQuery(
+      { pageName: 'page', perPageName: 'limit', defaultLimit: defaultLimit },
+      ctx as ExecutionContext,
+    );
+
+    expect(result).to.deep.equal({
+      filter: { key: 'value' },
+      limit: 0,
+      skip: 0,
+      sort: {},
+      project: {},
+    });
+  });
 });

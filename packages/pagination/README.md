@@ -23,8 +23,8 @@ npm install --save @algoan/nestjs-pagination
 
 ```json
 {
-  "totalDocs": 1530,
-  "resource": [ { ... }, ..., { ... }]
+  "totalResources": 1530,
+  "resources": [ { ... }, ..., { ... }]
 }
 ```
 
@@ -32,7 +32,7 @@ npm install --save @algoan/nestjs-pagination
 
 ## Limits
 
-- This module does not take into account what is returned in the `resource` property. It may be inconsistent with headers set by the interceptor.
+- This module does not take into account what is returned in the `resources` property. It may be inconsistent with headers set by the interceptor.
 
 ## Quick Start
 
@@ -52,11 +52,11 @@ class AppController {
    */
   @UseInterceptors(new LinkHeaderInterceptor({ resource: 'data' }))
   @Get('/data')
-  public async findAll(): Promise<{ totalDocs: number; resource: DataToReturn[] }> {
+  public async findAll(): Promise<{ totalResources: number; resources: DataToReturn[] }> {
     const data: DataToReturn = await model.find(...);
     const count: number = await model.count();
 
-    return { totalDocs: count, resource: data };
+    return { totalResources: count, resources: data };
   }
 }
 ```
@@ -87,7 +87,7 @@ class AppController {
     const data: DataToReturn[] = await model.find(pagination);
     const count: number = await model.count(pagination.filter);
 
-    return { totalDocs: count, resource: data };
+    return { totalResources: count, resources: data };
   }
 }
 ```
@@ -101,4 +101,47 @@ You can also change the name of those parameters and the default per page limit 
 new LinkHeaderInterceptor({ resource: 'data', pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50 })
 
 @MongoPaginationParamDecorator({ pageName: '_page', perPageName: 'numberPerPage', defaultLimit: 50  })
+```
+
+You can also have the pagination in the response body by using the PaginationBodyInterceptor. By using this interceptor, the pagination is included in the response body instead of the header.
+
+A paginated data response is returned.
+
+```json 
+{
+  "resources": [],
+  "pagination": {
+    "next": null,
+    "previous": null,
+    "first": null,
+    "last": null,
+    "totalPages": 1,
+    "totalResources": 0,
+  }
+}
+```
+
+Import the `PaginationBodyInterceptor` next to a controller method.
+
+```typescript
+import { PaginationBodyInterceptor } from '@algoan/nestjs-pagination';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
+
+@Controller()
+/**
+ * Controller returning a lot of documents
+ */
+class AppController {
+  /**
+   * Find all documents
+   */
+  @UseInterceptors(new PaginationBodyInterceptor({pageName: 'page', perPageName: 'limit'}))
+  @Get('/data')
+  public async findAll(@MongoPaginationParamDecorator({pageName: 'page', perPageName: 'limit'}) pagination: MongoPagination): Promise<{ totalResources: number; resources: DataToReturn[] }> {
+    const data: DataToReturn = await model.find(...);
+    const count: number = await model.count();
+
+    return { totalResources: count, resources: data };
+  }
+}
 ```

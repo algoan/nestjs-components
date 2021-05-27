@@ -4,6 +4,7 @@ import { Request, Response as ExpressResponse } from 'express';
 import * as formatLinkHeader from 'format-link-header';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DataToPaginate } from './interfaces';
 
 const DEFAULT_LIMIT: number = 100;
 
@@ -11,15 +12,7 @@ const DEFAULT_LIMIT: number = 100;
  * Response extends from Express
  */
 export interface Response<T> extends ExpressResponse {
-  data: Pageable<T>;
-}
-
-/**
- * Pageable interface
- */
-export interface Pageable<T> {
-  resource: T[];
-  totalDocs: number;
+  data: DataToPaginate<T>;
 }
 
 type Relation = 'first' | 'next' | 'prev' | 'last';
@@ -76,7 +69,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
     const limit: string = (request.query[this.perPageName] as string) ?? this.defaultLimit;
 
     return next.handle().pipe(
-      map((data: Pageable<T>): T[] => {
+      map((data: DataToPaginate<T>): T[] => {
         const response: Response<T> = context.switchToHttp().getResponse();
 
         /**
@@ -86,7 +79,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
           page,
           limit,
           resourceUrl,
-          totalDocs: data.totalDocs,
+          totalDocs: data.totalResources,
         });
 
         response.setHeader('Link', linkHeader);
@@ -100,11 +93,11 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
             page,
             limit,
             resourceUrl,
-            totalDocs: data.totalDocs,
+            totalDocs: data.totalResources,
           }),
         );
 
-        return data.resource;
+        return data.resources;
       }),
     );
   }
