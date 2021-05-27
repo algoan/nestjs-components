@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.2.11...@algoan/nestjs-google-pubsub-client@0.3.0) (2021-05-27)
+
+
+### Features
+
+* **querypagination:** adding the pagination in query package ([a83c13c](https://github.com/algoan/nestjs-components/commit/a83c13c71929eefef32903bab076ceb624128057))
+
+
+
+
+
 ## [0.2.11](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.2.10...@algoan/nestjs-google-pubsub-client@0.2.11) (2021-04-29)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-client
