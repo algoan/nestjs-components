@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@4.1.1...@algoan/nestjs-pagination@5.0.0) (2021-05-31)
+
+
+### Bug Fixes
+
+* **pagination:** adding options to the body pagination ([daadfae](https://github.com/algoan/nestjs-components/commit/daadfaedc2e84cf14ae0e40ed70642110afbccba))
+* **pagination:** adding the new pagination to the already existing pagination folder ([404b372](https://github.com/algoan/nestjs-components/commit/404b37268cc89dca5b646f56935c5230ee7be4d3))
+* **pagination:** creating const variables for the page name and page limit ([f9fd196](https://github.com/algoan/nestjs-components/commit/f9fd19616ee0c4828d3af778a571929c77331694))
+* **pagination:** fixing the body interceptor default values ([cc58537](https://github.com/algoan/nestjs-components/commit/cc585377240c3c2132c7d5975a5712de3344a085))
+* **pagination:** readme file and packages lock file modifications ([fc40998](https://github.com/algoan/nestjs-components/commit/fc409982bafd88334cb40dcaf5c277d2593cdc7d))
+* **pagination:** readme file corrections ([b588e59](https://github.com/algoan/nestjs-components/commit/b588e5968b081fd34aee7c1ddccb1093b8647a15))
+* **pagination:** upgrade dev dependencies to their lts version ([0b6f708](https://github.com/algoan/nestjs-components/commit/0b6f7084feb1721cd261a0991ad0d3e9fb072b2d))
+
+
+### BREAKING CHANGES
+
+* **pagination:** the controller must return "totalResources" and "resources"
+
+
+
+
+
 ## [4.1.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@4.1.1...@algoan/nestjs-pagination@4.1.2) (2021-05-27)
 
 
