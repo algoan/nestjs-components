@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@5.0.0...@algoan/nestjs-pagination@5.0.1) (2021-06-01)
+
+
+### Bug Fixes
+
+* **pagination:** change the default limit for pagination results to 200 ([49fd48d](https://github.com/algoan/nestjs-components/commit/49fd48db170832e7de1015029a6b6a6c4f0aba0d))
+* **pagination:** change the default limit for the paginations results to 200 and test corrections ([5d2b6d4](https://github.com/algoan/nestjs-components/commit/5d2b6d4cd6f10fc074a78fa1ea0195c119c94282))
+
+
+
+
+
 # [5.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@4.1.1...@algoan/nestjs-pagination@5.0.0) (2021-05-31)
 
 
