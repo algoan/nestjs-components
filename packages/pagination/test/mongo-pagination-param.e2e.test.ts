@@ -47,9 +47,9 @@ describe('E2e tests related to the MongoPagination ParamDecorator', () => {
 
       expect(res.body.pagination).to.deep.equal({
         filter: {},
-        limit: 10,
+        limit: 200,
         project: {},
-        skip: 40,
+        skip: 800,
         sort: {},
       });
     });
