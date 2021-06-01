@@ -23,7 +23,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
 
     expect(result).to.deep.equal({
       filter: {},
-      limit: 10,
+      limit: 200,
       skip: 0,
       sort: {},
       project: {},
