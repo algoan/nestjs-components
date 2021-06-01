@@ -2,7 +2,7 @@ import { BadRequestException, createParamDecorator, ExecutionContext } from '@ne
 import { Request } from 'express';
 
 const FIRST_PAGE: number = 1;
-const DEFAULT_NUMBER_OF_RESULTS: number = 10;
+const DEFAULT_NUMBER_OF_RESULTS: number = 200;
 
 /**
  * Mongo query
