@@ -40,9 +40,9 @@
   },
   "peerDependencies": {
     "@algoan/pubsub": ">=4.x.x",
-    "@nestjs/common": ">=7.x.x",
-    "@nestjs/core": ">=7.x.x",
-    "@nestjs/microservices": ">=7.x.x"
+    "@nestjs/common": ">=8.x.x",
+    "@nestjs/core": ">=8.x.x",
+    "@nestjs/microservices": ">=8.x.x"
   },
   "devDependencies": {
     "@algoan/pubsub": "4.6.2",
