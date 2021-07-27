@@ -37,8 +37,8 @@ describe('GooglePubSubServer', () => {
     /**
      * After launching the application, ensure that all subscriptions have been created
      */
-    const _server = await app.listen();
-    console.log(_server);
+    await app.listen();
+
     await delay(1000);
     expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
     expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);

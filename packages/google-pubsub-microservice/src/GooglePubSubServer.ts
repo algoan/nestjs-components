@@ -32,7 +32,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   /**
    * Server listening method
    */
-  public listen(callback: () => void): void {
+  public listen(callback: (error?: Error, info?: unknown[]) => void): void {
     const gcPubSub: GCPubSub = PubSubFactory.create({
       transport: Transport.GOOGLE_PUBSUB,
       options: this.options,
@@ -59,7 +59,13 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
       );
     }
 
-    Promise.all(handlers).then(callback).catch(this.handleError);
+    Promise.all(handlers)
+      .then((res: unknown[]): void => {
+        callback(undefined, res);
+      })
+      .catch((err: Error): void => {
+        callback(err);
+      });
   }
 
   /**
