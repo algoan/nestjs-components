@@ -91,7 +91,7 @@ export class GCPubSubClient extends ClientProxy {
    * NOTE: this method has not been yet implemented
    * It will be in the future 😉
    */
-  public publish(): Function {
+  public publish(): () => void {
     throw new Error('NOT_YET_IMPLEMENTED');
   }
 }
