@@ -40,7 +40,9 @@ async function bootstrap() {
     strategy: new GCPubSubServer(options)
   })
 
-  await app.listen(() => console.log('Server running!'));
+  await app.listen();
+
+  console.log('Server running!')
 }
 bootstrap()
 ```

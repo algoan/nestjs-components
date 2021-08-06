@@ -35,13 +35,13 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "dependencies": {
-    "@nestjs/common": "^7.6.15",
+    "@nestjs/common": "^8.0.4",
     "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
-    "@nestjs/core": "7.6.15",
-    "@nestjs/platform-express": "7.6.15",
-    "@nestjs/testing": "^7.6.15",
+    "@nestjs/core": "^8.0.4",
+    "@nestjs/platform-express": "^8.0.4",
+    "@nestjs/testing": "^8.0.4",
     "@types/mocha": "^8.2.2",
     "@types/supertest": "^2.0.11",
     "mocha": "^8.3.2",
@@ -50,7 +50,7 @@
     "ts-node": "^9.1.1"
   },
   "peerDependencies": {
-    "@nestjs/common": "^7.6.15",
+    "@nestjs/common": "^8.0.4",
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15"
   }

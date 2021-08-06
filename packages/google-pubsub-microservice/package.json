@@ -40,21 +40,21 @@
   },
   "peerDependencies": {
     "@algoan/pubsub": ">=4.x.x",
-    "@nestjs/common": ">=7.x.x",
-    "@nestjs/core": ">=7.x.x",
-    "@nestjs/microservices": ">=7.x.x"
+    "@nestjs/common": ">=8.x.x",
+    "@nestjs/core": ">=8.x.x",
+    "@nestjs/microservices": ">=8.x.x"
   },
   "devDependencies": {
     "@algoan/pubsub": "4.6.2",
-    "@nestjs/common": "7.6.15",
-    "@nestjs/core": "7.6.15",
-    "@nestjs/microservices": "7.6.15",
-    "@nestjs/testing": "^7.6.15",
+    "@nestjs/common": "8.0.4",
+    "@nestjs/core": "^8.0.4",
+    "@nestjs/microservices": "^8.0.4",
+    "@nestjs/testing": "^8.0.4",
     "delay": "^5.0.0",
-    "google-pubsub-emulator": "^4.0.0",
+    "google-pubsub-emulator": "^5.0.0",
     "jest": "^26.6.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.6.7",
+    "rxjs": "^7.2.0",
     "typescript": "^4.2.4"
   }
 }

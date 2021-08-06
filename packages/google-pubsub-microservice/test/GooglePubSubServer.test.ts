@@ -28,7 +28,7 @@ describe('GooglePubSubServer', () => {
     await emulator.stop();
   });
 
-  it('GCPSS01 - should properly listen to a subscription - cb call', async (done: jest.DoneCallback) => {
+  it('GCPSS01 - should properly listen to a subscription - cb call', async () => {
     const server: GCPubSubServer = new GCPubSubServer({
       projectId: 'algoan-test',
       topicsNames: [SUBSCRIPTION_NAME],
@@ -37,16 +37,16 @@ describe('GooglePubSubServer', () => {
     /**
      * After launching the application, ensure that all subscriptions have been created
      */
-    app.listen(async () => {
-      expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
-      expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
+    await app.listen();
 
-      await app.close();
-      done();
-    });
+    await delay(1000);
+    expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
+    expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
+
+    await app.close();
   });
 
-  it('GCPSS02 - should properly listen to a subscription with a prefix', async (done: jest.DoneCallback) => {
+  it('GCPSS02 - should properly listen to a subscription with a prefix', async () => {
     const server: GCPubSubServer = new GCPubSubServer({
       subscriptionsPrefix: 'test-app',
       projectId: 'algoan-test',
@@ -67,16 +67,16 @@ describe('GooglePubSubServer', () => {
     /**
      * After launching the application, ensure that all subscriptions have been created
      */
-    app.listen(async () => {
-      expect(server.gcClient.subscriptions.get(subscriptionName)).toBeDefined();
-      expect(await server.gcClient.client.subscription(subscriptionName).exists()).toEqual([true]);
+    await app.listen();
+    await delay(1000);
 
-      await app.close();
-      done();
-    });
+    expect(server.gcClient.subscriptions.get(subscriptionName)).toBeDefined();
+    expect(await server.gcClient.client.subscription(subscriptionName).exists()).toEqual([true]);
+
+    await app.close();
   });
 
-  it('GCPSS03 - Emit an event and test if it is received', async (done: jest.DoneCallback) => {
+  it('GCPSS03 - Emit an event and test if it is received', async () => {
     const server: GCPubSubServer = new GCPubSubServer({
       projectId: 'algoan-test',
       topicsNames: [SUBSCRIPTION_NAME],
@@ -88,25 +88,22 @@ describe('GooglePubSubServer', () => {
      * After launching the application, emit an event and check if the app service has been called
      * After closing the app, it should not listen anymore
      */
-    app.listen(async () => {
-      await server.gcClient.emit(SUBSCRIPTION_NAME, {
-        hello: 'world',
-      });
-      await delay(100);
-      expect(spy).toHaveBeenCalledTimes(1);
-
-      await app.close();
-      await server.gcClient.emit(SUBSCRIPTION_NAME, {
-        hello: 'world',
-      });
-      await delay(100);
-      expect(spy).toHaveBeenCalledTimes(1);
-
-      done();
+    await app.listen();
+    await server.gcClient.emit(SUBSCRIPTION_NAME, {
+      hello: 'world',
     });
+    await delay(100);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    await app.close();
+    await server.gcClient.emit(SUBSCRIPTION_NAME, {
+      hello: 'world',
+    });
+    await delay(100);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('GCPSS04 - should properly listen to all subscriptions - cb call', async (done: jest.DoneCallback) => {
+  it('GCPSS04 - should properly listen to all subscriptions - cb call', async () => {
     const server: GCPubSubServer = new GCPubSubServer({
       projectId: 'algoan-test',
     });
@@ -114,14 +111,13 @@ describe('GooglePubSubServer', () => {
     /**
      * After launching the application, ensure that all subscriptions have been created
      */
-    app.listen(async () => {
-      expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
-      expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
-      expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME_2)).toBeDefined();
-      expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME_2).exists()).toEqual([true]);
+    await app.listen();
 
-      await app.close();
-      done();
-    });
+    expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
+    expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
+    expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME_2)).toBeDefined();
+    expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME_2).exists()).toEqual([true]);
+
+    await app.close();
   });
 });

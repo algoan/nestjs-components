@@ -27,7 +27,7 @@ describe('GooglePubSubServer', () => {
     await emulator.start();
   });
 
-  beforeEach(async (done: jest.DoneCallback) => {
+  beforeEach(async () => {
     /**
      * Start the client app
      */
@@ -44,7 +44,7 @@ describe('GooglePubSubServer', () => {
     const { app: mApp, module } = await getTestingServer(gPubSubServer);
     msModule = module;
     mServer = await mApp.init();
-    await mApp.listen(() => done());
+    await mApp.listen();
   });
 
   afterEach(async () => {
