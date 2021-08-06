@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@2.1.4...@algoan/nestjs-google-pubsub-microservice@3.0.0) (2021-08-06)
+
+
+### Bug Fixes
+
+* **nest:** update nest peer dependencies to v8 ([7a4adae](https://github.com/algoan/nestjs-components/commit/7a4adae52a0cf3f98623cdedbdc617a6c14ffecd))
+* change the listen signature ([88b69cb](https://github.com/algoan/nestjs-components/commit/88b69cbfd7b667afe559d48851c5ec718b26165e))
+
+
+### BREAKING CHANGES
+
+* **nest:** The listen method does not accept a callback method anymore
+
+
+
+
+
 ## [2.1.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@2.1.3...@algoan/nestjs-google-pubsub-microservice@2.1.4) (2021-04-29)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-microservice

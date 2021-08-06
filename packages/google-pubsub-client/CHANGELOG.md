@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.3.0...@algoan/nestjs-google-pubsub-client@0.3.1) (2021-08-06)
+
+
+### Bug Fixes
+
+* **pubsubclient:** change publish signature method ([c365f70](https://github.com/algoan/nestjs-components/commit/c365f7013a4644e782963025c88cc0d093bcdfe0))
+
+
+
+
+
 # [0.3.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.2.11...@algoan/nestjs-google-pubsub-client@0.3.0) (2021-05-27)
 
 
