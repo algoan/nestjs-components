@@ -33,7 +33,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@nestjs/common": "^8.0.4",
+    "@nestjs/common": "^8.0.10",
     "@nestjs/core": "^8.0.4",
     "@nestjs/platform-express": "^8.0.4",
     "@nestjs/testing": "^8.0.4",
