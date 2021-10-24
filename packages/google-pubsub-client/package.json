@@ -48,7 +48,7 @@
     "@algoan/nestjs-google-pubsub-microservice": "^3.0.0",
     "@algoan/pubsub": "^4.6.2",
     "@nestjs/common": "^8.0.5",
-    "@nestjs/core": "^8.0.5",
+    "@nestjs/core": "^8.1.1",
     "@nestjs/microservices": "^8.0.5",
     "@nestjs/platform-express": "^8.0.5",
     "@nestjs/testing": "^8.0.5",
