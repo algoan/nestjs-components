@@ -35,11 +35,11 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.2",
     "@yelloan/tslint": "^0.3.0",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.4",
     "jest": "^26.6.3",
     "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
