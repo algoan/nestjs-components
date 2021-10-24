@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-custom-decorators@1.3.1...@algoan/nestjs-custom-decorators@1.3.2) (2021-10-24)
+
+
+### Bug Fixes
+
+* **deps:** move @nestjs/common to peer dependencies ([ca6eaa0](https://github.com/algoan/nestjs-components/commit/ca6eaa018d4fb866aaa4d28f59a43457b9dab44c))
+
+
+
+
+
 ## [1.3.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-custom-decorators@1.3.0...@algoan/nestjs-custom-decorators@1.3.1) (2021-08-06)
 
 **Note:** Version bump only for package @algoan/nestjs-custom-decorators

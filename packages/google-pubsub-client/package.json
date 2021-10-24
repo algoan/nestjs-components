@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-google-pubsub-client",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A NestJS ClientProxy for Google Cloud PubSub",
   "keywords": [
     "nestjs",
@@ -45,7 +45,7 @@
     "@nestjs/platform-express": "^7.6.15"
   },
   "devDependencies": {
-    "@algoan/nestjs-google-pubsub-microservice": "^3.0.0",
+    "@algoan/nestjs-google-pubsub-microservice": "^3.0.1",
     "@algoan/pubsub": "^4.6.3",
     "@nestjs/common": "^8.1.1",
     "@nestjs/core": "^8.1.1",
