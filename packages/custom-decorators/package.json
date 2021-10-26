@@ -38,7 +38,7 @@
     "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
-    "@nestjs/common": "^8.1.1",
+    "@nestjs/common": "^8.1.2",
     "@nestjs/core": "^8.1.1",
     "@nestjs/platform-express": "^8.1.1",
     "@nestjs/testing": "^8.1.1",
