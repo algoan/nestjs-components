@@ -33,7 +33,7 @@
   "author": "algoan",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^13.2.1",
+    "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^13.2.0",
     "@types/jest": "^27.0.2",
     "@yelloan/tslint": "^0.3.0",
