@@ -2,7 +2,7 @@ import { GCPubSub, GooglePubSubOptions, PubSubFactory, Transport } from '@algoan
 import { Logger } from '@nestjs/common';
 import { ClientProxy, ReadPacket } from '@nestjs/microservices';
 
-export type GCPubSubClientOptions = GooglePubSubOptions;
+export type GCPubSubClientOptions = GooglePubSubOptions & {messageMetadataKey?: string};
 /**
  * Algoan pub sub client
  */
@@ -72,6 +72,12 @@ export class GCPubSubClient extends ClientProxy {
     if (this.pubSub === undefined) {
       return undefined;
     }
+    
+    let opts = {};
+    if (this.options?.messageMetadataKey !== undefined && _packet.data[this.options?.messageMetadataKey] !== undefined) {
+      opts = {metadata: ..._packet.data[this.options?.messageMetadataKey]};
+      delete _packet.data[this.options?.messageMetadataKey]
+    }
 
     const pattern: string = this.normalizePattern(_packet.pattern);
     if (this.options?.debug === true) {
@@ -79,12 +85,13 @@ export class GCPubSubClient extends ClientProxy {
         {
           pattern,
           data: _packet.data,
+          opts: opts,
         },
         'Emitting an event through the GCPubSubClient',
       );
     }
 
-    return this.pubSub.emit(pattern, _packet.data);
+    return this.pubSub.emit(pattern, _packet.data, opts);
   }
 
   /**
