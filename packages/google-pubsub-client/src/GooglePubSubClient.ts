@@ -73,7 +73,7 @@ export class GCPubSubClient extends ClientProxy {
       return undefined;
     }
 
-    let opts: { metadata?: { [key: string]: string } } = {};
+    const opts: { metadata?: { [key: string]: string } } = {};
     if (
       this.options?.messageMetadataKey !== undefined &&
       _packet.data[this.options?.messageMetadataKey] !== undefined
