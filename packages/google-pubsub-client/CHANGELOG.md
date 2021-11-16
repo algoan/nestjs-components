@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.3.2...@algoan/nestjs-google-pubsub-client@0.4.0) (2021-11-16)
+
+
+### Features
+
+* **pubsubclient:** be able to add message attributes ([3fab24b](https://github.com/algoan/nestjs-components/commit/3fab24b7a327ae3fb5d83f2d098f77c3ef32cfec))
+
+
+
+
+
 ## [0.3.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.3.1...@algoan/nestjs-google-pubsub-client@0.3.2) (2021-10-24)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-client
