@@ -47,7 +47,7 @@
   "devDependencies": {
     "@algoan/nestjs-google-pubsub-microservice": "^3.0.1",
     "@algoan/pubsub": "^4.6.3",
-    "@nestjs/common": "^8.1.1",
+    "@nestjs/common": "^8.2.1",
     "@nestjs/core": "^8.1.1",
     "@nestjs/microservices": "^8.1.1",
     "@nestjs/platform-express": "^8.1.1",
