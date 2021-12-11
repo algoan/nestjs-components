@@ -31,7 +31,7 @@ workflows:
 imageA: &defaults
   working_directory: ~/tmp
   docker:
-    - image: yelloan/node-docker:lts
+    - image: cimg/node:lts
   environment:
     NODE_ENV: test
 
@@ -44,8 +44,8 @@ jobs:
           keys:
           - dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Install node dependencies
-          command: npm ci
+          name: Install lerna globally
+          command: npm install
       - run:
           name: Lerna bootstrap the packages
           command: npx lerna bootstrap
