@@ -35,5 +35,13 @@
   },
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=8",
+    "@nestjs/core": ">=8",
+    "@nestjs/platform-express": ">=8",
+    "rxjs": ">=7",
+    "class-validator": "*",
+    "express": ">=4"
   }
 }
