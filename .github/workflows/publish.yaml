@@ -1,0 +1,34 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: NestJS components Publish Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js fermium
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run compile
+    - name: Wait on tests
+      uses: lewagon/wait-on-check-action@v0.2
+      with:
+        ref: master
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        check-name: test (14.x)
+        wait-interval: 20 # seconds
+        allowed-conclusions: success
+    - run: npx lerna version --conventional-commits --yes
+      name: Run Lerna version
+    - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc 
+    - run: npx lerna publish from-git --yes
