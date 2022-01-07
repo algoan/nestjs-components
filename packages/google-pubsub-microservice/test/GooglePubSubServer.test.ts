@@ -7,6 +7,8 @@ import { getTestingApplication } from './test-app/main';
 
 const Emulator = require('google-pubsub-emulator');
 
+jest.setTimeout(20000);
+
 describe('GooglePubSubServer', () => {
   let emulator: any;
 
@@ -16,6 +18,7 @@ describe('GooglePubSubServer', () => {
      */
     emulator = new Emulator({
       projectId: 'algoan-test',
+      debug: process.env.ENABLE_EMULATOR_DEBUG === 'true',
     });
 
     await emulator.start();
