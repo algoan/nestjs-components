@@ -5,12 +5,12 @@ import * as request from 'supertest';
 describe('E2e tests related to the User ParamDecorator', () => {
   let app: INestApplication;
 
-  before(async () => {
+  beforeAll(async () => {
     app = await createTestAppModule();
     await app.init();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await app.close();
   });
 
