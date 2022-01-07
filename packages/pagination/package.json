@@ -6,9 +6,9 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc -p .",
-    "test:cov": "nyc --reporter=html --reporter=lcov npm test",
+    "test:cov": "jest --coverage",
     "pretest": "npm run build",
-    "test": "NODE_ENV=test mocha --reporter spec --exit --require ts-node/register ./test/**/*.test.ts"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -30,18 +30,6 @@
     "url": "https://github.com/algoan/nestjs-components.git"
   },
   "homepage": "https://github.com/algoan/nestjs-components/packages/nestjs-pagination",
-  "nyc": {
-    "check-coverage": true,
-    "per-file": true,
-    "lines": 100,
-    "statements": 100,
-    "functions": 100,
-    "branches": 100,
-    "cache": false,
-    "extension": [
-      ".ts"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   },

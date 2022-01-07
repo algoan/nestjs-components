@@ -26,14 +26,18 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Get GCloud CLI to install pubsub emulator
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
       - name: Update GCloud Components
         run: gcloud components update --quiet
       - name: Install GCloud beta
         run: gcloud components install beta --quiet
       - name: Install pubsub-emulator
         run: gcloud components install pubsub-emulator --quiet
+      - run: npm i -g npm lerna
+        name: Install Lerna globally
       - run: npm i
-      - run: npx lerna bootstrap
+        name: Install all dependencies and symlinks using lerna link convert
       - run: npm run lint
+        name: Lint all packages
       - run: npm run test:cov:all
+        name: Launch tests for each package

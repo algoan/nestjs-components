@@ -38,11 +38,11 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "peerDependencies": {
-    "@algoan/pubsub": "^4.3.1",
-    "@nestjs/common": "^7.6.15",
-    "@nestjs/core": "^7.6.15",
-    "@nestjs/microservices": "^7.6.15",
-    "@nestjs/platform-express": "^7.6.15"
+    "@algoan/pubsub": "^4.x.x",
+    "@nestjs/common": ">=8",
+    "@nestjs/core": ">=8",
+    "@nestjs/microservices": ">=8",
+    "@nestjs/platform-express": ">=8"
   },
   "devDependencies": {
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice"

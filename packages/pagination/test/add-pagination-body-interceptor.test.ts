@@ -6,12 +6,12 @@ import { createTestAppModule } from './helpers';
 describe('Tests related to the pagination interceptor', () => {
   let app: INestApplication;
 
-  before(async () => {
+  beforeAll(async () => {
     app = await createTestAppModule();
     await app.init();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await app.close();
   });
 
@@ -65,6 +65,21 @@ describe('Tests related to the pagination interceptor', () => {
         first: '/resource?page=1&limit=100&filter={customerIdentifier: my_id_43524}',
         last: '/resource?page=11&limit=100&filter={customerIdentifier: my_id_43524}',
         previous: '/resource?page=3&limit=100&filter={customerIdentifier: my_id_43524}',
+        totalPages: 11,
+        totalResources: 1015,
+      });
+    });
+
+    it('AD05 - should not add sort and project if they are already defined', async () => {
+      const res: request.Response = await request(app.getHttpServer())
+        .get('/resource?page=4&limit=100&filter={customerIdentifier: my_id_43524}&sort={created: -1}&project={id: 0}')
+        .expect(200);
+      expect(res.body.pagination).to.deep.equal({
+        next: '/resource?page=5&limit=100&filter={customerIdentifier: my_id_43524}&sort={created: -1}&project={id: 0}',
+        first: '/resource?page=1&limit=100&filter={customerIdentifier: my_id_43524}&sort={created: -1}&project={id: 0}',
+        last: '/resource?page=11&limit=100&filter={customerIdentifier: my_id_43524}&sort={created: -1}&project={id: 0}',
+        previous:
+          '/resource?page=3&limit=100&filter={customerIdentifier: my_id_43524}&sort={created: -1}&project={id: 0}',
         totalPages: 11,
         totalResources: 1015,
       });
