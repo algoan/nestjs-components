@@ -8,12 +8,12 @@ import { createTestAppModule } from './helpers';
 describe('Tests related to the Link Header interceptor', () => {
   let app: INestApplication;
 
-  before(async () => {
+  beforeAll(async () => {
     app = await createTestAppModule();
     await app.init();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await app.close();
   });
 
