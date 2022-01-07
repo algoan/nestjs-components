@@ -18,8 +18,8 @@ jobs:
       with:
         node-version: '14.x'
         cache: 'npm'
-    - run: npm ci
-    - run: npm run compile
+    - run: npm i
+    - run: npm run build
     - name: Wait on tests
       uses: lewagon/wait-on-check-action@v0.2
       with:
