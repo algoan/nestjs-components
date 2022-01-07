@@ -20,6 +20,7 @@ jobs:
         cache: 'npm'
     - run: npm i -g npm && npm i
     - run: npm run build
+    - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
     - name: Wait on tests
       uses: lewagon/wait-on-check-action@v0.2
       with:
