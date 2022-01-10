@@ -37,7 +37,7 @@
   "devDependencies": {
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice",
     "@algoan/pubsub": "^4.6.3",
-    "@commitlint/cli": "^16.0.1",
+    "@commitlint/cli": "^16.0.2",
     "@commitlint/config-conventional": "^16.0.0",
     "@nestjs/common": "^8.2.4",
     "@nestjs/core": "^8.2.4",
