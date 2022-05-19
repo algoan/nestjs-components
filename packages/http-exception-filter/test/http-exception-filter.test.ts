@@ -27,7 +27,7 @@ describe('Http Exception Filter', () => {
     jest.clearAllMocks();
   });
 
-  it('returns a formatted bad request reponse', async () => {
+  it('returns a formatted bad request response', async () => {
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
     const url: string = `/cats/badrequest`;
 
@@ -65,7 +65,7 @@ describe('Http Exception Filter', () => {
     });
   });
 
-  it('returns a formatted internal server error reponse', async () => {
+  it('returns a formatted internal server error response', async () => {
     const errorSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'error');
     const url: string = `/cats/internalerror`;
 
@@ -83,6 +83,25 @@ describe('Http Exception Filter', () => {
       code: 'INTERNAL_SERVER_ERROR',
       message: 'A critical error happened.',
       status: 500,
+    });
+  });
+
+  it('returns a formatted not found error response with a specific code', async () => {
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const url: string = `/cats/notfound`;
+
+    const { body: resBody } = await request(app.getHttpServer()).get(url);
+
+    expect(warnSpy).toHaveBeenCalledWith({
+      message: `404 [GET ${url}] has thrown an HTTP client error`,
+      exceptionStack: expect.any(String),
+      headers: expect.anything(),
+    });
+
+    expect(resBody).toEqual({
+      code: 'UNKNOWN_ENTITY',
+      message: 'Id notfound could not be found',
+      status: 404,
     });
   });
 
