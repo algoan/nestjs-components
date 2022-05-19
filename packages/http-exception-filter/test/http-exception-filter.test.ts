@@ -1,20 +1,21 @@
 import { HttpStatus, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+import { HttpExceptionFilter } from '../src';
 import { CatsModule } from './test-app/cats/cats.module';
-import { CoreModule } from './test-app/core/core.module';
 
 describe('Http Exception Filter', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [CoreModule, CatsModule],
+      imports: [CatsModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
     app.useLogger(Logger);
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
   });
