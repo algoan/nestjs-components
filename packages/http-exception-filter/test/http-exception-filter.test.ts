@@ -27,7 +27,7 @@ describe('Http Exception Filter', () => {
     jest.clearAllMocks();
   });
 
-  it('returns a formatted bad request reponse', async () => {
+  it('returns a formatted bad request response', async () => {
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
     const url: string = `/cats/badrequest`;
 
@@ -65,7 +65,7 @@ describe('Http Exception Filter', () => {
     });
   });
 
-  it('returns a formatted internal server error reponse', async () => {
+  it('returns a formatted internal server error response', async () => {
     const errorSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'error');
     const url: string = `/cats/internalerror`;
 
