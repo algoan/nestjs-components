@@ -1,4 +1,12 @@
-import { BadRequestException, Controller, Get, InternalServerErrorException, Post, Body } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  InternalServerErrorException,
+  NotFoundException,
+  Post,
+} from '@nestjs/common';
 import { CreateCatDto } from './create-cat.dto';
 
 /**
@@ -26,6 +34,17 @@ export class CatsController {
   @Get('internalerror')
   public internalerror(): string {
     throw new InternalServerErrorException(`A critical error happened.`);
+  }
+  /**
+   * Fetching not found
+   */
+  @Get('notfound')
+  public notfound(): string {
+    throw new NotFoundException({
+      code: 'UNKNOWN_ENTITY',
+      message: 'Id notfound could not be found',
+      status: 404,
+    });
   }
   /**
    * Create a cat

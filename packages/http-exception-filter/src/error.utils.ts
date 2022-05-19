@@ -16,6 +16,10 @@ export function getCode(exResponse: ExceptionResponse | string): string {
     return formatErrorCode(exResponse.error);
   }
 
+  if ('code' in exResponse && typeof exResponse.code === 'string') {
+    return exResponse.code;
+  }
+
   return '';
 }
 
@@ -97,6 +101,7 @@ interface Constraint {
  * Exception response
  */
 interface ExceptionResponse {
+  code?: string;
   error?: string;
   message?: string | string[] | ValidationError[];
 }

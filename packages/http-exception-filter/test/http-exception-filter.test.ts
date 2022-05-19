@@ -86,6 +86,25 @@ describe('Http Exception Filter', () => {
     });
   });
 
+  it('returns a formatted not found error response with a specific code', async () => {
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const url: string = `/cats/notfound`;
+
+    const { body: resBody } = await request(app.getHttpServer()).get(url);
+
+    expect(warnSpy).toHaveBeenCalledWith({
+      message: `404 [GET ${url}] has thrown an HTTP client error`,
+      exceptionStack: expect.any(String),
+      headers: expect.anything(),
+    });
+
+    expect(resBody).toEqual({
+      code: 'UNKNOWN_ENTITY',
+      message: 'Id notfound could not be found',
+      status: 404,
+    });
+  });
+
   it('returns a formatted bad request after failing DTO validation', async () => {
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
     const url: string = `/cats/create`;
