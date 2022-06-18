@@ -149,4 +149,9 @@ describe('Logging interceptor', () => {
 
     expect(warnSpy).not.toHaveBeenCalled();
   });
+
+  it('logs the input and output request details as undefined with GraphQL - OK status code', async () => {
+    const url: string = `/graphql`;
+    await request(app.getHttpServer()).post(url).send({ query: '{ok{message}}' }).expect(HttpStatus.OK);
+  });
 });

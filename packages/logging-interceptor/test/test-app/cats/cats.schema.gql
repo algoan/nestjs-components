@@ -1,0 +1,9 @@
+type Cat {
+    message: String
+}
+
+type Query {
+  ok: Cat
+  badRequest: Cat
+  internalerror: Cat
+}
