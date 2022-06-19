@@ -150,8 +150,134 @@ describe('Logging interceptor', () => {
     expect(warnSpy).not.toHaveBeenCalled();
   });
 
-  it('logs the input and output request details as undefined with GraphQL - OK status code', async () => {
+  // GraphQL Tests
+
+  it('logs the input and output request details (GraphQL) - OK status code', async () => {
+    const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
     const url: string = `/graphql`;
+
     await request(app.getHttpServer()).post(url).send({ query: '{ok{message}}' }).expect(HttpStatus.OK);
+
+    const ctx: string = `LoggingInterceptor - POST - ${url}`;
+    const resCtx: string = `LoggingInterceptor - 200 - POST - ${url}`;
+    const incomingMsg: string = `Incoming request - POST - ${url}`;
+    const outgoingMsg: string = `Outgoing response - 200 - POST - ${url}`;
+
+    /**
+     * Info level
+     */
+    expect(logSpy).toBeCalledTimes(2);
+    expect(logSpy.mock.calls[0]).toEqual([
+      {
+        body: {
+          query: '{ok{message}}',
+        },
+        headers: expect.any(Object),
+        message: incomingMsg,
+        method: `POST`,
+      },
+      ctx,
+    ]);
+    expect(logSpy.mock.calls[1]).toEqual([
+      {
+        message: outgoingMsg,
+        body: { message: `This action returns all cats` },
+      },
+      resCtx,
+    ]);
+  });
+
+  it('logs the input and output request details (GraphQL) - BAD_REQUEST status code', async () => {
+    const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const errorSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'error');
+    const url: string = `/graphql`;
+
+    await request(app.getHttpServer()).post(url).send({ query: '{badRequest{message}}' }).expect(HttpStatus.OK);
+
+    const ctx: string = `LoggingInterceptor - POST - ${url}`;
+    const resCtx: string = `LoggingInterceptor - 400 - POST - ${url}`;
+    const incomingMsg: string = `Incoming request - POST - ${url}`;
+    const outgoingMsg: string = `Outgoing response - 400 - POST - ${url}`;
+
+    /**
+     * Info level
+     */
+    expect(logSpy).toBeCalledTimes(1);
+    expect(logSpy.mock.calls[0]).toEqual([
+      {
+        body: {
+          query: '{badRequest{message}}',
+        },
+        headers: expect.any(Object),
+        message: incomingMsg,
+        method: `POST`,
+      },
+      ctx,
+    ]);
+
+    expect(warnSpy).toBeCalledTimes(1);
+    expect(warnSpy.mock.calls[0]).toEqual([
+      {
+        message: outgoingMsg,
+        method: 'POST',
+        url: url,
+        body: {
+          query: '{badRequest{message}}',
+        },
+        error: expect.any(BadRequestException),
+      },
+      resCtx,
+    ]);
+
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('logs the input and output request details (GraphQL) - INTERNAL_SERVER_ERROR status code', async () => {
+    const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const errorSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'error');
+    const url: string = '/graphql';
+
+    // await request(app.getHttpServer()).get(url).expect(HttpStatus.INTERNAL_SERVER_ERROR);
+    await request(app.getHttpServer()).post(url).send({ query: '{internalerror{message}}' }).expect(HttpStatus.OK);
+
+    const ctx: string = `LoggingInterceptor - POST - ${url}`;
+    const resCtx: string = `LoggingInterceptor - 500 - POST - ${url}`;
+    const incomingMsg: string = `Incoming request - POST - ${url}`;
+    const outgoingMsg: string = `Outgoing response - 500 - POST - ${url}`;
+
+    /**
+     * Info level
+     */
+    expect(logSpy).toBeCalledTimes(1);
+    expect(logSpy.mock.calls[0]).toEqual([
+      {
+        body: {
+          query: '{internalerror{message}}',
+        },
+        headers: expect.any(Object),
+        message: incomingMsg,
+        method: `POST`,
+      },
+      ctx,
+    ]);
+
+    expect(errorSpy).toBeCalledTimes(1);
+    expect(errorSpy.mock.calls[0]).toEqual([
+      {
+        message: outgoingMsg,
+        method: 'POST',
+        url: url,
+        body: {
+          query: '{internalerror{message}}',
+        },
+        error: expect.any(InternalServerErrorException),
+      },
+      expect.any(String),
+      resCtx,
+    ]);
+
+    expect(warnSpy).not.toHaveBeenCalled();
   });
 });
