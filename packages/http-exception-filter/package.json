@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-http-exception-filter",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A simple http exception filter for NestJS applications",
   "keywords": [
     "nestjs",
