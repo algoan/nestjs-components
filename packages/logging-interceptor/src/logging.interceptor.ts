@@ -7,9 +7,74 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { Request, Response } from 'express';
+import { IncomingHttpHeaders } from 'http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+/**
+ * Util method, obtains http request metadata from the execution context
+ * @param context details about the current request
+ */
+function getRequestMeta(context: ExecutionContext): {
+  method: string;
+  url: string;
+  body: Record<string, unknown>;
+  headers: IncomingHttpHeaders;
+} {
+  if (context.getType<GqlContextType>() === 'graphql') {
+    const gqlContext: GqlExecutionContext = GqlExecutionContext.create(context);
+    const _req: Request | undefined = gqlContext.getContext().req;
+    if (typeof _req === 'undefined') {
+      throw new Error(
+        `'req' object not found on context, please ensure you have provided a 'req' argument to the context passed to GraphQL execution `,
+      );
+    }
+
+    return {
+      method: _req.method,
+      url: _req.baseUrl,
+      body: _req.body,
+      headers: _req.headers,
+    };
+  }
+  const req: Request = context.switchToHttp().getRequest<Request>();
+
+  return {
+    method: req.method,
+    url: req.url,
+    body: req.body,
+    headers: req.headers,
+  };
+}
+
+/**
+ * Util method, obtains http response metadata from the execution context
+ * @param context details about the current request
+ */
+function getResponseMeta(context: ExecutionContext): {
+  statusCode: number;
+} {
+  if (context.getType<GqlContextType>() === 'graphql') {
+    const gqlContext: GqlExecutionContext = GqlExecutionContext.create(context);
+    const _res: Response | undefined = gqlContext.getContext().res;
+    if (typeof _res === 'undefined') {
+      throw new Error(
+        `'res' object not found on context, please ensure you have provided a 'res' argument to the context passed to GraphQL execution `,
+      );
+    }
+
+    return {
+      statusCode: _res.statusCode,
+    };
+  }
+  const res: Response = context.switchToHttp().getResponse<Response>();
+
+  return {
+    statusCode: res.statusCode,
+  };
+}
 
 /**
  * Interceptor that logs input/output requests
@@ -34,8 +99,7 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param call$ implements the handle method that returns an Observable
    */
   public intercept(context: ExecutionContext, call$: CallHandler): Observable<unknown> {
-    const req: Request = context.switchToHttp().getRequest();
-    const { method, url, body, headers } = req;
+    const { method, url, body, headers } = getRequestMeta(context);
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
 
@@ -67,10 +131,8 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param context details about the current request
    */
   private logNext(body: unknown, context: ExecutionContext): void {
-    const req: Request = context.switchToHttp().getRequest<Request>();
-    const res: Response = context.switchToHttp().getResponse<Response>();
-    const { method, url } = req;
-    const { statusCode } = res;
+    const { method, url } = getRequestMeta(context);
+    const { statusCode } = getResponseMeta(context);
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
     const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
@@ -89,8 +151,7 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param context details about the current request
    */
   private logError(error: Error, context: ExecutionContext): void {
-    const req: Request = context.switchToHttp().getRequest<Request>();
-    const { method, url, body } = req;
+    const { method, url, body } = getRequestMeta(context);
 
     if (error instanceof HttpException) {
       const statusCode: number = error.getStatus();

@@ -33,9 +33,14 @@
     "access": "public"
   },
   "peerDependencies": {
+    "@nestjs/apollo": ">=5",
     "@nestjs/common": ">=5",
     "@nestjs/core": ">=5",
+    "@nestjs/graphql": ">=5",
+    "apollo-server": ">=2",
+    "apollo-server-express": ">=2",
     "express": ">=4",
+    "graphql": ">=15",
     "rxjs": ">=6"
   }
 }
