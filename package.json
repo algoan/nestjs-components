@@ -42,7 +42,7 @@
     "@nestjs/common": "^9.0.8",
     "@nestjs/core": "^9.0.8",
     "@nestjs/microservices": "^9.0.8",
-    "@nestjs/platform-express": "^9.0.8",
+    "@nestjs/platform-express": "^9.1.4",
     "@nestjs/testing": "^9.0.8",
     "@types/chai": "^4.3.1",
     "@types/content-range": "^1.1.1",
