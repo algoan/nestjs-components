@@ -19,24 +19,22 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: Get GCloud CLI to install pubsub emulator
-        uses: google-github-actions/setup-gcloud@v0
-      - name: Update GCloud Components
-        run: gcloud components update --quiet
-      - name: Install GCloud beta
-        run: gcloud components install beta --quiet
-      - name: Install pubsub-emulator
-        run: gcloud components install pubsub-emulator --quiet
-      - run: npm i -g npm lerna
-        name: Install Lerna globally
-      - run: npm i
-        name: Install all dependencies and symlinks using lerna link convert
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          install_components: 'beta,pubsub-emulator'
+      - run: npm i -g npm@9
+      - run: npm ci
+        name: Install root dependencies
+      - run: npx lerna bootstrap --hoist
+        name: Install all dependencies and symlinks using lerna bootstrap
       - run: npm run lint
         name: Lint all packages
       - run: npm run test:cov:all
