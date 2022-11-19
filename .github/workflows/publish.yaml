@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js fermium
-      uses: actions/setup-node@v2
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: '14.x'
+        node-version: '16.x'
         cache: 'npm'
-    - run: npm i -g npm && npm i
+    - run: npm i -g npm@9 && npm i
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
     - name: Wait on tests
@@ -26,7 +26,7 @@ jobs:
       with:
         ref: master
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        check-name: test (14.x)
+        check-name: test (16.x)
         wait-interval: 20 # seconds
         allowed-conclusions: success
     - run: npx lerna version --conventional-commits --yes

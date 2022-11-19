@@ -25,7 +25,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
       - name: Get GCloud CLI to install pubsub emulator
         uses: google-github-actions/setup-gcloud@v1
         with:
