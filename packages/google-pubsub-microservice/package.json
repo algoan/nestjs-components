@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-google-pubsub-microservice",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "A GooglePubSub transport strategy with NestJS Microservice",
   "keywords": [
     "nodejs",
