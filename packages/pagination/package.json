@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc -p .",
     "test:cov": "jest --coverage",
-    "pretest": "npm run build",
     "test": "jest"
   },
   "repository": {

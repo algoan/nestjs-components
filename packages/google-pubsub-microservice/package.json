@@ -32,8 +32,7 @@
     "build": "tsc -p .",
     "test": "jest --detectOpenHandles --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config ./jest.config.js",
-    "test:cov": "npm t -- --coverage",
-    "pretest": "npm run build"
+    "test:cov": "npm t -- --coverage"
   },
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"

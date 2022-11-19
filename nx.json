@@ -15,9 +15,9 @@
         "^build"
       ]
     },
-    "test": {
+    "test:cov": {
       "dependsOn": [
-        "^test"
+        "build"
       ]
     }
   },

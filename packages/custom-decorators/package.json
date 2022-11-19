@@ -28,7 +28,6 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "pretest": "npm run build",
     "test": "jest",
     "test:cov": "jest --coverage"
   },
