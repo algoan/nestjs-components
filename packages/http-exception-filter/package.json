@@ -18,14 +18,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-components.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/http-exception-filter"
   },
   "scripts": {
     "build": "tsc -p .",
     "test": "jest",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config ./jest.config.js",
-    "test:cov": "jest --coverage",
-    "pretest": "npm run build"
+    "test:cov": "jest --coverage"
   },
   "bugs": {
     "url": "https://github.com/algoan/nestjs-components/issues"

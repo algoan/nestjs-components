@@ -7,12 +7,12 @@
   "scripts": {
     "build": "tsc -p .",
     "test:cov": "jest --coverage",
-    "pretest": "npm run build",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-components.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/pagination"
   },
   "files": [
     "dist/src"

@@ -56,3 +56,17 @@ See [the documentation here](./packages/google-pubsub-client/).
 A set of custom decorators for NestJS.
 
 See [the documentation here](./packages/custom-decorators).
+
+# Contribution
+
+This repository is managed by [Lerna.js](https://lerna.js.org). If you want to contribute, you need to follow these instructions:
+
+Install root dependencies:
+
+```bash
+npm install
+```
+
+That's it!
+
+💡 We've used the [hosit](https://lerna.js.org/docs/concepts/hoisting) option to bootstrap dependencies. All dev dependencies are installed in the root `node_modules` directory to save space and time!
