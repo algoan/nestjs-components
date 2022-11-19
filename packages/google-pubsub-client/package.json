@@ -25,7 +25,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-components.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/google-pubsub-client"
   },
   "scripts": {
     "build": "tsc -p .",

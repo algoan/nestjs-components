@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-components.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/custom-decorators"
   },
   "scripts": {
     "build": "tsc -p .",

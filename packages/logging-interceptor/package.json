@@ -18,7 +18,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/algoan/nestjs-components.git"
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/logging-interceptor"
   },
   "scripts": {
     "build": "tsc -p .",
