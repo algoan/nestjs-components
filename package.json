@@ -58,7 +58,7 @@
     "@yelloan/tslint": "^0.3.0",
     "chai": "^4.3.7",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.14.0",
     "commitizen": "^4.2.5",
     "cz-conventional-changelog": "^3.3.0",
     "delay": "^5.0.0",
