@@ -1,6 +1,6 @@
 {
   "name": "@algoan/nestjs-pagination",
-  "version": "5.0.8",
+  "version": "5.0.9",
   "description": "NestJS interceptor handling request's pagination",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
