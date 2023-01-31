@@ -87,6 +87,27 @@ describe('Http Exception Filter', () => {
     });
   });
 
+  it('returns a formatted internal server error response with a default message', async () => {
+    const errorSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'error');
+    const url: string = `/cats/internalerrornomessage`;
+
+    const { body: resBody } = await request(app.getHttpServer()).get(url).expect(HttpStatus.INTERNAL_SERVER_ERROR);
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      {
+        message: `500 [GET ${url}] has thrown a critical error`,
+        headers: expect.anything(),
+      },
+      expect.any(String),
+    );
+
+    expect(resBody).toEqual({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'An internal server error occurred',
+      status: 500,
+    });
+  });
+
   it('returns a formatted not found error response with a specific code', async () => {
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
     const url: string = `/cats/notfound`;

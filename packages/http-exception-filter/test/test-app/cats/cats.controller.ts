@@ -35,6 +35,15 @@ export class CatsController {
   public internalerror(): string {
     throw new InternalServerErrorException(`A critical error happened.`);
   }
+
+  /**
+   * Fetching internalerror without message
+   */
+  @Get('internalerrornomessage')
+  public internalerrornomessage(): string {
+    throw new Error();
+  }
+
   /**
    * Fetching not found
    */

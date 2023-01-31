@@ -36,7 +36,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message: string =
       exception instanceof HttpException
         ? getErrorMessage(exception.getResponse())
-        : 'An internal server error occurred, please contact us at dev-team@algoan.com';
+        : 'An internal server error occurred';
 
     if (status === HttpStatus.PAYLOAD_TOO_LARGE) {
       code = HttpStatus[HttpStatus.PAYLOAD_TOO_LARGE];
