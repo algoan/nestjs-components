@@ -53,7 +53,7 @@
     "@types/format-link-header": "^2.1.0",
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.191",
-    "@types/parse-link-header": "^2.0.0",
+    "@types/parse-link-header": "^2.0.1",
     "@types/supertest": "^2.0.12",
     "@yelloan/tslint": "^0.3.0",
     "chai": "^4.3.7",
