@@ -46,7 +46,7 @@
     "@nestjs/core": "^9.3.1",
     "@nestjs/microservices": "^9.3.1",
     "@nestjs/platform-express": "^9.3.1",
-    "@nestjs/testing": "^9.3.1",
+    "@nestjs/testing": "^9.3.7",
     "@types/chai": "^4.3.4",
     "@types/content-range": "^1.1.1",
     "@types/express": "^4.17.16",
