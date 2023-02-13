@@ -94,7 +94,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
     project?: unknown,
   ): string => {
     // tslint:disable-next-line
-    let url = `${path}?page=${page}&limit=${limit}`;
+    let url = `${path}?page=${page}&${perPageName}=${limit}`;
 
     if (filter !== undefined) {
       url += `&filter=${filter}`;
