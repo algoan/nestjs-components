@@ -53,7 +53,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-deps: 0
+        fetch-depth: 0
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
@@ -62,9 +62,9 @@ jobs:
     - run: npm i -g npm@9 && npm i
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
-    - run: npx lerna version --conventional-commits --include-merged-tags --yes
+    - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release --include-merged-tags --yes
       name: Run Lerna version
-    - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc 
-    - run: npx lerna publish from-git --yes
       env:
         GH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
+    - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc 
+    - run: npx lerna publish from-git --yes
