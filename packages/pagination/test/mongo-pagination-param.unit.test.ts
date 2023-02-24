@@ -89,14 +89,14 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
     });
   });
 
-  it('MPPD06 - should successfully parse filters (per_page: 0)', () => {
-    req = { query: { page: '1', per_page: '0', filter: '{"key": "value"}', sort: '{}' } };
+  it('MPPD06 - should successfully parse filters (per_page: 20)', () => {
+    req = { query: { page: '1', per_page: '20', filter: '{"key": "value"}', sort: '{}' } };
 
     const result: MongoPagination = getMongoQuery({}, ctx as ExecutionContext);
 
     expect(result).to.deep.equal({
       filter: { key: 'value' },
-      limit: 0,
+      limit: 20,
       skip: 0,
       sort: {},
       project: {},
@@ -107,7 +107,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
     req = {
       query: {
         page: '1',
-        per_page: '0',
+        per_page: '20',
         filter:
           '{"key": "value", "mapreduce": "", "$expr": {"$function": { "body": "function () { return true; }", "args": [], "lang": "js" } } }',
         project: '{"$where": "function () { return true; }"}',
@@ -121,7 +121,7 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
 
     expect(result).to.deep.equal({
       filter: { key: 'value', $expr: {} },
-      limit: 0,
+      limit: 20,
       skip: 0,
       sort: {},
       project: {},
@@ -203,8 +203,8 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
     ).to.throw(BadRequestException);
   });
 
-  it('MPPQD12 - should successfully parse filters (limit: 0) with the query parameter pagination', () => {
-    req = { query: { page: '1', limit: '0', filter: '{"key": "value"}', sort: '{}' } };
+  it('MPPQD12 - should successfully parse filters (limit: 20) with the query parameter pagination', () => {
+    req = { query: { page: '1', limit: '20', filter: '{"key": "value"}', sort: '{}' } };
 
     const defaultLimit = 200;
 
@@ -215,10 +215,22 @@ describe('Unit tests related to the MongoPagination ParamDecorator', () => {
 
     expect(result).to.deep.equal({
       filter: { key: 'value' },
-      limit: 0,
+      limit: 20,
       skip: 0,
       sort: {},
       project: {},
     });
+  });
+
+  it('MPPQD13 - should throw an error when per_page is not a positive number (per_page=-1)', () => {
+    req = { query: { page: '1', per_page: '-1', filter: '{"key": "value"}', sort: '{}' } };
+
+    expect(() => getMongoQuery({}, ctx as ExecutionContext)).to.throw(BadRequestException);
+  });
+
+  it('MPPQD14 - should throw an error when per_page is not a positive number (per_page=0)', () => {
+    req = { query: { page: '1', per_page: '0', filter: '{"key": "value"}', sort: '{}' } };
+
+    expect(() => getMongoQuery({}, ctx as ExecutionContext)).to.throw(BadRequestException);
   });
 });

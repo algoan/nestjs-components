@@ -55,6 +55,10 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
   let project: {};
   let excludePattern: string = '';
 
+  if (limit <= 0) {
+    throw new BadRequestException(`${perPageName} should be a strictly positive number, got: ${limit}`);
+  }
+
   try {
     filter = req.query.filter !== undefined ? JSON.parse(req.query.filter as string) : {};
     sort = req.query.sort !== undefined ? JSON.parse(req.query.sort as string) : {};
