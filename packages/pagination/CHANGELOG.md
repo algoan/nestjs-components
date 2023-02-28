@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-pagination@5.0.10...@algoan/nestjs-pagination@6.0.0) (2023-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **pagination:** Default parameters are not returned anymore
+
+### Bug Fixes
+
+* **nestjs-pagination:** throw on invalid limit ([75e454f](https://github.com/algoan/nestjs-components/commit/75e454f2039c2e4be5fe8e53637df42ee530b074))
+* **pagination:** apply page and limit names to query params ([6cf8c03](https://github.com/algoan/nestjs-components/commit/6cf8c03824fdf42fa6f07887f91300a26f32aa0f))
+
+
+
 ## 5.0.11 (2023-02-24)
 
 **Note:** Version bump only for package @algoan/nestjs-pagination
