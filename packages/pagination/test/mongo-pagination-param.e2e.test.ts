@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { expect } from 'chai';
 import * as request from 'supertest';
-import { createTestAppModule } from './helpers';
+import { createTestAppModule } from './helpers.test';
 
 describe('E2e tests related to the MongoPagination ParamDecorator', () => {
   let app: INestApplication;

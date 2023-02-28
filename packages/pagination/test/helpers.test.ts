@@ -111,6 +111,49 @@ class FakeAppController {
 
     return { totalResources: data.length, resources: data };
   }
+
+  /**
+   * Find all documents with the new query pagination and
+   */
+  @UseInterceptors(new PaginationBodyInterceptor({ pageName: 'other_name', perPageName: 'other_limit_name' }))
+  @Get('/resource-custom-props')
+  public async findAllCustomQueryParams(): Promise<DataToPaginate<FakeDataToReturn>> {
+    const data: FakeDataToReturn[] = [];
+    const maxDocuments: number = 1015;
+
+    for (let i: number = 0; i < maxDocuments; i++) {
+      data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
+    }
+
+    return { totalResources: data.length, resources: data };
+  }
+
+  /**
+   * Find all documents with the new query pagination and
+   */
+  @UseInterceptors(new PaginationBodyInterceptor({}))
+  @Get('/resource-default-props')
+  public async findAllDefaultQueryParams(): Promise<DataToPaginate<FakeDataToReturn>> {
+    const data: FakeDataToReturn[] = [];
+    const maxDocuments: number = 1015;
+
+    for (let i: number = 0; i < maxDocuments; i++) {
+      data.push({ name: `doc_${i}`, index: i, createdAt: new Date() });
+    }
+
+    return { totalResources: data.length, resources: data };
+  }
+
+  /**
+   * Find all documents with the new query pagination and
+   */
+  @UseInterceptors(new PaginationBodyInterceptor({}))
+  @Get('/resource-null')
+  public async findZeroResource(): Promise<DataToPaginate<FakeDataToReturn>> {
+    const data: FakeDataToReturn[] = [];
+
+    return { totalResources: data.length, resources: [] };
+  }
 }
 
 /**

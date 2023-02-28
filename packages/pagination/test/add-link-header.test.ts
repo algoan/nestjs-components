@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import * as formatLinkHeader from 'format-link-header';
 import * as parseLinkHeader from 'parse-link-header';
 import * as request from 'supertest';
-import { createTestAppModule } from './helpers';
+import { createTestAppModule } from './helpers.test';
 
 describe('Tests related to the Link Header interceptor', () => {
   let app: INestApplication;

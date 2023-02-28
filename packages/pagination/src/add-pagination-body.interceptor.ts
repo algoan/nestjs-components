@@ -46,10 +46,9 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
     const req: Request = context.switchToHttp().getRequest();
     const path: string = req.path;
     const page: number = !isNaN(Number(req.query[this.pageName])) ? Number(req.query[this.pageName]) : FIRST_PAGE;
-    const limit: number =
-      !isNaN(Number(req.query.limit)) && Number(req.query[this.perPageName]) !== 0
-        ? Number(req.query[this.perPageName])
-        : this.defaultLimit;
+    const limit: number = !isNaN(Number(req.query[this.perPageName]))
+      ? Number(req.query[this.perPageName])
+      : this.defaultLimit;
     const filter: unknown = req.query.filter;
     const sort: unknown = req.query.sort;
     const project: unknown = req.query.project;
@@ -94,7 +93,7 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
     project?: unknown,
   ): string => {
     // tslint:disable-next-line
-    let url = `${path}?page=${page}&limit=${limit}`;
+    let url = `${path}?${this.pageName}=${page}&${this.perPageName}=${limit}`;
 
     if (filter !== undefined) {
       url += `&filter=${filter}`;
