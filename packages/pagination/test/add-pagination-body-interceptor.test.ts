@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { expect } from 'chai';
 import * as request from 'supertest';
-import { createTestAppModule } from './helpers.test';
+import { createTestAppModule } from './helpers';
 
 describe('Tests related to the pagination interceptor', () => {
   let app: INestApplication;
