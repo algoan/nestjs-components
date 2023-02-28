@@ -83,7 +83,7 @@
   "lint-staged": {
     "**/*.ts": [
       "prettier --list-different",
-      "tslint --project tsconfig.json -e \"**/*.test.ts\""
+      "tslint --project tsconfig.json -e \"**/*.test.ts\" -e \"**/helpers.ts\""
     ]
   },
   "config": {
