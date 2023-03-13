@@ -45,25 +45,6 @@ jobs:
         name: Lint all packages
       - run: npm run test:cov:all
         name: Launch tests for each packages
-  dependabot:
-    permissions:
-      pull-requests: write
-      contents: write
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
-    name: Auto-merge Dependabot PRs if tests pass and non-major version
-    needs:
-      - test
-    steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1
-      - name: Enable auto-merge for Dependabot PRs
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
 
   publish:
     runs-on: ubuntu-latest
