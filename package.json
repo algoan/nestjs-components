@@ -43,7 +43,7 @@
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@nestjs/common": "^9.3.10",
-    "@nestjs/core": "^9.3.9",
+    "@nestjs/core": "^9.3.10",
     "@nestjs/microservices": "^9.3.10",
     "@nestjs/platform-express": "^9.3.10",
     "@nestjs/testing": "^9.3.9",
