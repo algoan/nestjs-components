@@ -11,20 +11,105 @@ import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+/**
+ * Configuration arguments to require masking.
+ */
 interface MaskConfigType {
   request?: {
     url?: string;
     method?: string;
-    pattern?: string;
+    routePattern?: string;
     params?: string[];
   };
 }
 
+/**
+ * Masked body
+ */
 interface MaskedBody {
-  [x: string]: any;
+  [x: string]: string | object;
 }
 
-const VAR = '{var}';
+// The default route parameter pattern name in a url
+const VAR: string = '{var}';
+
+/**
+ * Parse and Mask the body by maskConfigs
+ * @param maskConfig maskConfig
+ * @param body parsed body of request
+ * @param prefixKey prefixKey for nest structure
+ * @returns MaskedBody
+ */
+function parseBody(
+  maskConfig: MaskConfigType,
+  body: { [key: string]: string | { [key: string]: string } },
+  prefixKey: string = '',
+): MaskedBody {
+  return Object.keys(body).reduce((maskedBody: MaskedBody, currentKey: string): MaskedBody => {
+    const mixedKey: string = prefixKey ? `${prefixKey}.${currentKey}` : currentKey;
+
+    // value of param is string or array
+    if (typeof body[currentKey] === 'string' || Array.isArray(body[currentKey])) {
+      return {
+        ...maskedBody,
+        [currentKey]:
+          maskConfig?.request?.params?.find((param: string): boolean => param === mixedKey) !== undefined
+            ? '****'
+            : body[currentKey],
+      };
+    }
+
+    // value of param is parsable object
+    const subBody: {
+      [key: string]: string;
+    } = body[currentKey] as { [key: string]: string };
+
+    return {
+      ...maskedBody,
+      [currentKey]: parseBody(maskConfig, subBody, mixedKey),
+    };
+  }, {});
+}
+
+/**
+ * Get consist pattern url from raw url
+ * @param rawUrl raw url
+ * @param configUrl config url mask configurations
+ * @param pattern url pattern to get pattern url
+ * @returns Fixed Url replaced with pattern
+ */
+function getPatternUrl(rawUrl: string = '', configUrl: string = '', pattern: string = VAR): string {
+  const rawUrlPieces: string[] = rawUrl.split('/');
+  const constUrlPatternPieces: string[] = configUrl.split('/');
+
+  const patternIndexes: number[] = constUrlPatternPieces.reduce(
+    (pieces: number[], piece: string, index: number): number[] => {
+      if (piece === pattern) {
+        pieces.push(index);
+      }
+
+      return pieces;
+    },
+    [],
+  );
+
+  patternIndexes.forEach((index: number): void => {
+    rawUrlPieces[index] = pattern;
+  });
+
+  return rawUrlPieces.join('/');
+}
+
+/**
+ * check the url is needs masking
+ * @param patternUrl url pattern to get pattern url
+ * @param method raw url
+ * @param maskConfig maskConfig
+ * @returns boolean
+ */
+function needMask(patternUrl: string, method: string, maskConfig: MaskConfigType): boolean {
+  return patternUrl === maskConfig?.request?.url && method.toLowerCase() === maskConfig?.request?.method?.toLowerCase();
+}
 
 /**
  * Interceptor that logs input/output requests
@@ -38,80 +123,6 @@ export class LoggingInterceptor implements NestInterceptor {
 
   constructor(config?: MaskConfigType[]) {
     this.maskConfigs = config;
-  }
-
-  /**
-   * Parse and Mask the body by maskConfigs
-   * @param maskConfig maskConfig
-   * @param body parsed body
-   * @param prefixKey prefixKey for nest structure
-   * @returns MaskedBody
-   */
-  private parseBody(
-    maskConfig: MaskConfigType,
-    body: { [key: string]: string | { [key: string]: string } },
-    prefixKey?: string,
-  ): MaskedBody {
-    const maskedBody = Object.keys(body).reduce((maskedBody: MaskedBody, currentKey: string) => {
-      const mixedKey = prefixKey ? `${prefixKey}.${currentKey}` : currentKey;
-
-      // value of param is string or array
-      if (typeof body[currentKey] === 'string' || Array.isArray(body[currentKey])) {
-        return {
-          ...maskedBody,
-          [currentKey]: maskConfig?.request?.params?.find((param) => param === mixedKey) ? '****' : body[currentKey],
-        };
-      }
-
-      // value of param is parsable object
-      const subBody = body[currentKey] as { [key: string]: string };
-
-      return {
-        ...maskedBody,
-        [currentKey]: this.parseBody(maskConfig, subBody, mixedKey),
-      };
-    }, {} as MaskedBody);
-
-    return maskedBody;
-  }
-
-  /**
-   * Get consist pattern url from raw url
-   * @param rawUrl raw url
-   * @param configUrl config url mask configurations
-   * @param pattern url pattern to get pattern url
-   * @returns Fixed Url replaced with pattern
-   */
-  private getPatternUrl(rawUrl: string = '', configUrl: string = '', pattern: string = VAR) {
-    const rawUrlPieces = rawUrl.split('/');
-    const constUrlPatternPieces = configUrl.split('/');
-
-    const patternIndexes = constUrlPatternPieces.reduce((pieces: number[], piece, index) => {
-      if (piece === pattern) {
-        pieces.push(index);
-      }
-
-      return pieces;
-    }, []);
-
-    patternIndexes.forEach((index) => {
-      rawUrlPieces[index] = pattern;
-    });
-
-    return rawUrlPieces.join('/');
-  }
-
-  /**
-   * check the url is needs masking
-   * @param patternUrl url pattern to get pattern url
-   * @param method raw url
-   * @param maskConfig maskConfig
-   * @returns boolean
-   */
-  private needMask(patternUrl: string, method: string, maskConfig: MaskConfigType) {
-    return (
-      patternUrl === maskConfig?.request?.url && method.toLowerCase() === maskConfig?.request?.method?.toLowerCase()
-    );
   }
 
   /**
@@ -141,29 +152,25 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
 
-    let patternUrl = '';
+    let patternUrl: string = '';
     let maskedBody: string | object;
-    const maskConfig =
-      this?.maskConfigs?.find((config) => {
-        const temporaryPatternUrl = this.getPatternUrl(url, config?.request?.url, config?.request?.pattern);
-        if (this.needMask(temporaryPatternUrl, method, config)) {
+    const maskConfig: MaskConfigType =
+      this?.maskConfigs?.find((config: MaskConfigType): boolean => {
+        const temporaryPatternUrl: string = getPatternUrl(url, config?.request?.url, config?.request?.routePattern);
+        if (needMask(temporaryPatternUrl, method, config)) {
           patternUrl = temporaryPatternUrl;
 
           return true;
         }
 
         return false;
-      }) || {};
+      }) ?? {};
 
-    if (this.needMask(patternUrl, method, maskConfig)) {
-      if (typeof body === 'object') {
-        maskedBody = this.parseBody(maskConfig, body);
-      } else {
-        maskedBody = '****';
-      }
-    } else {
-      maskedBody = body;
-    }
+    maskedBody = needMask(patternUrl, method, maskConfig)
+      ? typeof body === 'object'
+        ? (maskedBody = parseBody(maskConfig, body))
+        : '****'
+      : body;
 
     this.logger.log(
       {
