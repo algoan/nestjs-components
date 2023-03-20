@@ -9,7 +9,26 @@ import { LoggingInterceptor } from '../../../src';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
+      useFactory: () => {
+        const interceptor: LoggingInterceptor = new LoggingInterceptor([
+          {
+            request: {
+              url: '/cats/{catId}',
+              routePattern: '{catId}',
+              method: 'put',
+              params: ['password', 'interests', 'address.country', 'address.city', 'payments.bank.name'],
+            },
+          },
+          {
+            request: {
+              url: '/cats/login',
+              method: 'post',
+              params: ['password'],
+            },
+          },
+        ]);
+        return interceptor;
+      },
     },
   ],
 })
