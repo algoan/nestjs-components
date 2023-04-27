@@ -72,7 +72,7 @@
     "prettier": "^2.8.8",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.4.0",
-    "rxjs": "^7.8.0",
+    "rxjs": "^7.8.1",
     "supertest": "^6.3.3",
     "ts-jest": "^28.0.7",
     "ts-node": "^10.9.1",
