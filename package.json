@@ -44,7 +44,7 @@
     "@commitlint/config-conventional": "^17.6.1",
     "@nestjs/common": "^9.3.10",
     "@nestjs/core": "^9.4.0",
-    "@nestjs/microservices": "^9.3.10",
+    "@nestjs/microservices": "^9.4.0",
     "@nestjs/platform-express": "^9.3.10",
     "@nestjs/testing": "^9.3.9",
     "@types/chai": "^4.3.5",
