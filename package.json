@@ -42,7 +42,7 @@
     "@algoan/pubsub": "^5.0.5",
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.1",
-    "@nestjs/common": "^9.3.10",
+    "@nestjs/common": "^9.4.0",
     "@nestjs/core": "^9.4.0",
     "@nestjs/microservices": "^9.3.10",
     "@nestjs/platform-express": "^9.3.10",
