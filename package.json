@@ -41,7 +41,7 @@
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice",
     "@algoan/pubsub": "^5.1.0",
     "@commitlint/cli": "^17.6.5",
-    "@commitlint/config-conventional": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.5",
     "@nestjs/common": "^9.4.2",
     "@nestjs/core": "^9.4.2",
     "@nestjs/microservices": "^9.4.2",
