@@ -27,33 +27,34 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
     private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions; topicsNames?: string[] },
   ) {
     super();
-  }
-
-  /**
-   * Server listening method
-   */
-  public listen(callback: (error?: Error, info?: unknown[]) => void): void {
     const gcPubSub: GCPubSub = PubSubFactory.create({
       transport: Transport.GOOGLE_PUBSUB,
       options: this.options,
     });
 
     this.gcClient = gcPubSub;
+  }
+
+  /**
+   * Server listening method
+   */
+  public listen(callback: (error?: Error, info?: unknown[]) => void): void {
     const handlers: Promise<void>[] = [];
 
-    for (const subscriptionName of this.messageHandlers.keys()) {
+    for (const [subscriptionName, messageHandler] of this.messageHandlers) {
       if (this.options?.topicsNames !== undefined && !this.options?.topicsNames?.includes(subscriptionName)) {
         continue;
       }
       this.logger.debug(`Registered new subscription "${subscriptionName}"`);
 
       handlers.push(
-        gcPubSub.listen(subscriptionName, {
+        this.gcClient.listen(subscriptionName, {
           onMessage: this.handleMessage(subscriptionName),
           onError: this.handleError,
           options: {
             autoAck: true,
             ...this.options?.listenOptions,
+            ...(messageHandler.extras as GCListenOptions),
           },
         }),
       );
