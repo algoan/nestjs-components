@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.0.9...@algoan/nestjs-google-pubsub-microservice@3.1.0) (2023-06-17)
+
+
+### Features
+
+* **pubsub-microservice:** add listen option to EventPattern extras ([0d0e5b8](https://github.com/algoan/nestjs-components/commit/0d0e5b8e80f01a0fc939f302cc0d6db1e1e471b3))
+
+
+
 ## 3.0.9 (2023-02-24)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-microservice
