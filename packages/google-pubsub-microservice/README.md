@@ -73,6 +73,26 @@ export class AppController {
 }
 ```
 
+### EventPattern extras
+
+You can add [`ListenOptions`](https://github.com/algoan/pubsub#pubsublistenevent-opts) to the subscription by adding `extras` to the `EventPattern` decorator. For example, if you want a different topic name:
+
+```typescript
+/**
+  * Handle the test event
+  * @param data Payload sent
+  */
+@EventPattern('test_event', { topicName: 'different_topic' })
+public async handleTestEvent(@Payload() data: EmittedMessage<{ hello: string }>): Promise<void> {
+  /**
+    * Handle data emitted by Google PubSub
+    */
+  this.appService.handleTestEvent(data);
+}
+```
+
+When the application will start and look for event patterns, it will get or create the `different_topic` topic from Google Cloud.
+
 ## API
 
 This module uses [@algoan/pubsub](https://github.com/algoan/pubsub) library which by default automatically acknowledges emitted messages.

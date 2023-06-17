@@ -1,7 +1,13 @@
 import * as delay from 'delay';
 
 import { GCPubSubServer } from '../src';
-import { SUBSCRIPTION_NAME, SUBSCRIPTION_NAME_2 } from './test-app/app.controller';
+import {
+  SUBSCRIPTION_NAME,
+  SUBSCRIPTION_NAME_2,
+  SUBSCRIPTION_NAME_3,
+  SUBSCRIPTION_NAME_4,
+  TOPIC_NAME,
+} from './test-app/app.controller';
 import { AppService } from './test-app/app.service';
 import { getTestingApplication } from './test-app/main';
 
@@ -112,14 +118,54 @@ describe('GooglePubSubServer', () => {
     });
     const { app } = await getTestingApplication(server);
     /**
-     * After launching the application, ensure that all subscriptions have been created
+     * After launching the application and creating a topic, ensure that all subscriptions have been created
      */
+    const [topic] = await server.gcClient.client.createTopic(TOPIC_NAME);
+
     await app.listen();
 
     expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
     expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
     expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME_2)).toBeDefined();
     expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME_2).exists()).toEqual([true]);
+    expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME_3)).toBeDefined();
+    expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME_3).exists()).toEqual([true]);
+    expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME_4)).toBeDefined();
+    expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME_4).exists()).toEqual([true]);
+
+    await topic.delete();
+    await server.gcClient.client.subscription(SUBSCRIPTION_NAME_4).delete();
+    await server.gcClient.client.subscription(SUBSCRIPTION_NAME_3).delete();
+
+    await app.close();
+  });
+
+  it('GCPSS05 - Emit an event and test if it is received twice', async () => {
+    const server: GCPubSubServer = new GCPubSubServer({
+      projectId: 'algoan-test',
+      debug: true,
+    });
+
+    /**
+     * First, create a topic to ensure it already exists
+     */
+    const [topic] = await server.gcClient.client.createTopic(TOPIC_NAME);
+
+    const { app, module } = await getTestingApplication(server);
+    const appService: AppService = module.get(AppService);
+    const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
+    await app.listen();
+    await server.gcClient.emit(TOPIC_NAME, {
+      hello: 'world',
+    });
+    await delay(2000);
+
+    /**
+     * Since we have two listeners on the same topic, the spy must be called twice
+     */
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    await topic.delete();
 
     await app.close();
   });
