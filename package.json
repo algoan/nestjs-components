@@ -39,7 +39,7 @@
   "license": "ISC",
   "devDependencies": {
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice",
-    "@algoan/pubsub": "^5.1.0",
+    "@algoan/pubsub": "^5.2.0",
     "@commitlint/cli": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",
     "@nestjs/common": "^9.4.2",
