@@ -68,5 +68,3 @@ npm install
 ```
 
 That's it!
-
-💡 We've used the [hosit](https://lerna.js.org/docs/concepts/hoisting) option to bootstrap dependencies. All dev dependencies are installed in the root `node_modules` directory to save space and time!
