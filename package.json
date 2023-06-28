@@ -7,7 +7,6 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "lerna bootstrap --hoist && lerna link convert",
     "clean:all": "rimraf ./**/dist ./**/node_modules ./**/coverage",
     "test": "npm run test:all",
     "build": "npm run build:all",
