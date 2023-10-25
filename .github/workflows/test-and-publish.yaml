@@ -22,21 +22,25 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        version: [
+          { node: "16.x", npm: "9" },
+          { node: "18.x", npm: "10" },
+          { node: "20.x", npm: "10" }
+        ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.version.node }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.version.node }}
           cache: 'npm'
       - name: Get GCloud CLI to install pubsub emulator
         uses: google-github-actions/setup-gcloud@v1
         with:
           install_components: 'beta,pubsub-emulator'
-      - run: npm i -g npm@9
+      - run: npm i -g npm@${{ matrix.version.npm }}
       - run: npm i
         name: Install root dependencies
       - run: npm run lint
@@ -55,14 +59,14 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '20.x'
         cache: 'npm'
-    - run: npm i -g npm@9 && npm i
+    - run: npm i -g npm@10 && npm i
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
     - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release github --include-merged-tags --yes
       name: Run Lerna version
       env:
         GH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
-    - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc 
+    - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
     - run: npx lerna publish from-git --yes
