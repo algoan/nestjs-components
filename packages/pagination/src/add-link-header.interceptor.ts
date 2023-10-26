@@ -183,16 +183,19 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
       return `${this.resource} 0-0/1`;
     }
 
+    if (linkOptions.totalDocs === 0) {
+      return `${this.resource} */0`;
+    }
+
     if (endIndex > linkOptions.totalDocs) {
       endIndex = linkOptions.totalDocs;
     }
 
     return contentRange.format({
-      first: startIndex,
-      last: endIndex - 1,
-      length: linkOptions.totalDocs,
-      limit,
+      start: startIndex,
+      end: endIndex - 1,
+      size: linkOptions.totalDocs,
       unit: this.resource,
-    });
+    }) as string;
   }
 }
