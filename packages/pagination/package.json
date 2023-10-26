@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "content-range": "^1.1.0",
+    "content-range": "^2.0.2",
     "format-link-header": "^3.1.1"
   },
   "peerDependencies": {
