@@ -99,11 +99,12 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   /**
    * Handle messages
    */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleMessage<T = any>(subscriptionName: string): (message: EmittedMessage<T>) => Promise<void> {
     return async (message: EmittedMessage<T>): Promise<void> => {
       const handler: MessageHandler | null = this.getHandlerByPattern(subscriptionName);
 
+      // eslint-disable-next-line no-null/no-null
       if (handler === null) {
         return;
       }

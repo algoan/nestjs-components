@@ -9,7 +9,7 @@ const DEFAULT_LIMIT: number = 200;
 const PAGE_NAME: string = 'page';
 const PER_PAGE_NAME: string = 'per_page';
 
-/* tslint:disable no-null-keyword */
+/* eslint-disable no-null/no-null */
 
 /**
  * Configuration options
@@ -54,7 +54,6 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
     const project: unknown = req.query.project;
 
     return next.handle().pipe(
-      // tslint:disable-next-line
       map((data: DataToPaginate<T>) => {
         const totalPages: number = Math.ceil(data.totalResources / limit);
         const nextUri: string | null =
@@ -92,7 +91,6 @@ export class PaginationBodyInterceptor<T> implements NestInterceptor<DataToPagin
     sort?: unknown,
     project?: unknown,
   ): string => {
-    // tslint:disable-next-line
     let url = `${path}?${this.pageName}=${page}&${this.perPageName}=${limit}`;
 
     if (filter !== undefined) {

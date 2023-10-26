@@ -14,7 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   /**
    * Catch and format thrown exception
    */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public catch(exception: any, host: ArgumentsHost): void {
     const ctx: HttpArgumentsHost = host.switchToHttp();
     const request: Request = ctx.getRequest();

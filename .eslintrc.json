@@ -1,0 +1,11 @@
+{
+    "extends": "@algoan/eslint-config",
+    "rules": {
+        "class-methods-use-this": ["error", { "enforceForClassFields": false }],
+        "no-magic-numbers": ["error", { "ignore": [0, 1, -1] }],
+        "camelcase": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/tslint/config": "off",
+        "prefer-arrow/prefer-arrow-functions": "off"
+    }
+}

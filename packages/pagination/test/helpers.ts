@@ -159,12 +159,12 @@ class FakeAppController {
 /**
  * Fake app module
  */
-/* tslint:disable */
+/* eslint-disable */
 @Module({
   controllers: [FakeAppController],
 })
 class AppModule {}
-/* tslint:enable */
+/* eslint-enable */
 
 export async function createTestAppModule(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -178,7 +178,7 @@ export function getParamDecoratorFactory(decorator: Function): CustomParamFactor
   /**
    * Test class
    */
-  // tslint:disable-next-line:max-classes-per-file
+
   class TestClass {
     /**
      * Test method
@@ -188,7 +188,6 @@ export function getParamDecoratorFactory(decorator: Function): CustomParamFactor
     }
   }
 
-  // tslint:disable-next-line:completed-docs
   const metadata: { [key: string]: { factory: CustomParamFactory } } = Reflect.getMetadata(
     ROUTE_ARGS_METADATA,
     TestClass,

@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import { Controller, ExecutionContext, Get, INestApplication, Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DecodeJWT } from '../src/decode-jwt.decorator';
@@ -52,7 +52,7 @@ class FakeAppController {
 /**
  * Fake app module
  */
-/* tslint:disable */
+/* eslint-disable */
 @Module({
   controllers: [FakeAppController],
   providers: [
@@ -63,7 +63,7 @@ class FakeAppController {
   ],
 })
 class AppModule {}
-/* tslint:enable */
+/* eslint-enable */
 
 export async function createTestAppModule(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({

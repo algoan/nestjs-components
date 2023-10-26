@@ -67,7 +67,7 @@ export class GCPubSubClient extends ClientProxy {
    * Override the abstract "dispatchEvent" by simply emitting an Event
    * @param _packet Containing the event pattern and the payload sent
    */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line
   public async dispatchEvent(_packet: ReadPacket): Promise<any> {
     if (this.pubSub === undefined) {
       return undefined;
@@ -79,7 +79,6 @@ export class GCPubSubClient extends ClientProxy {
       _packet.data[this.options?.messageMetadataKey] !== undefined
     ) {
       opts.metadata = _packet.data[this.options?.messageMetadataKey];
-      // tslint:disable-next-line: no-dynamic-delete
       delete _packet.data[this.options?.messageMetadataKey];
     }
 
@@ -102,6 +101,7 @@ export class GCPubSubClient extends ClientProxy {
    * NOTE: this method has not been yet implemented
    * It will be in the future 😉
    */
+  // eslint-disable-next-line
   public publish(): () => void {
     throw new Error('NOT_YET_IMPLEMENTED');
   }
