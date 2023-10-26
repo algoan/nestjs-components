@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "test": "jest --detectOpenHandles --verbose",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --verbose",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --config ./jest.config.js",
     "test:cov": "npm t -- --coverage"
   },
