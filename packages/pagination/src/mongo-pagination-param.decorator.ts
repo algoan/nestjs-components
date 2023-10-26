@@ -8,10 +8,7 @@ const DEFAULT_NUMBER_OF_RESULTS: number = 200;
  * Mongo query
  */
 export interface MongoPagination {
-  filter: {
-    // tslint:disable-next-line: no-any
-    [key: string]: any;
-  };
+  filter: Record<string, unknown>;
   limit: number;
   skip: number;
   sort?: {
@@ -50,9 +47,9 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
 
   const page: number = !isNaN(Number(req.query[pageName])) ? Number(req.query[pageName]) : FIRST_PAGE;
   const limit: number = !isNaN(Number(req.query[perPageName])) ? Number(req.query[perPageName]) : defaultLimit;
-  let filter: {};
-  let sort: {};
-  let project: {};
+  let filter: MongoPagination['filter'];
+  let sort: MongoPagination['sort'];
+  let project: MongoPagination['project'];
   let excludePattern: string = '';
 
   if (limit <= 0) {
@@ -78,9 +75,9 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
   if (excludePattern) {
     const excludeRegex: RegExp = new RegExp(excludePattern);
 
-    filter = sanitize(filter, excludeRegex) as object;
-    sort = sanitize(sort, excludeRegex) as object;
-    project = sanitize(project, excludeRegex) as object;
+    filter = sanitize(filter, excludeRegex);
+    sort = sanitize(sort, excludeRegex);
+    project = sanitize(project, excludeRegex);
   }
 
   return {
@@ -92,9 +89,12 @@ export const getMongoQuery = (options: MongoPaginationOptions = {}, ctx: Executi
   };
 };
 
-const buildExcludePattern = (excludeArray: string[]): string => {
-  // Traverse the list of excluding keywords to build a regex pattern, e.g. ^(\$where|mapreduce|\$function)$
-  return excludeArray
+/**
+ * Traverse the list of excluding keywords to build a regex pattern,
+ * e.g. ^(\$where|mapreduce|\$function)$
+ */
+const buildExcludePattern = (excludeArray: string[]): string =>
+  excludeArray
     .reduce((previousValue: string, currentValue: string, currentIndex: number): string => {
       let accumulator: string = previousValue;
 
@@ -109,17 +109,16 @@ const buildExcludePattern = (excludeArray: string[]): string => {
       return accumulator + currentValue;
     }, '^(')
     .concat(')$');
-};
 
-const sanitize = (value: unknown, excludeRegex: RegExp): unknown => {
+const sanitize = <T>(value: T, excludeRegex: RegExp): T => {
   // Recursively traverse the keys to detect and remove the matching ones
   if (value instanceof Object) {
     for (const key in value) {
       if (excludeRegex.test(key)) {
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         delete (value as any)[key];
       } else {
-        // tslint:disable-next-line
+        // eslint-disable-next-line
         sanitize((value as any)[key], excludeRegex);
       }
     }
@@ -128,5 +127,4 @@ const sanitize = (value: unknown, excludeRegex: RegExp): unknown => {
   return value;
 };
 
-// tslint:disable-next-line
 export const MongoPaginationParamDecorator = createParamDecorator(getMongoQuery);
