@@ -1,4 +1,4 @@
-import * as delay from 'delay';
+import { setTimeout } from 'node:timers/promises';
 
 import { GCPubSubServer } from '../src';
 import {
@@ -48,7 +48,7 @@ describe('GooglePubSubServer', () => {
      */
     await app.listen();
 
-    await delay(1000);
+    await setTimeout(1000);
     expect(server.gcClient.subscriptions.get(SUBSCRIPTION_NAME)).toBeDefined();
     expect(await server.gcClient.client.subscription(SUBSCRIPTION_NAME).exists()).toEqual([true]);
 
@@ -77,7 +77,7 @@ describe('GooglePubSubServer', () => {
      * After launching the application, ensure that all subscriptions have been created
      */
     await app.listen();
-    await delay(1000);
+    await setTimeout(1000);
 
     expect(server.gcClient.subscriptions.get(subscriptionName)).toBeDefined();
     expect(await server.gcClient.client.subscription(subscriptionName).exists()).toEqual([true]);
@@ -101,14 +101,14 @@ describe('GooglePubSubServer', () => {
     await server.gcClient.emit(SUBSCRIPTION_NAME, {
       hello: 'world',
     });
-    await delay(100);
+    await setTimeout(100);
     expect(spy).toHaveBeenCalledTimes(1);
 
     await app.close();
     await server.gcClient.emit(SUBSCRIPTION_NAME, {
       hello: 'world',
     });
-    await delay(100);
+    await setTimeout(100);
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
@@ -158,7 +158,7 @@ describe('GooglePubSubServer', () => {
     await server.gcClient.emit(TOPIC_NAME, {
       hello: 'world',
     });
-    await delay(2000);
+    await setTimeout(2000);
 
     /**
      * Since we have two listeners on the same topic, the spy must be called twice
