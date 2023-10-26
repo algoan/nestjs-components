@@ -130,7 +130,7 @@ export class LinkHeaderInterceptor<T> implements NestInterceptor<T, T[]> {
   /**
    * Build a link object
    * @param rel Relation
-   * @param linkOptions Link optioins
+   * @param linkOptions Link options
    */
   private readonly buildLink = (rel: Relation, linkOptions: LinkOptions): formatLinkHeader.Link => {
     const page: number = Number(linkOptions.page);
