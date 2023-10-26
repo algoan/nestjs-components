@@ -65,6 +65,114 @@ describe('Logging interceptor', () => {
     ]);
   });
 
+  it('mask logs of the specific params in the request(body: object) - OK status code', async () => {
+    const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+    const url: string = `/cats/123`;
+
+    await request(app.getHttpServer())
+      .put(url)
+      .send({
+        email: 'test@test.com',
+        password: 'test-password',
+        address: {
+          country: 'plain text of the country',
+          city: 'plain text of the city',
+        },
+        interests: [1, 2, 3],
+        payments: {
+          bank: {
+            id: 'plain text of bank Id',
+            name: 'plan text of bank name',
+          },
+        },
+      })
+      .expect(HttpStatus.OK);
+
+    const ctx: string = `LoggingInterceptor - PUT - ${url}`;
+    const resCtx: string = `LoggingInterceptor - 200 - PUT - ${url}`;
+    const incomingMsg: string = `Incoming request - PUT - ${url}`;
+    const outgoingMsg: string = `Outgoing response - 200 - PUT - ${url}`;
+
+    /**
+     * Info level
+     */
+    expect(logSpy).toBeCalledTimes(2);
+    expect(logSpy.mock.calls[0]).toEqual([
+      {
+        body: {
+          email: 'test@test.com',
+          password: '****',
+          address: {
+            city: '****',
+            country: '****',
+          },
+          interests: '****',
+          payments: {
+            bank: {
+              id: 'plain text of bank Id',
+              name: '****',
+            },
+          },
+        },
+        headers: expect.any(Object),
+        message: incomingMsg,
+        method: `PUT`,
+      },
+      ctx,
+    ]);
+    expect(logSpy.mock.calls[1]).toEqual([
+      {
+        message: outgoingMsg,
+        body: `This action returns a cat(id: 123) from the cats' list`,
+      },
+      resCtx,
+    ]);
+  });
+
+  it('mask logs the input and output login(body: object) details - CREATED status code', async () => {
+    const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+    const url: string = `/cats/login`;
+
+    await request(app.getHttpServer())
+      .post(url)
+      .send({
+        userinfo: 'test@test.com',
+        password: 'test-password',
+        gender: 'male',
+      })
+      .expect(HttpStatus.CREATED);
+
+    const ctx: string = `LoggingInterceptor - POST - ${url}`;
+    const resCtx: string = `LoggingInterceptor - 201 - POST - ${url}`;
+    const incomingMsg: string = `Incoming request - POST - ${url}`;
+    const outgoingMsg: string = `Outgoing response - 201 - POST - ${url}`;
+
+    /**
+     * Info level
+     */
+    expect(logSpy).toBeCalledTimes(2);
+    expect(logSpy.mock.calls[0]).toEqual([
+      {
+        body: {
+          userinfo: 'test@test.com',
+          password: '****',
+          gender: 'male',
+        },
+        headers: expect.any(Object),
+        message: incomingMsg,
+        method: `POST`,
+      },
+      ctx,
+    ]);
+    expect(logSpy.mock.calls[1]).toEqual([
+      {
+        message: outgoingMsg,
+        body: `This action login with a cat credential`,
+      },
+      resCtx,
+    ]);
+  });
+
   it('logs the input and output request details - BAD_REQUEST status code', async () => {
     const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
     const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');

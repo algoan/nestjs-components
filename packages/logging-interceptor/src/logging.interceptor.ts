@@ -10,6 +10,43 @@ import {
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { LogOptions, METHOD_LOG_METADATA, MethodMask } from './log.decorator';
+
+/**
+ * Masked body
+ */
+interface MaskedBody {
+  [x: string]: string | object;
+}
+
+const maskBody = (
+  body: { [key: string]: string | { [key: string]: string } },
+  mask?: MethodMask,
+  prefixKey: string = '',
+): MaskedBody => {
+  return Object.keys(body).reduce((maskedBody: MaskedBody, currentKey: string): MaskedBody => {
+    const mixedKey: string = prefixKey ? `${prefixKey}.${currentKey}` : currentKey;
+
+    // value of param is string or array
+    if (typeof body[currentKey] === 'string' || Array.isArray(body[currentKey])) {
+      return {
+        ...maskedBody,
+        [currentKey]:
+          mask?.request?.find((param: string): boolean => param === mixedKey) !== undefined ? '****' : body[currentKey],
+      };
+    }
+
+    // value of param is parsable object
+    const subBody: {
+      [key: string]: string;
+    } = body[currentKey] as { [key: string]: string };
+
+    return {
+      ...maskedBody,
+      [currentKey]: maskBody(subBody, mask, mixedKey),
+    };
+  }, {});
+};
 
 /**
  * Interceptor that logs input/output requests
@@ -38,12 +75,15 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url, body, headers } = req;
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
+    const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
+
+    const maskedBody = typeof body === 'object' ? maskBody(body, options?.mask) : body;
 
     this.logger.log(
       {
         message,
         method,
-        body,
+        body: maskedBody,
         headers,
       },
       ctx,
