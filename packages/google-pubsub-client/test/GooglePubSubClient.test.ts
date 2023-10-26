@@ -2,7 +2,7 @@ const Emulator = require('google-pubsub-emulator');
 import { GCPubSubServer } from '@algoan/nestjs-google-pubsub-microservice';
 import { INestApplication, INestMicroservice } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
-import * as delay from 'delay';
+import { setTimeout } from 'node:timers/promises';
 import * as request from 'supertest';
 import { getTestingApplication } from './client-app/main';
 import { AppService } from './server-app/app.service';
@@ -64,7 +64,7 @@ describe('GooglePubSubServer', () => {
     const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
     await request(server.getHttpServer()).post('/emit').send({}).expect(201);
 
-    await delay(1000);
+    await setTimeout(1000);
 
     expect(spy).toHaveBeenCalledTimes(1);
   });
