@@ -151,4 +151,155 @@ describe('Logging interceptor', () => {
       expect(warnSpy).not.toHaveBeenCalled();
     });
   });
+
+  describe('Masking options', () => {
+    const mask = '****';
+
+    it('allows to mask given properties of the request body', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      await request(app.getHttpServer())
+        .post(url)
+        .send({
+          name: 'Tom',
+          birthdate: '1980-01-01',
+          enemies: ['Jerry', 'Titi'],
+          interests: [
+            { description: 'Eating Jerry', level: 'HIGH' },
+            { description: 'Sleeping', level: 'MEDIUM' },
+          ],
+          address: { country: 'USA', city: 'New York' },
+        })
+        .expect(HttpStatus.CREATED);
+
+      const ctx: string = `LoggingInterceptor - POST - ${url}`;
+      const incomingMsg: string = `Incoming request - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[0]).toEqual([
+        {
+          body: {
+            name: 'Tom',
+            birthdate: mask,
+            enemies: mask,
+            interests: [
+              { description: mask, level: 'HIGH' },
+              { description: mask, level: 'MEDIUM' },
+            ],
+            address: mask,
+          },
+          headers: expect.any(Object),
+          message: incomingMsg,
+          method: `POST`,
+        },
+        ctx,
+      ]);
+    });
+
+    it('allows to mask the whole request body', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/1/password`;
+
+      await request(app.getHttpServer()).post(url).send({ password: 'secret password' }).expect(HttpStatus.CREATED);
+
+      const ctx: string = `LoggingInterceptor - POST - ${url}`;
+      const incomingMsg: string = `Incoming request - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[0]).toEqual([
+        {
+          body: mask,
+          headers: expect.any(Object),
+          message: incomingMsg,
+          method: `POST`,
+        },
+        ctx,
+      ]);
+    });
+
+    it('allows to mask given properties of the response body', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      await request(app.getHttpServer())
+        .post(url)
+        .send({
+          name: 'Tom',
+          birthdate: '1980-01-01',
+          enemies: ['Jerry', 'Titi'],
+          interests: [
+            { description: 'Eating Jerry', level: 'HIGH' },
+            { description: 'Sleeping', level: 'MEDIUM' },
+          ],
+          address: { country: 'USA', city: 'New York' },
+        })
+        .expect(HttpStatus.CREATED);
+
+      const ctx: string = `LoggingInterceptor - 201 - POST - ${url}`;
+      const outgoingMsg: string = `Outgoing response - 201 - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[1]).toEqual([
+        {
+          body: {
+            id: mask,
+            name: 'Tom',
+            birthdate: mask,
+            enemies: mask,
+            interests: [
+              { description: mask, level: 'HIGH' },
+              { description: mask, level: 'MEDIUM' },
+            ],
+            address: mask,
+          },
+          message: outgoingMsg,
+        },
+        ctx,
+      ]);
+    });
+
+    it('allows to mask the whole response body', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/1/password`;
+
+      await request(app.getHttpServer()).post(url).send({ password: 'secret password' }).expect(HttpStatus.CREATED);
+
+      const ctx: string = `LoggingInterceptor - 201 - POST - ${url}`;
+      const outgoingMsg: string = `Outgoing response - 201 - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[1]).toEqual([
+        {
+          body: mask,
+          message: outgoingMsg,
+        },
+        ctx,
+      ]);
+    });
+
+    it('should ignore unknown properties', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      await request(app.getHttpServer()).get(url).expect(HttpStatus.OK);
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[1][0].body).toEqual([
+        {
+          id: 1,
+          name: 'Tom',
+          interests: [
+            { description: mask, level: 'HIGH' },
+            { description: mask, level: 'MEDIUM' },
+          ],
+        },
+        {
+          id: 2,
+          name: 'Sylvestre',
+          interests: [{ description: mask, level: 'HIGH' }],
+        },
+      ]);
+    });
+  });
 });
