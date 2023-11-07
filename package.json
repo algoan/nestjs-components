@@ -50,7 +50,7 @@
     "@types/chai": "^4.3.9",
     "@types/content-range": "^1.1.1",
     "@types/express": "^4.17.17",
-    "@types/format-link-header": "^2.1.1",
+    "@types/format-link-header": "^2.1.2",
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.195",
     "@types/parse-link-header": "^2.0.2",
