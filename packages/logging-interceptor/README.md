@@ -160,6 +160,91 @@ Error: Internal Server Error
 
 ```
 
+### Masking
+By default, the whole body of the request and of the response is logged. However, the payload may contain sensitive data you would like to hide in the logs. The `Log` decorator provides masking options which allow to override the default properties logged for each endpoint. You just need to provide the path of the properties to mask for the request and/or the response. The corresponding values will be replaced by the placeholder `****` in the resulting log.
+
+For example:
+
+```typescript
+import { Log } from '@algoan/nestjs-logging-interceptor'
+import { Body, Controller } from '@nestjs/common';
+
+@Controller('users')
+export class UsersController {
+
+  @Post()
+  @Log({
+    mask: {
+      request: [
+        'lastName', // simple property
+        'maritalSituation', // object property
+        'contact.phone', // nested property
+        'friends.lastName' // property of an array element
+        ],
+      response: ['lastName'],
+    },
+  })
+  public createUser(@Body() payload: UserDto) {
+    // create and return the new user
+  }
+}
+```
+
+If the endpoint is called with:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "maritalSituation": {
+    "status": "MARRIED",
+    "wife": { "firstName": "Jane", "lastName": "Doe" }
+  },
+  "contact": { "email": "john.doe@email.com", "phone": "+330102030405" },
+  "friends": [
+    { "firstName": "James", "lastName": "Smith" },
+    { "firstName": "Emma", "lastName": "Cole" }
+  ]
+}
+```
+The body in the logged request will be:
+```json
+{
+  "firstName": "John",
+  "lastName": "****",
+  "maritalSituation": "****",
+  "contact": { "email": "john.doe@email.com", "phone": "****" },
+  "friends": [
+    { "firstName": "James", "lastName": "****" },
+    { "firstName": "Emma", "lastName": "****" }
+  ]
+}
+```
+
+If you want you to mask the whole body of the request/response, you can pass `true` instead of the array containing the exhaustive list of properties.
+
+In addition, if you want to ignore masking options in the entire application, you can disable the feature at the interceptor level:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
+
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: () => {
+        const interceptor: LoggingInterceptor = new LoggingInterceptor();
+        interceptor.setDisabledMasking(true);
+
+        return interceptor;
+      },
+    },
+  ],
+})
+export class CoreModule {}
+```
+
 ### Use a custom Logger
 
 #### Nest-pino
