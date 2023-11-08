@@ -21,7 +21,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly logger: Logger = new Logger(this.ctxPrefix);
   private userPrefix: string = '';
   private disableMasking: boolean = false;
-  private readonly MASK_MARKER: string = '****';
+  private maskingPlaceholder: string | undefined = '****';
 
   /**
    * User prefix setter
@@ -37,6 +37,14 @@ export class LoggingInterceptor implements NestInterceptor {
    */
   public setDisableMasking(disableMasking: boolean): void {
     this.disableMasking = disableMasking;
+  }
+
+  /**
+   * Set the masking placeholder
+   * @param placeholder
+   */
+  public setMaskingPlaceholder(placeholder: string | undefined): void {
+    this.maskingPlaceholder = placeholder;
   }
   /**
    * Intercept method, logs before and after the request being processed
@@ -163,7 +171,7 @@ export class LoggingInterceptor implements NestInterceptor {
     }
 
     if (maskingOptions === true || maskingOptions.includes(path)) {
-      return this.MASK_MARKER;
+      return this.maskingPlaceholder;
     }
 
     if (Array.isArray(data)) {

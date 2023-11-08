@@ -222,7 +222,7 @@ The body in the logged request will be:
 
 If you want you to mask the whole body of the request/response, you can pass `true` instead of the array containing the exhaustive list of properties.
 
-In addition, if you want to ignore masking options in the entire application, you can disable the feature at the interceptor level:
+In addition, other options can be set at the interceptor level:
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -235,7 +235,8 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
       provide: APP_INTERCEPTOR,
       useClass: () => {
         const interceptor: LoggingInterceptor = new LoggingInterceptor();
-        interceptor.setDisabledMasking(true);
+        interceptor.setDisabledMasking(true); // Ignore masking options in the entire applications
+        interceptor.setMaskingPlaceholder("hidden"); // Replace the default placeholder '****' by a custom one
 
         return interceptor;
       },

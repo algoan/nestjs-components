@@ -155,7 +155,7 @@ describe('Logging interceptor', () => {
   });
 
   describe('Masking options', () => {
-    const mask = '****';
+    const placeholder = '****';
 
     it('allows to mask given properties of the request body', async () => {
       const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
@@ -183,13 +183,13 @@ describe('Logging interceptor', () => {
         {
           body: {
             name: 'Tom',
-            birthdate: mask,
-            enemies: mask,
+            birthdate: placeholder,
+            enemies: placeholder,
             interests: [
-              { description: mask, level: 'HIGH' },
-              { description: mask, level: 'MEDIUM' },
+              { description: placeholder, level: 'HIGH' },
+              { description: placeholder, level: 'MEDIUM' },
             ],
-            address: mask,
+            address: placeholder,
           },
           headers: expect.any(Object),
           message: incomingMsg,
@@ -211,7 +211,7 @@ describe('Logging interceptor', () => {
       expect(logSpy).toBeCalledTimes(2);
       expect(logSpy.mock.calls[0]).toEqual([
         {
-          body: mask,
+          body: placeholder,
           headers: expect.any(Object),
           message: incomingMsg,
           method: `POST`,
@@ -245,15 +245,15 @@ describe('Logging interceptor', () => {
       expect(logSpy.mock.calls[1]).toEqual([
         {
           body: {
-            id: mask,
+            id: placeholder,
             name: 'Tom',
-            birthdate: mask,
-            enemies: mask,
+            birthdate: placeholder,
+            enemies: placeholder,
             interests: [
-              { description: mask, level: 'HIGH' },
-              { description: mask, level: 'MEDIUM' },
+              { description: placeholder, level: 'HIGH' },
+              { description: placeholder, level: 'MEDIUM' },
             ],
-            address: mask,
+            address: placeholder,
           },
           message: outgoingMsg,
         },
@@ -273,7 +273,7 @@ describe('Logging interceptor', () => {
       expect(logSpy).toBeCalledTimes(2);
       expect(logSpy.mock.calls[1]).toEqual([
         {
-          body: mask,
+          body: placeholder,
           message: outgoingMsg,
         },
         ctx,
@@ -292,14 +292,14 @@ describe('Logging interceptor', () => {
           id: 1,
           name: 'Tom',
           interests: [
-            { description: mask, level: 'HIGH' },
-            { description: mask, level: 'MEDIUM' },
+            { description: placeholder, level: 'HIGH' },
+            { description: placeholder, level: 'MEDIUM' },
           ],
         },
         {
           id: 2,
           name: 'Sylvestre',
-          interests: [{ description: mask, level: 'HIGH' }],
+          interests: [{ description: placeholder, level: 'HIGH' }],
         },
       ]);
     });
@@ -329,6 +329,42 @@ describe('Logging interceptor', () => {
       expect(logSpy.mock.calls[1][0].body).toEqual({ ...newCat, id: 1 });
 
       interceptor.setDisableMasking(false);
+    });
+
+    it('should be possible to change the masking placeholder', async () => {
+      const customPlaceholder = undefined;
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMaskingPlaceholder(customPlaceholder);
+
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      await request(app.getHttpServer())
+        .post(url)
+        .send({
+          name: 'Tom',
+          birthdate: '1980-01-01',
+        })
+        .expect(HttpStatus.CREATED);
+
+      const ctx: string = `LoggingInterceptor - POST - ${url}`;
+      const incomingMsg: string = `Incoming request - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[0]).toEqual([
+        {
+          body: {
+            name: 'Tom',
+            birthdate: customPlaceholder,
+          },
+          headers: expect.any(Object),
+          message: incomingMsg,
+          method: `POST`,
+        },
+        ctx,
+      ]);
+
+      interceptor.setMaskingPlaceholder(placeholder);
     });
   });
 });
