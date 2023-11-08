@@ -20,6 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly ctxPrefix: string = LoggingInterceptor.name;
   private readonly logger: Logger = new Logger(this.ctxPrefix);
   private userPrefix: string = '';
+  private disableMasking: boolean = false;
   private readonly MASK_MARKER: string = '****';
 
   /**
@@ -30,6 +31,13 @@ export class LoggingInterceptor implements NestInterceptor {
     this.userPrefix = `${prefix} - `;
   }
 
+  /**
+   * Set the disable masking flag
+   * @param disableMasking
+   */
+  public setDisableMasking(disableMasking: boolean): void {
+    this.disableMasking = disableMasking;
+  }
   /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
@@ -150,6 +158,10 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked data
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
+    if (this.disableMasking) {
+      return data;
+    }
+
     if (maskingOptions === true || maskingOptions.includes(path)) {
       return this.MASK_MARKER;
     }

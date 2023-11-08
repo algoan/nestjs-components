@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+import { ApplicationConfig } from '@nestjs/core';
+import { LoggingInterceptor } from '../src';
 import { CatsModule } from './test-app/cats/cats.module';
 import { CoreModule } from './test-app/core/core.module';
 
@@ -300,6 +302,33 @@ describe('Logging interceptor', () => {
           interests: [{ description: mask, level: 'HIGH' }],
         },
       ]);
+    });
+
+    it("shouldn't mask anything if masking is disabled", async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setDisableMasking(true);
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      const newCat = {
+        name: 'Tom',
+        birthdate: '1980-01-01',
+        enemies: ['Jerry', 'Titi'],
+        interests: [
+          { description: 'Eating Jerry', level: 'HIGH' },
+          { description: 'Sleeping', level: 'MEDIUM' },
+        ],
+        address: { country: 'USA', city: 'New York' },
+      };
+
+      await request(app.getHttpServer()).post(url).send(newCat).expect(HttpStatus.CREATED);
+
+      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy.mock.calls[0][0].body).toEqual(newCat);
+
+      expect(logSpy.mock.calls[1][0].body).toEqual({ ...newCat, id: 1 });
+
+      interceptor.setDisableMasking(false);
     });
   });
 });
