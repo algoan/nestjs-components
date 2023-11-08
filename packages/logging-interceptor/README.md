@@ -83,6 +83,7 @@ The context message will be preprend by the provided `userPrefix`:
 
 This interceptor logs:
   - incoming request details
+  - outgoing response details
 
 ### Default Logger messages
 ```bash
