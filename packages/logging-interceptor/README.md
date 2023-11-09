@@ -60,7 +60,7 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: () => {
+      useFactory: () => {
         const interceptor: LoggingInterceptor = new LoggingInterceptor();
         interceptor.setUserPrefix('ExampleApp');
 
@@ -233,7 +233,7 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: () => {
+      useFactory: () => {
         const interceptor: LoggingInterceptor = new LoggingInterceptor();
         interceptor.setDisabledMasking(true); // Ignore masking options in the entire applications
         interceptor.setMaskingPlaceholder("hidden"); // Replace the default placeholder '****' by a custom one
