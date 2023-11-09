@@ -19,9 +19,15 @@ import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 export class LoggingInterceptor implements NestInterceptor {
   private readonly ctxPrefix: string = LoggingInterceptor.name;
   private readonly logger: Logger = new Logger(this.ctxPrefix);
-  private userPrefix: string = '';
-  private disableMasking: boolean = false;
-  private maskingPlaceholder: string | undefined = '****';
+  private userPrefix: string;
+  private disableMasking: boolean;
+  private maskingPlaceholder: string | undefined;
+
+  constructor(options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
+    this.userPrefix = options?.userPrefix ?? '';
+    this.disableMasking = options?.disableMasking ?? false;
+    this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
+  }
 
   /**
    * User prefix setter
