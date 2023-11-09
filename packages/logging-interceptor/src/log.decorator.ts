@@ -1,3 +1,5 @@
+import { SetMetadata } from '@nestjs/common';
+
 export const METHOD_LOG_METADATA: string = 'METHOD_LOG_METADATA';
 
 /**
@@ -32,9 +34,4 @@ export interface MaskingOptions {
  * Log decorator. It allows to customise logging behaviour for each route.
  * @param options the logging options
  */
-export const Log =
-  (options: LogOptions): MethodDecorator =>
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-  (_target: Object, _propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>) => {
-    Reflect.defineMetadata(METHOD_LOG_METADATA, options, descriptor.value);
-  };
+export const Log = (options: LogOptions) => SetMetadata(METHOD_LOG_METADATA, options);
