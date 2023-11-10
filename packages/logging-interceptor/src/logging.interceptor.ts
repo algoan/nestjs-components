@@ -6,6 +6,7 @@ import {
   Injectable,
   Logger,
   NestInterceptor,
+  Optional,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
@@ -23,7 +24,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
 
-  constructor(options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
+  constructor(@Optional() options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
