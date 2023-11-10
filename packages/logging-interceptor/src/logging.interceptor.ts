@@ -6,10 +6,12 @@ import {
   Injectable,
   Logger,
   NestInterceptor,
+  Optional,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
 /**
  * Interceptor that logs input/output requests
@@ -18,7 +20,15 @@ import { tap } from 'rxjs/operators';
 export class LoggingInterceptor implements NestInterceptor {
   private readonly ctxPrefix: string = LoggingInterceptor.name;
   private readonly logger: Logger = new Logger(this.ctxPrefix);
-  private userPrefix: string = '';
+  private userPrefix: string;
+  private disableMasking: boolean;
+  private maskingPlaceholder: string | undefined;
+
+  constructor(@Optional() options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
+    this.userPrefix = options?.userPrefix ?? '';
+    this.disableMasking = options?.disableMasking ?? false;
+    this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
+  }
 
   /**
    * User prefix setter
@@ -29,6 +39,21 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Set the disable masking flag
+   * @param disableMasking
+   */
+  public setDisableMasking(disableMasking: boolean): void {
+    this.disableMasking = disableMasking;
+  }
+
+  /**
+   * Set the masking placeholder
+   * @param placeholder
+   */
+  public setMaskingPlaceholder(placeholder: string | undefined): void {
+    this.maskingPlaceholder = placeholder;
+  }
+  /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
    * @param call$ implements the handle method that returns an Observable
@@ -38,12 +63,16 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url, body, headers } = req;
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
+    const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
+
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
 
     this.logger.log(
       {
         message,
         method,
-        body,
+        body: maskedBody,
         headers,
       },
       ctx,
@@ -74,10 +103,14 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
     const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
+    const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    const maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
+
     this.logger.log(
       {
         message,
-        body,
+        body: maskedBody,
       },
       ctx,
     );
@@ -130,5 +163,41 @@ export class LoggingInterceptor implements NestInterceptor {
         `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`,
       );
     }
+  }
+
+  /**
+   * Mask the given data
+   * @param data the data to mask
+   * @param maskingOptions the paths of the data to mask
+   * @param path the current path
+   * @returns the masked data
+   */
+  private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
+    if (this.disableMasking) {
+      return data;
+    }
+
+    if (maskingOptions === true || maskingOptions.includes(path)) {
+      return this.maskingPlaceholder;
+    }
+
+    if (Array.isArray(data)) {
+      return data.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
+    }
+
+    // eslint-disable-next-line no-null/no-null
+    if (typeof data === 'object' && data !== null) {
+      return Object.keys(data).reduce<object>((maskedObject: object, key: string): object => {
+        const nestedPath = path ? `${path}.${key}` : key;
+
+        return {
+          ...maskedObject,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          [key]: this.maskData((data as any)[key], maskingOptions, nestedPath),
+        };
+      }, {});
+    }
+
+    return data;
   }
 }

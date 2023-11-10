@@ -60,12 +60,7 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: () => {
-        const interceptor: LoggingInterceptor = new LoggingInterceptor();
-        interceptor.setUserPrefix('ExampleApp');
-
-        return interceptor;
-      },
+      useFactory: () => new LoggingInterceptor({ userPrefix: 'ExampleApp'}),
     },
   ],
 })
@@ -83,6 +78,7 @@ The context message will be preprend by the provided `userPrefix`:
 
 This interceptor logs:
   - incoming request details
+  - outgoing response details
 
 ### Default Logger messages
 ```bash
@@ -157,6 +153,90 @@ Error: Internal Server Error
     at MergeMapSubscriber._innerSub (/Users/philippediep/Documents/workspace/algoan/examples/example-manager/node_modules/rxjs/internal/operators/mergeMap.js:82:53)
     at MergeMapSubscriber._tryNext (/Users/philippediep/Documents/workspace/algoan/examples/example-manager/node_modules/rxjs/internal/operators/mergeMap.js:76:14)
 
+```
+
+### Masking
+By default, the whole body of the request and of the response is logged. However, the payload may contain sensitive data you would like to hide in the logs. The `Log` decorator provides masking options which allow to override the default properties logged for each endpoint. You just need to provide the path of the properties to mask for the request and/or the response. The corresponding values will be replaced by the placeholder `****` in the resulting log.
+
+For example:
+
+```typescript
+import { Log } from '@algoan/nestjs-logging-interceptor'
+import { Body, Controller } from '@nestjs/common';
+
+@Controller('users')
+export class UsersController {
+
+  @Post()
+  @Log({
+    mask: {
+      request: [
+        'lastName', // simple property
+        'maritalSituation', // object property
+        'contact.phone', // nested property
+        'friends.lastName' // property of an array element
+        ],
+      response: ['lastName'],
+    },
+  })
+  public createUser(@Body() payload: UserDto) {
+    // create and return the new user
+  }
+}
+```
+
+If the endpoint is called with:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "maritalSituation": {
+    "status": "MARRIED",
+    "wife": { "firstName": "Jane", "lastName": "Doe" }
+  },
+  "contact": { "email": "john.doe@email.com", "phone": "+330102030405" },
+  "friends": [
+    { "firstName": "James", "lastName": "Smith" },
+    { "firstName": "Emma", "lastName": "Cole" }
+  ]
+}
+```
+The body in the logged request will be:
+```json
+{
+  "firstName": "John",
+  "lastName": "****",
+  "maritalSituation": "****",
+  "contact": { "email": "john.doe@email.com", "phone": "****" },
+  "friends": [
+    { "firstName": "James", "lastName": "****" },
+    { "firstName": "Emma", "lastName": "****" }
+  ]
+}
+```
+
+If you want you to mask the whole body of the request/response, you can pass `true` instead of the array containing the exhaustive list of properties.
+
+In addition, other options can be set at the interceptor level:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
+
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: () =>
+        new LoggingInterceptor({
+          disableMasking: true, // Ignore masking options in the entire applications
+          maskingPlaceholder: 'hidden', // Replace the default placeholder '****' by a custom one
+        }),
+    },
+  ],
+})
+export class CoreModule {}
 ```
 
 ### Use a custom Logger
