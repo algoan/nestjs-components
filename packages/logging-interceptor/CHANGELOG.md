@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.1.17...@algoan/nestjs-logging-interceptor@2.2.0) (2023-11-10)
+
+
+### Features
+
+* **logging:** add ability to disable masking option ([2447ec5](https://github.com/algoan/nestjs-components/commit/2447ec5c6fdcb73ede244f64bf1e1e098381b338))
+* **logging:** add ability to pass set interceptor params in constructor ([1548918](https://github.com/algoan/nestjs-components/commit/1548918ad07a943fa6264c53ebc9b643b6c34ca9))
+* **logging:** add ability to set masking placeholder ([de36017](https://github.com/algoan/nestjs-components/commit/de3601794a43fbb8215d8b1e0e287ef0ae4d43c2))
+* **logging:** add log decorator ([decd629](https://github.com/algoan/nestjs-components/commit/decd629acaba22ced96208dc6c37c5ef8ccad69f))
+
+
+
 ## 2.1.17 (2023-02-24)
 
 **Note:** Version bump only for package @algoan/nestjs-logging-interceptor
