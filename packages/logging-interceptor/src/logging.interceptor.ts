@@ -174,33 +174,33 @@ export class LoggingInterceptor implements NestInterceptor {
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
     // Parse the data to avoid having constructors like new ObjectId() in the body
-    const dataToMask = JSON.parse(JSON.stringify(data));
+    const parsedData = JSON.parse(JSON.stringify(data));
 
     if (this.disableMasking) {
-      return dataToMask;
+      return parsedData;
     }
 
     if (maskingOptions === true || maskingOptions.includes(path)) {
       return this.maskingPlaceholder;
     }
 
-    if (Array.isArray(dataToMask)) {
-      return dataToMask.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
+    if (Array.isArray(parsedData)) {
+      return parsedData.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
     }
 
     // eslint-disable-next-line no-null/no-null
-    if (typeof dataToMask === 'object' && dataToMask !== null) {
-      return Object.keys(dataToMask).reduce<object>((maskedObject: object, key: string): object => {
+    if (typeof parsedData === 'object' && parsedData !== null) {
+      return Object.keys(parsedData).reduce<object>((maskedObject: object, key: string): object => {
         const nestedPath = path ? `${path}.${key}` : key;
 
         return {
           ...maskedObject,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          [key]: this.maskData((dataToMask as any)[key], maskingOptions, nestedPath),
+          [key]: this.maskData((parsedData as any)[key], maskingOptions, nestedPath),
         };
       }, {});
     }
 
-    return dataToMask;
+    return parsedData;
   }
 }
