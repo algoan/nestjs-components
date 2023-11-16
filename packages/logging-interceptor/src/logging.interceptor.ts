@@ -173,31 +173,33 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked data
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
+    const dataToMask = JSON.parse(JSON.stringify(data));
+
     if (this.disableMasking) {
-      return data;
+      return dataToMask;
     }
 
     if (maskingOptions === true || maskingOptions.includes(path)) {
       return this.maskingPlaceholder;
     }
 
-    if (Array.isArray(data)) {
-      return data.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
+    if (Array.isArray(dataToMask)) {
+      return dataToMask.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
     }
 
     // eslint-disable-next-line no-null/no-null
-    if (typeof data === 'object' && data !== null) {
-      return Object.keys(data).reduce<object>((maskedObject: object, key: string): object => {
+    if (typeof dataToMask === 'object' && dataToMask !== null) {
+      return Object.keys(dataToMask).reduce<object>((maskedObject: object, key: string): object => {
         const nestedPath = path ? `${path}.${key}` : key;
 
         return {
           ...maskedObject,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          [key]: this.maskData((data as any)[key], maskingOptions, nestedPath),
+          [key]: this.maskData((dataToMask as any)[key], maskingOptions, nestedPath),
         };
       }, {});
     }
 
-    return data;
+    return dataToMask;
   }
 }
