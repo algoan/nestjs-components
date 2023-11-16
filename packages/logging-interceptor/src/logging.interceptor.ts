@@ -173,6 +173,7 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked data
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
+    // Parse the data to avoid having constructors like new ObjectId() in the body
     const dataToMask = JSON.parse(JSON.stringify(data));
 
     if (this.disableMasking) {
