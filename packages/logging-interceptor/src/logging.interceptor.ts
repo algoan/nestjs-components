@@ -11,6 +11,8 @@ import {
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { parse, stringify } from 'flatted';
 import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
 /**
@@ -173,8 +175,8 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked data
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
-    // Parse the data to avoid having constructors like new ObjectId() in the body
-    const parsedData = JSON.parse(JSON.stringify(data));
+    // Parse the data to avoid having constructors like new ObjectId() in the body and handle circular references
+    const parsedData = parse(stringify(data));
 
     if (this.disableMasking) {
       return parsedData;
