@@ -37,5 +37,8 @@
     "@nestjs/core": ">=5",
     "express": ">=4",
     "rxjs": ">=6"
+  },
+  "dependencies": {
+    "flatted": "^3.2.9"
   }
 }

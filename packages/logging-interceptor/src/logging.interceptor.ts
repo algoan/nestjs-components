@@ -11,7 +11,6 @@ import {
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { parse, stringify } from 'flatted';
 import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
