@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.2.0...@algoan/nestjs-logging-interceptor@2.3.0) (2023-11-17)
+
+
+### Features
+
+* handle circular references ([a7a5f26](https://github.com/algoan/nestjs-components/commit/a7a5f26272c089e8285795234110b058d520aa81))
+
+
+### Bug Fixes
+
+* parse the data to json before masking the properties ([3ea1732](https://github.com/algoan/nestjs-components/commit/3ea17320b24f000805d29f2d68db2db933b6d0b5))
+
+
+
 ## [2.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.1.17...@algoan/nestjs-logging-interceptor@2.2.0) (2023-11-10)
 
 
