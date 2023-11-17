@@ -11,6 +11,7 @@ import {
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { parse, stringify } from 'flatted';
 import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
 /**
@@ -173,31 +174,34 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked data
    */
   private maskData(data: unknown, maskingOptions: string[] | true, path: string = ''): unknown {
+    // Parse the data to avoid having constructors like new ObjectId() in the body and handle circular references
+    const parsedData = parse(stringify(data));
+
     if (this.disableMasking) {
-      return data;
+      return parsedData;
     }
 
     if (maskingOptions === true || maskingOptions.includes(path)) {
       return this.maskingPlaceholder;
     }
 
-    if (Array.isArray(data)) {
-      return data.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
+    if (Array.isArray(parsedData)) {
+      return parsedData.map((item: unknown): unknown => this.maskData(item, maskingOptions, path));
     }
 
     // eslint-disable-next-line no-null/no-null
-    if (typeof data === 'object' && data !== null) {
-      return Object.keys(data).reduce<object>((maskedObject: object, key: string): object => {
+    if (typeof parsedData === 'object' && parsedData !== null) {
+      return Object.keys(parsedData).reduce<object>((maskedObject: object, key: string): object => {
         const nestedPath = path ? `${path}.${key}` : key;
 
         return {
           ...maskedObject,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          [key]: this.maskData((data as any)[key], maskingOptions, nestedPath),
+          [key]: this.maskData((parsedData as any)[key], maskingOptions, nestedPath),
         };
       }, {});
     }
 
-    return data;
+    return parsedData;
   }
 }
