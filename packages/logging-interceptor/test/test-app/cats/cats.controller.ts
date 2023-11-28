@@ -41,6 +41,10 @@ export class CatsController {
     },
   })
   public createCat(@Body() payload: CreateCatDto) {
+    if (payload.name === 'dog') {
+      throw new BadRequestException({ message: 'You cannot name a cat dog' });
+    }
+
     return { id: 1, ...payload };
   }
 

@@ -131,12 +131,17 @@ export class LoggingInterceptor implements NestInterceptor {
       const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${statusCode} - ${method} - ${url}`;
       const message: string = `Outgoing response - ${statusCode} - ${method} - ${url}`;
 
+      const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
+
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+
       if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
         this.logger.error(
           {
             method,
             url,
-            body,
+            body: maskedBody,
             message,
             error,
           },
@@ -149,7 +154,7 @@ export class LoggingInterceptor implements NestInterceptor {
             method,
             url,
             error,
-            body,
+            body: maskedBody,
             message,
           },
           ctx,

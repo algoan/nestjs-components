@@ -366,5 +366,35 @@ describe('Logging interceptor', () => {
 
       interceptor.setMaskingPlaceholder(placeholder);
     });
+
+    it('should mask http exception response', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats`;
+
+      await request(app.getHttpServer())
+        .post(url)
+        .send({
+          name: 'dog',
+          birthdate: '1980-01-01',
+        })
+        .expect(HttpStatus.BAD_REQUEST);
+
+      const ctx: string = `LoggingInterceptor - POST - ${url}`;
+      const incomingMsg: string = `Incoming request - POST - ${url}`;
+
+      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy.mock.calls[0]).toEqual([
+        {
+          body: {
+            name: 'dog',
+            birthdate: placeholder,
+          },
+          headers: expect.any(Object),
+          message: incomingMsg,
+          method: `POST`,
+        },
+        ctx,
+      ]);
+    });
   });
 });
