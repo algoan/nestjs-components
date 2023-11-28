@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.3.0...@algoan/nestjs-logging-interceptor@2.4.0) (2023-11-28)
+
+
+### Features
+
+* **logging:** apply log masks to http exception body ([a3abe51](https://github.com/algoan/nestjs-components/commit/a3abe516ca61aaaacd4757bf8811bb0b0e0e3046))
+
+
+
 ## [2.3.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.2.0...@algoan/nestjs-logging-interceptor@2.3.0) (2023-11-17)
 
 
