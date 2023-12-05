@@ -154,7 +154,7 @@ describe('Logging interceptor', () => {
     });
   });
 
-  describe('Masking options', () => {
+  describe('@Log - Masking options', () => {
     const placeholder = '****';
 
     it('allows to mask given properties of the request body', async () => {
@@ -395,6 +395,80 @@ describe('Logging interceptor', () => {
         },
         ctx,
       ]);
+    });
+  });
+
+  describe('LoggingInterceptor - Masking options', () => {
+    const placeholder = '****';
+
+    it('allows to mask the whole content of a request header', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: { authorization: true } });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'access-token').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toEqual(placeholder);
+    });
+
+    it('allows to mask a request header with a specific handler function', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({
+        requestHeader: {
+          authorization: (header: string | string[]) => {
+            if (typeof header === 'string') {
+              const [type, value] = header.split(' ');
+
+              return { type, value };
+            } else {
+              return header;
+            }
+          },
+        },
+      });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toEqual({
+        type: 'Bearer',
+        value: 'JWT',
+      });
+    });
+
+    it('should not mask a request header if the corresponding mask is undefined', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: {} });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
+    });
+
+    it('should not mask a request header if the corresponding mask is false', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: { authorization: false } });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
+    });
+
+    it('should not modify the request header if it is not passed with the request but defined in masking option', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: { authorization: true } });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBeUndefined();
     });
   });
 });
