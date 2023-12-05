@@ -15,6 +15,24 @@ import { parse, stringify } from 'flatted';
 import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
 /**
+ * Logging interceptor options
+ */
+export interface LoggingInterceptorOptions {
+  /**
+   * User prefix to add to the logs
+   */
+  userPrefix?: string;
+  /**
+   * Disable masking
+   */
+  disableMasking?: boolean;
+  /**
+   * Masking placeholder
+   */
+  maskingPlaceholder?: string;
+}
+
+/**
  * Interceptor that logs input/output requests
  */
 @Injectable()
@@ -25,7 +43,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
 
-  constructor(@Optional() options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
+  constructor(@Optional() options?: LoggingInterceptorOptions) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
