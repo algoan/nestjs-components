@@ -1,3 +1,4 @@
+import { IncomingHttpHeaders } from 'http';
 import {
   CallHandler,
   ExecutionContext,
@@ -30,6 +31,30 @@ export interface LoggingInterceptorOptions {
    * Masking placeholder
    */
   maskingPlaceholder?: string;
+  /**
+   * Masking options to apply to all routes
+   */
+  mask?: LoggingInterceptorMaskingOptions;
+}
+
+/**
+ * Masking options of the logging interceptor
+ */
+export interface LoggingInterceptorMaskingOptions {
+  /**
+   * Masking options to apply to the headers of the request
+   */
+  requestHeader?: RequestHeaderMask;
+}
+
+/**
+ * Masking options of the request headers
+ */
+export interface RequestHeaderMask {
+  /**
+   * Mask of a request header. The key is the header name and the value is a boolean or a function that returns the data to log.
+   */
+  [headerKey: string]: boolean | ((headerValue: string | string[]) => unknown);
 }
 
 /**
@@ -42,11 +67,13 @@ export class LoggingInterceptor implements NestInterceptor {
   private userPrefix: string;
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
+  private mask: LoggingInterceptorMaskingOptions | undefined;
 
   constructor(@Optional() options?: LoggingInterceptorOptions) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
+    this.mask = options?.mask;
   }
 
   /**
@@ -72,6 +99,15 @@ export class LoggingInterceptor implements NestInterceptor {
   public setMaskingPlaceholder(placeholder: string | undefined): void {
     this.maskingPlaceholder = placeholder;
   }
+
+  /**
+   * Set the masking options
+   * @param mask
+   */
+  public setMask(mask: LoggingInterceptorMaskingOptions): void {
+    this.mask = mask;
+  }
+
   /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
@@ -86,13 +122,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    const maskedHeaders = this.maskHeaders(headers);
 
     this.logger.log(
       {
         message,
         method,
         body: maskedBody,
-        headers,
+        headers: maskedHeaders,
       },
       ctx,
     );
@@ -226,5 +263,40 @@ export class LoggingInterceptor implements NestInterceptor {
     }
 
     return parsedData;
+  }
+
+  /**
+   * Mask the given headers
+   * @param headers the headers to mask
+   * @returns the masked headers
+   */
+  private maskHeaders(headers: IncomingHttpHeaders): Record<string, unknown> {
+    return Object.keys(headers).reduce<Record<string, unknown>>(
+      (maskedHeaders: Record<string, unknown>, headerKey: string): Record<string, unknown> => {
+        const headerValue = headers[headerKey];
+        const mask = this.mask?.requestHeader?.[headerKey];
+
+        if (headerValue === undefined) {
+          return maskedHeaders;
+        }
+
+        if (mask === true) {
+          return {
+            ...maskedHeaders,
+            [headerKey]: this.maskingPlaceholder,
+          };
+        }
+
+        if (typeof mask === 'function') {
+          return {
+            ...maskedHeaders,
+            [headerKey]: mask(headerValue),
+          };
+        }
+
+        return maskedHeaders;
+      },
+      headers,
+    );
   }
 }
