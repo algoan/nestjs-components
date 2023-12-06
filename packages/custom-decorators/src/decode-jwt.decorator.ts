@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const DecodeJWT: () => ParameterDecorator = createParamDecorator(
   async (_data: unknown, ctx: ExecutionContext): Promise<unknown> => {
