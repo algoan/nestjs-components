@@ -470,5 +470,22 @@ describe('Logging interceptor', () => {
 
       expect(logSpy.mock.calls[0][0].headers.authorization).toBeUndefined();
     });
+
+    it('should not fail if the masking function throws an error and mask the whole header as fallback', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({
+        requestHeader: {
+          authorization: () => {
+            throw new Error('This is an error');
+          },
+        },
+      });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBe(placeholder);
+    });
   });
 });

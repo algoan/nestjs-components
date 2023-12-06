@@ -288,10 +288,19 @@ export class LoggingInterceptor implements NestInterceptor {
         }
 
         if (typeof mask === 'function') {
-          return {
-            ...maskedHeaders,
-            [headerKey]: mask(headerValue),
-          };
+          try {
+            return {
+              ...maskedHeaders,
+              [headerKey]: mask(headerValue),
+            };
+          } catch (err) {
+            this.logger.warn(`LoggingInterceptor - Masking error for header ${headerKey}`, err);
+
+            return {
+              ...maskedHeaders,
+              [headerKey]: this.maskingPlaceholder,
+            };
+          }
         }
 
         return maskedHeaders;
