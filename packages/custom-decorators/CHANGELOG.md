@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-custom-decorators@1.3.11...@algoan/nestjs-custom-decorators@1.3.12) (2023-12-06)
+
+
+### Bug Fixes
+
+* **custom-decorators:** fix import of jwt decode ([800ab6f](https://github.com/algoan/nestjs-components/commit/800ab6f9e3f2cd32393134e8ff9dd061c8e3e266))
+
+
+
 ## [1.3.11](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-custom-decorators@1.3.10...@algoan/nestjs-custom-decorators@1.3.11) (2023-11-10)
 
 **Note:** Version bump only for package @algoan/nestjs-custom-decorators
