@@ -68,10 +68,21 @@ jobs:
       name: Run Lerna version
       env:
         GH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
+    - name: Setting NPM configs to publish to NPM
+      run: |
+        echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > .npmrc
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Publishing to NPM
       run: npx lerna publish from-git --yes --registry=https://registry.npmjs.org
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Setting NPM configs to publish to GitHub Packages
+      run: |
+        echo "@algoan:registry=https://npm.pkg.github.com" > .npmrc
+        echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
     - name: Publishing to GitHub Packages
       run: npx lerna publish from-git --yes --registry=https://npm.pkg.github.com
       env:
