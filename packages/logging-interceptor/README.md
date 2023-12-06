@@ -236,7 +236,7 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
             requestHeader: {
               password: true, // Mask the header 'password' in the request
               authorization: (header: string | string[]) => {
-                ... // Handle the header value to keep non sensitve data for instance
+                ... // Handle the header value to keep non sensitive data for instance
               }
             },
           },
