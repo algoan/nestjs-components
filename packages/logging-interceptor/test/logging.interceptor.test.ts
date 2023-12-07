@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   BadRequestException,
   HttpStatus,
@@ -486,6 +487,18 @@ describe('Logging interceptor', () => {
       await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
 
       expect(logSpy.mock.calls[0][0].headers.authorization).toBe(placeholder);
+    });
+
+    it('should not mask request headers if masking is disabled', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: { authorization: true } });
+      interceptor.setDisableMasking(true);
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/ok`;
+
+      await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
     });
   });
 });

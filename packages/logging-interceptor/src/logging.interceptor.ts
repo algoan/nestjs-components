@@ -271,6 +271,10 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns the masked headers
    */
   private maskHeaders(headers: IncomingHttpHeaders): Record<string, unknown> {
+    if (this.disableMasking || this.mask?.requestHeader === undefined) {
+      return headers;
+    }
+
     return Object.keys(headers).reduce<Record<string, unknown>>(
       (maskedHeaders: Record<string, unknown>, headerKey: string): Record<string, unknown> => {
         const headerValue = headers[headerKey];
