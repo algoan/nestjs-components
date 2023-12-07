@@ -1,3 +1,4 @@
+import { IncomingHttpHeaders } from 'http';
 import {
   CallHandler,
   ExecutionContext,
@@ -15,6 +16,48 @@ import { parse, stringify } from 'flatted';
 import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
 
 /**
+ * Logging interceptor options
+ */
+export interface LoggingInterceptorOptions {
+  /**
+   * User prefix to add to the logs
+   */
+  userPrefix?: string;
+  /**
+   * Disable masking
+   */
+  disableMasking?: boolean;
+  /**
+   * Masking placeholder
+   */
+  maskingPlaceholder?: string;
+  /**
+   * Masking options to apply to all routes
+   */
+  mask?: LoggingInterceptorMaskingOptions;
+}
+
+/**
+ * Masking options of the logging interceptor
+ */
+export interface LoggingInterceptorMaskingOptions {
+  /**
+   * Masking options to apply to the headers of the request
+   */
+  requestHeader?: RequestHeaderMask;
+}
+
+/**
+ * Masking options of the request headers
+ */
+export interface RequestHeaderMask {
+  /**
+   * Mask of a request header. The key is the header name and the value is a boolean or a function that returns the data to log.
+   */
+  [headerKey: string]: boolean | ((headerValue: string | string[]) => unknown);
+}
+
+/**
  * Interceptor that logs input/output requests
  */
 @Injectable()
@@ -24,11 +67,13 @@ export class LoggingInterceptor implements NestInterceptor {
   private userPrefix: string;
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
+  private mask: LoggingInterceptorMaskingOptions | undefined;
 
-  constructor(@Optional() options?: { userPrefix?: string; disableMasking?: boolean; maskingPlaceholder?: string }) {
+  constructor(@Optional() options?: LoggingInterceptorOptions) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
+    this.mask = options?.mask;
   }
 
   /**
@@ -54,6 +99,15 @@ export class LoggingInterceptor implements NestInterceptor {
   public setMaskingPlaceholder(placeholder: string | undefined): void {
     this.maskingPlaceholder = placeholder;
   }
+
+  /**
+   * Set the masking options
+   * @param mask
+   */
+  public setMask(mask: LoggingInterceptorMaskingOptions): void {
+    this.mask = mask;
+  }
+
   /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
@@ -68,13 +122,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    const maskedHeaders = this.maskHeaders(headers);
 
     this.logger.log(
       {
         message,
         method,
         body: maskedBody,
-        headers,
+        headers: maskedHeaders,
       },
       ctx,
     );
@@ -208,5 +263,53 @@ export class LoggingInterceptor implements NestInterceptor {
     }
 
     return parsedData;
+  }
+
+  /**
+   * Mask the given headers
+   * @param headers the headers to mask
+   * @returns the masked headers
+   */
+  private maskHeaders(headers: IncomingHttpHeaders): Record<string, unknown> {
+    if (this.disableMasking || this.mask?.requestHeader === undefined) {
+      return headers;
+    }
+
+    return Object.keys(headers).reduce<Record<string, unknown>>(
+      (maskedHeaders: Record<string, unknown>, headerKey: string): Record<string, unknown> => {
+        const headerValue = headers[headerKey];
+        const mask = this.mask?.requestHeader?.[headerKey];
+
+        if (headerValue === undefined) {
+          return maskedHeaders;
+        }
+
+        if (mask === true) {
+          return {
+            ...maskedHeaders,
+            [headerKey]: this.maskingPlaceholder,
+          };
+        }
+
+        if (typeof mask === 'function') {
+          try {
+            return {
+              ...maskedHeaders,
+              [headerKey]: mask(headerValue),
+            };
+          } catch (err) {
+            this.logger.warn(`LoggingInterceptor - Masking error for header ${headerKey}`, err);
+
+            return {
+              ...maskedHeaders,
+              [headerKey]: this.maskingPlaceholder,
+            };
+          }
+        }
+
+        return maskedHeaders;
+      },
+      headers,
+    );
   }
 }

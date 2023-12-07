@@ -232,6 +232,14 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
         new LoggingInterceptor({
           disableMasking: true, // Ignore masking options in the entire applications
           maskingPlaceholder: 'hidden', // Replace the default placeholder '****' by a custom one
+          mask: {
+            requestHeader: {
+              password: true, // Mask the header 'password' in the request
+              authorization: (header: string | string[]) => {
+                ... // Handle the header value to keep non sensitive data for instance
+              }
+            },
+          },
         }),
     },
   ],
