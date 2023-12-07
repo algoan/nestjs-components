@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.4.0...@algoan/nestjs-logging-interceptor@2.5.0) (2023-12-07)
+
+
+### Features
+
+* **logging:** add option to logging interceptor to mask request headers ([45e6afa](https://github.com/algoan/nestjs-components/commit/45e6afaccc1e5330ca7250c3b70072ab8f64d86e))
+* **logging:** create LoggingInterceptorOptions interface ([61d4dd8](https://github.com/algoan/nestjs-components/commit/61d4dd84786f7b89382aa597d439e72e9eaa6771))
+
+
+
 ## [2.4.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.3.0...@algoan/nestjs-logging-interceptor@2.4.0) (2023-11-28)
 
 
