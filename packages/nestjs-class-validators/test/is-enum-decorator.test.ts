@@ -53,7 +53,7 @@ describe('Tests related to the custom IsEnum Decorator', () => {
 
   class TestClass {
     @IsEnum(CustomEnum)
-    testProperty: CustomEnum;
+    testProperty: CustomEnum = CustomEnum.FIRST_ITEM;
   }
 
   it('should validate the correct values', () => {
