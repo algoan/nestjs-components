@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-class-validators",
+  "name": "@algoan/nestjs-class-validators",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
