@@ -1,6 +1,6 @@
-# Nestjs-class-validators
+# Nestjs class validators
 
-A set of class validators.
+A set of class validators based on the class-validator package (https://www.npmjs.com/package/@nestjs/class-validator/v/0.13.1).
 
 ## Installation
 
@@ -10,9 +10,9 @@ npm install --save @algoan/nestjs-class-validators
 
 ## IsEnum
 
-A class validators that validates the enum type.
+A class validator that validates the enum type.
 
-### Usage:
+### Usage
 
 ```ts
  @IsEnum(UserType)
