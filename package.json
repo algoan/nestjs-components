@@ -94,6 +94,7 @@
     "@algoan/nestjs-google-pubsub-microservice": "file:packages/google-pubsub-microservice",
     "@algoan/nestjs-http-exception-filter": "file:packages/http-exception-filter",
     "@algoan/nestjs-logging-interceptor": "file:packages/logging-interceptor",
-    "@algoan/nestjs-pagination": "file:packages/pagination"
+    "@algoan/nestjs-pagination": "file:packages/pagination",
+    "@algoan/nestjs-class-validators": "file:packages/class-validators"
   }
 }
