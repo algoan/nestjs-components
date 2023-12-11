@@ -20,6 +20,7 @@ A collection of [NestJS](https://docs.nestjs.com) components. This repository is
   - [NestJS Google Cloud PubSub MicroService](#nestjs-google-cloud-pubsub-microservice)
   - [NestJS Google Cloud PubSub Client Proxy](#nestjs-google-cloud-pubsub-client-proxy)
   - [NestJS custom decorators](#nestjs-custom-decorators)
+  - [NestJS class validators](#nestjs-class-validators)
 
 ## NestJS Pagination
 
@@ -56,6 +57,12 @@ See [the documentation here](./packages/google-pubsub-client/).
 A set of custom decorators for NestJS.
 
 See [the documentation here](./packages/custom-decorators).
+
+## NestJS class validators
+
+A package containing overriden class validators.
+
+See [the documentation here](./packages/class-validators).
 
 # Contribution
 
