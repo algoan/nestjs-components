@@ -64,6 +64,12 @@ A package containing overriden class validators.
 
 See [the documentation here](./packages/class-validators).
 
+## NestJS class transformers
+
+A package containing custom class transformers.
+
+See [the documentation here](./packages/class-transformers).
+
 # Contribution
 
 This repository is managed by [Lerna.js](https://lerna.js.org). If you want to contribute, you need to follow these instructions:
