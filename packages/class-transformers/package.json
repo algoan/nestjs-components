@@ -1,0 +1,23 @@
+{
+  "name": "@algoan/nestjs-class-transformers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "reflect-metadata": "^0.2.1"
+  },
+  "globals": {
+    "ts-jest": {
+      "diagnostics": false,
+      "isolatedModules": true
+    }
+  }
+}
