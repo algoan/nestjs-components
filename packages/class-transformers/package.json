@@ -19,5 +19,8 @@
       "diagnostics": false,
       "isolatedModules": true
     }
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=8"
   }
 }
