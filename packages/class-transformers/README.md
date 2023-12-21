@@ -28,3 +28,21 @@ class User {
   public role?: UserRole;
 }
 ```
+
+It works with array too:
+```ts
+import { EnumFallback } from '@algoan/nestjs-class-transformers';
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  READER = 'READER',
+}
+
+class User {
+  @EnumFallback({
+    type: UserRole,
+    fallback: (value: UserRole) => UserRole.READER // if an array element is not "ADMIN" or "READER", then the role will be "READER".
+  })
+  public roles: UserRole[];
+}
+```

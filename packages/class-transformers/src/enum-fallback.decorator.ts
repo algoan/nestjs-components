@@ -18,23 +18,31 @@ export interface EnumFallbackOptions<T> {
 /**
  * Return given literal value if it is included in the specific enum type.
  * Otherwise, return the value provided by the given fallback function.
+ * If the value is an array, the fallback function will be applied to each element.
  */
 export const EnumFallback = <T>(
   params: EnumFallbackOptions<T>,
   transformOptions?: TransformOptions,
-): PropertyDecorator => {
-  const { type, fallback } = params;
+): PropertyDecorator =>
+  Transform((transformParams) => {
+    const value = transformParams.value;
 
-  return Transform(({ value }) => {
-    // eslint-disable-next-line no-null/no-null
-    if (value === undefined || value === null) {
-      return value;
+    if (Array.isArray(value)) {
+      return value.map((element) => transformEnumValue(element, params));
+    } else {
+      return transformEnumValue(value, params);
     }
-
-    if (!Object.values(type).includes(value)) {
-      return fallback(value);
-    }
-
-    return value;
   }, transformOptions);
+
+const transformEnumValue = <T>(value: T, { type, fallback }: EnumFallbackOptions<T>): T => {
+  // eslint-disable-next-line no-null/no-null
+  if (value === undefined || value === null) {
+    return value;
+  }
+
+  if (!Object.values(type).includes(value)) {
+    return fallback(value);
+  }
+
+  return value;
 };

@@ -63,4 +63,15 @@ describe('EnumFallback Decorator', () => {
 
     expect(user.role).toEqual('WRITER');
   });
+
+  it('should return the fallback value for each invalid element if the property is an array', async () => {
+    class User {
+      @EnumFallback({ type: UserRole, fallback: () => UserRole.READER })
+      public roles?: UserRole[];
+    }
+
+    const user = plainToInstance(User, { roles: ['WRITER', 'ADMIN'] });
+
+    expect(user.roles).toEqual([UserRole.READER, UserRole.ADMIN]);
+  });
 });
