@@ -74,4 +74,28 @@ describe('EnumFallback Decorator', () => {
 
     expect(user.roles).toEqual([UserRole.READER, UserRole.ADMIN]);
   });
+
+  it('should allow to run side effects in fallback function if the given value is invalid', async () => {
+    const log = jest.fn();
+    // eslint-disable-next-line no-console
+    console.log = log;
+
+    class User {
+      @EnumFallback({
+        type: UserRole,
+        fallback: () => {
+          // eslint-disable-next-line no-console
+          console.log('fallback function called');
+
+          return UserRole.READER;
+        },
+      })
+      public role?: UserRole;
+    }
+
+    const user = plainToInstance(User, { role: 'WRITER' });
+
+    expect(user.role).toEqual(UserRole.READER);
+    expect(log).toHaveBeenCalledWith('fallback function called');
+  });
 });
