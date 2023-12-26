@@ -1,0 +1,38 @@
+{
+  "name": "@algoan/nestjs-class-transformers",
+  "version": "1.0.0",
+  "description": "Class transformers for NestJS",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p .",
+    "test:cov": "jest --coverage",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algoan/nestjs-components.git",
+    "directory": "packages/class-transformers"
+  },
+  "files": [
+    "dist/src"
+  ],
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "nestjs",
+    "class-transformers"
+  ],
+  "author": "Algoan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/algoan/nestjs-components.git"
+  },
+  "homepage": "https://github.com/algoan/nestjs-components/packages/nestjs-class-transformers",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1"
+  }
+}
