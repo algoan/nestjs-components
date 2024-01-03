@@ -37,7 +37,7 @@
   "author": "algoan",
   "license": "ISC",
   "devDependencies": {
-    "@algoan/eslint-config": "^2.0.1",
+    "@algoan/eslint-config": "^2.1.0",
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice",
     "@algoan/pubsub": "^6.1.2",
     "@commitlint/cli": "^18.4.3",
