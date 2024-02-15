@@ -399,6 +399,39 @@ describe('Logging interceptor', () => {
     });
   });
 
+  describe('LoggingInterceptor - Getters and setters', () => {
+    it('allows to set and get a user prefix', async () => {
+      const interceptor = new LoggingInterceptor();
+      const prefix = 'MyPrefix';
+      interceptor.setUserPrefix(prefix);
+      expect(interceptor.getUserPrefix()).toEqual(`${prefix} - `);
+    });
+
+    it('allows to set and get the disable masking flag', async () => {
+      const interceptor = new LoggingInterceptor();
+      interceptor.setDisableMasking(true);
+      expect(interceptor.getDisabledMasking()).toEqual(true);
+    });
+
+    it('allows to set and get the masking placeholder', async () => {
+      const interceptor = new LoggingInterceptor();
+      const placeholder = '****';
+      interceptor.setMaskingPlaceholder(placeholder);
+      expect(interceptor.getMaskingPlaceholder()).toEqual(placeholder);
+    });
+
+    it('allows to set and get the masking options', async () => {
+      const interceptor = new LoggingInterceptor();
+      const mask = {
+        requestHeader: {
+          authorization: true,
+        },
+      };
+      interceptor.setMask(mask);
+      expect(interceptor.getMask()).toEqual(mask);
+    });
+  });
+
   describe('LoggingInterceptor - Masking options', () => {
     const placeholder = '****';
 
