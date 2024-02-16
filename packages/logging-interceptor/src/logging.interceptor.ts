@@ -77,11 +77,25 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Return the user prefix
+   */
+  public getUserPrefix(): string {
+    return this.userPrefix;
+  }
+
+  /**
    * User prefix setter
    * ex. [MyPrefix - LoggingInterceptor - 200 - GET - /]
    */
   public setUserPrefix(prefix: string): void {
     this.userPrefix = `${prefix} - `;
+  }
+
+  /**
+   * Return the disable masking flag
+   */
+  public getDisabledMasking(): boolean {
+    return this.disableMasking;
   }
 
   /**
@@ -93,11 +107,25 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Return the masking placeholder
+   */
+  public getMaskingPlaceholder(): string | undefined {
+    return this.maskingPlaceholder;
+  }
+
+  /**
    * Set the masking placeholder
    * @param placeholder
    */
   public setMaskingPlaceholder(placeholder: string | undefined): void {
     this.maskingPlaceholder = placeholder;
+  }
+
+  /**
+   * Return the masking options
+   */
+  public getMask(): LoggingInterceptorMaskingOptions | undefined {
+    return this.mask;
   }
 
   /**
