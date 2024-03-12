@@ -69,7 +69,7 @@
     "lint-staged": "^15.2.0",
     "parse-link-header": "^2.0.0",
     "prettier": "^3.2.5",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.1.14",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
     "supertest": "^6.3.3",
