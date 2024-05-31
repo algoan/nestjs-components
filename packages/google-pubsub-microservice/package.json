@@ -39,7 +39,7 @@
     "url": "https://github.com/algoan/nestjs-components/issues"
   },
   "peerDependencies": {
-    "@algoan/pubsub": ">=4",
+    "@algoan/pubsub": ">=4 < 7",
     "@nestjs/common": ">=8",
     "@nestjs/core": ">=8",
     "@nestjs/microservices": ">=8"
