@@ -28,6 +28,10 @@ export interface MaskingOptions {
    * If it is an array of strings, it will mask only the specified fields.
    */
   response?: string[] | boolean;
+  /**
+   * If true, it will disable the header masking.
+   */
+  disableHeaderMask?: boolean;
 }
 
 /**
