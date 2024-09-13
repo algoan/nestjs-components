@@ -48,6 +48,22 @@ export class CatsController {
     return { id: 1, ...payload };
   }
 
+  @Post('header')
+  @Log({
+    mask: {
+      request: ['birthdate', 'interests.description', 'address', 'enemies'],
+      response: ['id', 'birthdate', 'interests.description', 'address', 'enemies'],
+      disableHeaderMasking: true,
+    },
+  })
+  public createCatUnmaskedHeader(@Body() payload: CreateCatDto) {
+    if (payload.name === 'dog') {
+      throw new BadRequestException({ message: 'You cannot name a cat dog' });
+    }
+
+    return { id: 1, ...payload };
+  }
+
   @Get()
   @Log({
     mask: {

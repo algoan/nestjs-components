@@ -483,6 +483,17 @@ describe('Logging interceptor', () => {
       expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
     });
 
+    it('should not mask a request header is disableHeaderMasking is true', async () => {
+      const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
+      interceptor.setMask({ requestHeader: {} });
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/header`;
+
+      await request(app.getHttpServer()).post(url).set('authorization', 'Bearer JWT').expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
+    });
+
     it('should not mask a request header if the corresponding mask is false', async () => {
       const interceptor = app.get(ApplicationConfig).getGlobalInterceptors()[0] as LoggingInterceptor;
       interceptor.setMask({ requestHeader: { authorization: false } });
