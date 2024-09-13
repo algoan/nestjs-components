@@ -53,7 +53,7 @@ export class CatsController {
     mask: {
       request: ['birthdate', 'interests.description', 'address', 'enemies'],
       response: ['id', 'birthdate', 'interests.description', 'address', 'enemies'],
-      disableHeaderMask: true,
+      disableHeaderMasking: true,
     },
   })
   public createCatUnmaskedHeader(@Body() payload: CreateCatDto) {

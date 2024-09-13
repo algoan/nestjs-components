@@ -151,7 +151,7 @@ export class LoggingInterceptor implements NestInterceptor {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const maskedHeaders = options?.mask?.disableHeaderMask ? headers : this.maskHeaders(headers);
+    const maskedHeaders = options?.mask?.disableHeaderMasking ? headers : this.maskHeaders(headers);
 
     this.logger.log(
       {

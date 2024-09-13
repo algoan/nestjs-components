@@ -31,7 +31,7 @@ export interface MaskingOptions {
   /**
    * If true, it will disable the header masking.
    */
-  disableHeaderMask?: boolean;
+  disableHeaderMasking?: boolean;
 }
 
 /**
