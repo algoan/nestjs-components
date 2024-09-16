@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.21...@algoan/nestjs-http-exception-filter@1.1.0) (2024-09-16)
+
+
+### Features
+
+* **http-exception-filter:** add option to mask headers ([ca3f18e](https://github.com/algoan/nestjs-components/commit/ca3f18e40cbcc248902b14860b4827b7831ffd89))
+
+
+
 ## [1.0.21](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.20...@algoan/nestjs-http-exception-filter@1.0.21) (2023-12-11)
 
 **Note:** Version bump only for package @algoan/nestjs-http-exception-filter
