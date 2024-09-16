@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.12](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.4.11...@algoan/nestjs-google-pubsub-client@0.4.12) (2024-09-16)
+
+
+### Bug Fixes
+
+* **deps:** restrict @algoan/pubsub peer dependency ([2a8587b](https://github.com/algoan/nestjs-components/commit/2a8587bf3d35886e1c226c1023f39fb3c101f16f))
+
+
+
 ## [0.4.11](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.4.10...@algoan/nestjs-google-pubsub-client@0.4.11) (2023-12-11)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-client

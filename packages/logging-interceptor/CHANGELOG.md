@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.6.0...@algoan/nestjs-logging-interceptor@2.7.0) (2024-09-16)
+
+
+### Features
+
+* add an option to disable header masking for a route ([ffc7776](https://github.com/algoan/nestjs-components/commit/ffc77768c097dbf7d820be0577bcb600c03ddf4d))
+
+
+
 ## [2.6.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.5.1...@algoan/nestjs-logging-interceptor@2.6.0) (2024-02-16)
 
 

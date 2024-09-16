@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.2...@algoan/nestjs-google-pubsub-microservice@3.1.3) (2024-09-16)
+
+
+### Bug Fixes
+
+* **deps:** restrict @algoan/pubsub peer dependency ([2a8587b](https://github.com/algoan/nestjs-components/commit/2a8587bf3d35886e1c226c1023f39fb3c101f16f))
+
+
+
 ## [3.1.2](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.1...@algoan/nestjs-google-pubsub-microservice@3.1.2) (2023-12-11)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-microservice
