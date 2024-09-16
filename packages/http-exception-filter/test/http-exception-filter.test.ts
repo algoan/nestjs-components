@@ -15,7 +15,17 @@ describe('Http Exception Filter', () => {
     app = moduleRef.createNestApplication();
     app.useLogger(Logger);
     app.useGlobalPipes(new ValidationPipe());
-    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalFilters(
+      new HttpExceptionFilter({
+        mask: {
+          requestHeader: {
+            authorization: (headerValue: string | string[]) =>
+              typeof headerValue === 'string' ? headerValue.split(' ')[0] : undefined,
+            'x-api-key': true,
+          },
+        },
+      }),
+    );
 
     await app.init();
   });
@@ -154,6 +164,32 @@ describe('Http Exception Filter', () => {
           - request size: 590001;
           - request limit: 102400.`,
       status: 413,
+    });
+  });
+
+  it('should mask the headers', async () => {
+    const warnSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'warn');
+    const url: string = `/cats/notfound`;
+
+    const { body: resBody } = await request(app.getHttpServer())
+      .get(url)
+      .set('Authorization', 'Bearer 123456')
+      .set('X-API-Key', '123456')
+      .expect(HttpStatus.NOT_FOUND);
+
+    expect(resBody).toEqual({
+      code: 'UNKNOWN_ENTITY',
+      message: 'Id notfound could not be found',
+      status: 404,
+    });
+
+    expect(warnSpy).toHaveBeenCalledWith({
+      message: `404 [GET ${url}] has thrown an HTTP client error`,
+      exceptionStack: expect.any(String),
+      headers: expect.objectContaining({
+        authorization: 'Bearer',
+        'x-api-key': '****',
+      }),
     });
   });
 });
