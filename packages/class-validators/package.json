@@ -33,6 +33,6 @@
     "access": "public"
   },
   "dependencies": {
-    "class-validator": "^0.14.0"
+    "class-validator": "^0.14.1"
   }
 }
