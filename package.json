@@ -68,7 +68,7 @@
     "lerna": "^8.1.8",
     "lint-staged": "^15.2.10",
     "parse-link-header": "^2.0.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "reflect-metadata": "^0.1.14",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
