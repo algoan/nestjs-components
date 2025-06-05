@@ -1,0 +1,539 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.6.1",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "@algoan/nestjs-google-pubsub-client": [
+        {
+          "file": "packages/google-pubsub-client/CHANGELOG.md",
+          "hash": "15527917358638622036"
+        },
+        {
+          "file": "packages/google-pubsub-client/README.md",
+          "hash": "7949562339077516870"
+        },
+        {
+          "file": "packages/google-pubsub-client/jest.config.js",
+          "hash": "11432217205925231135"
+        },
+        {
+          "file": "packages/google-pubsub-client/package.json",
+          "hash": "2136719842917540911",
+          "deps": [
+            "npm:@algoan/pubsub",
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/platform-express",
+            "@algoan/nestjs-google-pubsub-microservice"
+          ]
+        },
+        {
+          "file": "packages/google-pubsub-client/src/GooglePubSubClient.ts",
+          "hash": "10091052398003691603"
+        },
+        {
+          "file": "packages/google-pubsub-client/src/index.ts",
+          "hash": "9602369604616381209"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/GooglePubSubClient.test.ts",
+          "hash": "589805435671226350"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/client-app/app.controller.ts",
+          "hash": "12578987476060818949"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/client-app/app.module.ts",
+          "hash": "10649611248788691309"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/client-app/app.service.ts",
+          "hash": "6832776341304068929"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/client-app/main.ts",
+          "hash": "3679297874035744151"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/server-app/app.controller.ts",
+          "hash": "14403361084424262895"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/server-app/app.module.ts",
+          "hash": "16646975391298771677"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/server-app/app.service.ts",
+          "hash": "33676498763804583"
+        },
+        {
+          "file": "packages/google-pubsub-client/test/server-app/main.ts",
+          "hash": "10273949505939511344"
+        },
+        {
+          "file": "packages/google-pubsub-client/tsconfig.json",
+          "hash": "17569803807794298373"
+        }
+      ],
+      "@algoan/nestjs-google-pubsub-microservice": [
+        {
+          "file": "packages/google-pubsub-microservice/CHANGELOG.md",
+          "hash": "9461838772710209716"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/README.md",
+          "hash": "16385272310281610442"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/jest.config.js",
+          "hash": "2044227368601546837"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/package.json",
+          "hash": "12435799105950578341",
+          "deps": [
+            "npm:@algoan/pubsub",
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/microservices"
+          ]
+        },
+        {
+          "file": "packages/google-pubsub-microservice/src/GooglePubSubServer.ts",
+          "hash": "10985944738566415969"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/src/index.ts",
+          "hash": "1320971371639798575"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/test/GooglePubSubServer.test.ts",
+          "hash": "3318899343170192652"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/test/test-app/app.controller.ts",
+          "hash": "2338382194490590990"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/test/test-app/app.module.ts",
+          "hash": "16646975391298771677"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/test/test-app/app.service.ts",
+          "hash": "33676498763804583"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/test/test-app/main.ts",
+          "hash": "1046037081684849739"
+        },
+        {
+          "file": "packages/google-pubsub-microservice/tsconfig.json",
+          "hash": "17569803807794298373"
+        }
+      ],
+      "@algoan/nestjs-logging-interceptor": [
+        {
+          "file": "packages/logging-interceptor/CHANGELOG.md",
+          "hash": "4571273243931399609"
+        },
+        {
+          "file": "packages/logging-interceptor/README.md",
+          "hash": "16765099094824983030"
+        },
+        {
+          "file": "packages/logging-interceptor/jest.config.js",
+          "hash": "11802153688047337867"
+        },
+        {
+          "file": "packages/logging-interceptor/package.json",
+          "hash": "6315569689691584832",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:express",
+            "npm:rxjs",
+            "npm:flatted"
+          ]
+        },
+        {
+          "file": "packages/logging-interceptor/src/index.ts",
+          "hash": "10784217024303217427"
+        },
+        {
+          "file": "packages/logging-interceptor/src/log.decorator.ts",
+          "hash": "5185138901308224318"
+        },
+        {
+          "file": "packages/logging-interceptor/src/logging.interceptor.ts",
+          "hash": "17458494842868961132"
+        },
+        {
+          "file": "packages/logging-interceptor/test/logging.interceptor.test.ts",
+          "hash": "17664045181171194564"
+        },
+        {
+          "file": "packages/logging-interceptor/test/test-app/cats/cats.controller.ts",
+          "hash": "13183528549724231034"
+        },
+        {
+          "file": "packages/logging-interceptor/test/test-app/cats/cats.module.ts",
+          "hash": "11630808980086565354"
+        },
+        {
+          "file": "packages/logging-interceptor/test/test-app/cats/create-cat.dto.ts",
+          "hash": "16744139245192082051"
+        },
+        {
+          "file": "packages/logging-interceptor/test/test-app/core/core.module.ts",
+          "hash": "18039171294875506885"
+        },
+        {
+          "file": "packages/logging-interceptor/tsconfig.json",
+          "hash": "17569803807794298373"
+        }
+      ],
+      "@algoan/nestjs-class-transformers": [
+        {
+          "file": "packages/class-transformers/CHANGELOG.md",
+          "hash": "7178010012700290152"
+        },
+        {
+          "file": "packages/class-transformers/README.md",
+          "hash": "5450603973287552297"
+        },
+        {
+          "file": "packages/class-transformers/jest.config.js",
+          "hash": "14082237286087577835"
+        },
+        {
+          "file": "packages/class-transformers/package.json",
+          "hash": "4872061837462413317",
+          "deps": [
+            "npm:class-transformer"
+          ]
+        },
+        {
+          "file": "packages/class-transformers/src/enum-fallback.decorator.ts",
+          "hash": "16842655859034070733"
+        },
+        {
+          "file": "packages/class-transformers/src/index.ts",
+          "hash": "10332784260147435077"
+        },
+        {
+          "file": "packages/class-transformers/test/enum-fallback-decorator.test.ts",
+          "hash": "10243002847256285136"
+        },
+        {
+          "file": "packages/class-transformers/tsconfig.json",
+          "hash": "6884443366474481110"
+        }
+      ],
+      "@algoan/nestjs-class-validators": [
+        {
+          "file": "packages/class-validators/CHANGELOG.md",
+          "hash": "11506690991468616607"
+        },
+        {
+          "file": "packages/class-validators/README.md",
+          "hash": "6340235653632442737"
+        },
+        {
+          "file": "packages/class-validators/jest.config.js",
+          "hash": "17447758291089902395"
+        },
+        {
+          "file": "packages/class-validators/package.json",
+          "hash": "7535703880965639608",
+          "deps": [
+            "npm:class-validator"
+          ]
+        },
+        {
+          "file": "packages/class-validators/src/index.ts",
+          "hash": "9977795113287048851"
+        },
+        {
+          "file": "packages/class-validators/src/is-enum.decorator.ts",
+          "hash": "14077033094901677065"
+        },
+        {
+          "file": "packages/class-validators/test/is-enum-decorator.test.ts",
+          "hash": "3474820612920178584"
+        },
+        {
+          "file": "packages/class-validators/tsconfig.json",
+          "hash": "15944664769947124387"
+        }
+      ],
+      "@algoan/nestjs-http-exception-filter": [
+        {
+          "file": "packages/http-exception-filter/CHANGELOG.md",
+          "hash": "210369767912331292"
+        },
+        {
+          "file": "packages/http-exception-filter/README.md",
+          "hash": "11387447450587448655"
+        },
+        {
+          "file": "packages/http-exception-filter/jest.config.js",
+          "hash": "11554686146422305447"
+        },
+        {
+          "file": "packages/http-exception-filter/package.json",
+          "hash": "18189250747237656206",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/platform-express",
+            "npm:class-validator",
+            "npm:express",
+            "npm:rxjs",
+            "npm:lodash"
+          ]
+        },
+        {
+          "file": "packages/http-exception-filter/src/error.utils.ts",
+          "hash": "31942353562853448"
+        },
+        {
+          "file": "packages/http-exception-filter/src/http-exception-filter.ts",
+          "hash": "117894685247358400"
+        },
+        {
+          "file": "packages/http-exception-filter/src/index.ts",
+          "hash": "11220657156625449321"
+        },
+        {
+          "file": "packages/http-exception-filter/test/http-exception-filter.test.ts",
+          "hash": "11290447555848885006"
+        },
+        {
+          "file": "packages/http-exception-filter/test/test-app/cats/cats.controller.ts",
+          "hash": "8187221285295590298"
+        },
+        {
+          "file": "packages/http-exception-filter/test/test-app/cats/cats.module.ts",
+          "hash": "11630808980086565354"
+        },
+        {
+          "file": "packages/http-exception-filter/test/test-app/cats/create-cat.dto.ts",
+          "hash": "18423688642478783603"
+        },
+        {
+          "file": "packages/http-exception-filter/tsconfig.json",
+          "hash": "17569803807794298373"
+        }
+      ],
+      "@algoan/nestjs-pagination": [
+        {
+          "file": "packages/pagination/.vscode/launch.json",
+          "hash": "18305052881220781756"
+        },
+        {
+          "file": "packages/pagination/CHANGELOG.md",
+          "hash": "3942121876008816103"
+        },
+        {
+          "file": "packages/pagination/README.md",
+          "hash": "9022599750155970952"
+        },
+        {
+          "file": "packages/pagination/jest.config.js",
+          "hash": "11554686146422305447"
+        },
+        {
+          "file": "packages/pagination/package.json",
+          "hash": "14681610793703011107",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/platform-express",
+            "npm:express",
+            "npm:rxjs",
+            "npm:content-range",
+            "npm:format-link-header"
+          ]
+        },
+        {
+          "file": "packages/pagination/src/add-link-header.interceptor.ts",
+          "hash": "12842074990477196554"
+        },
+        {
+          "file": "packages/pagination/src/add-pagination-body.interceptor.ts",
+          "hash": "3871619167618285402"
+        },
+        {
+          "file": "packages/pagination/src/index.ts",
+          "hash": "6957770953610195574"
+        },
+        {
+          "file": "packages/pagination/src/interfaces/data-to-paginate.interface.ts",
+          "hash": "9874302547466189477"
+        },
+        {
+          "file": "packages/pagination/src/interfaces/index.ts",
+          "hash": "3703926332186797405"
+        },
+        {
+          "file": "packages/pagination/src/mongo-pagination-param.decorator.ts",
+          "hash": "8467232552059312368"
+        },
+        {
+          "file": "packages/pagination/test/add-link-header.test.ts",
+          "hash": "14649853368974356818"
+        },
+        {
+          "file": "packages/pagination/test/add-pagination-body-interceptor.test.ts",
+          "hash": "11026662804519124009"
+        },
+        {
+          "file": "packages/pagination/test/helpers.ts",
+          "hash": "4206087697983835365"
+        },
+        {
+          "file": "packages/pagination/test/mongo-pagination-param.e2e.test.ts",
+          "hash": "15590429346489332811"
+        },
+        {
+          "file": "packages/pagination/test/mongo-pagination-param.unit.test.ts",
+          "hash": "10956438932276498597"
+        },
+        {
+          "file": "packages/pagination/tsconfig.json",
+          "hash": "12959782727696991753"
+        }
+      ],
+      "@algoan/nestjs-custom-decorators": [
+        {
+          "file": "packages/custom-decorators/CHANGELOG.md",
+          "hash": "11530653066347030337"
+        },
+        {
+          "file": "packages/custom-decorators/README.md",
+          "hash": "10118186201365729658"
+        },
+        {
+          "file": "packages/custom-decorators/jest.config.js",
+          "hash": "11554686146422305447"
+        },
+        {
+          "file": "packages/custom-decorators/package.json",
+          "hash": "4903299729229898586",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/platform-express",
+            "npm:jwt-decode"
+          ]
+        },
+        {
+          "file": "packages/custom-decorators/src/decode-jwt.decorator.ts",
+          "hash": "10443883465779294388"
+        },
+        {
+          "file": "packages/custom-decorators/src/index.ts",
+          "hash": "7163490925893827720"
+        },
+        {
+          "file": "packages/custom-decorators/src/user.decorator.ts",
+          "hash": "13681522485859909302"
+        },
+        {
+          "file": "packages/custom-decorators/test/decode-jwt-decorator-e2e.test.ts",
+          "hash": "6964877423690830494"
+        },
+        {
+          "file": "packages/custom-decorators/test/helpers.ts",
+          "hash": "2357812579321854412"
+        },
+        {
+          "file": "packages/custom-decorators/test/user-decorator-e2e.test.ts",
+          "hash": "2379514995213466900"
+        },
+        {
+          "file": "packages/custom-decorators/tsconfig.json",
+          "hash": "15944664769947124387"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".eslintrc.json",
+        "hash": "631264953107636539"
+      },
+      {
+        "file": ".github/PULL_REQUEST_TEMPLATE.md",
+        "hash": "927413051809968634"
+      },
+      {
+        "file": ".github/dependabot.yml",
+        "hash": "3394550589871853731"
+      },
+      {
+        "file": ".github/workflows/test-and-publish.yaml",
+        "hash": "15541397553104332525"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "1739878304401790854"
+      },
+      {
+        "file": ".husky/.gitignore",
+        "hash": "10106645302852536800"
+      },
+      {
+        "file": ".husky/commit-msg",
+        "hash": "10305873839588482104"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "8906304965158091741"
+      },
+      {
+        "file": ".prettierrc.yaml",
+        "hash": "10881622547920782500"
+      },
+      {
+        "file": "README.md",
+        "hash": "15331846183887792624"
+      },
+      {
+        "file": "commitlint.config.js",
+        "hash": "2355987284785129803"
+      },
+      {
+        "file": "lerna.json",
+        "hash": "1153828910296593330"
+      },
+      {
+        "file": "nx.json",
+        "hash": "6010146156498002362"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "11583538023231185211"
+      },
+      {
+        "file": "package.json",
+        "hash": "4305558123844881073"
+      },
+      {
+        "file": "packages/jest.common.js",
+        "hash": "14358003817867616815"
+      },
+      {
+        "file": "packages/tsconfig.base.json",
+        "hash": "7826717328721286207"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "7353372625214056626"
+      }
+    ]
+  }
+}

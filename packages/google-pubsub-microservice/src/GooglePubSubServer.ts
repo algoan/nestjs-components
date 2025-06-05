@@ -23,6 +23,24 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    */
   protected readonly logger: Logger = new Logger(GCPubSubServer.name);
 
+  /**
+   * Flag used to stop message processing when the signal to close the connection to pubsub arrived
+   */
+  private shuttingDown = false;
+
+  /**
+   * Message counter to manage the connection closing logic with pubsub
+   */
+  public counterMessage = 0;
+
+  /**
+   * Wait a maximum of 5 seconds to close the pubsub connection if messages are in process
+   */
+  // eslint-disable-next-line no-magic-numbers
+  private readonly MAX_RETRY_INTERVAL_CLOSE = 50;
+  // eslint-disable-next-line no-magic-numbers
+  private readonly INTERVAL_CLOSE = 100;
+
   constructor(
     private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions; topicsNames?: string[] },
   ) {
@@ -73,6 +91,14 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    * Close all subscriptions when subscriptions is closing
    */
   public async close(): Promise<void> {
+    this.shuttingDown = true;
+
+    let reintentInterval = 0;
+    while (this.counterMessage > 0 && reintentInterval < this.MAX_RETRY_INTERVAL_CLOSE) {
+      ++reintentInterval;
+      await new Promise((resolve) => setTimeout(resolve, this.INTERVAL_CLOSE));
+    }
+
     for (const mapValue of this.gcClient.subscriptions) {
       await mapValue[1].close();
     }
@@ -109,7 +135,22 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
         return;
       }
 
-      await handler(message);
+      if (this.shuttingDown) {
+        message.nack();
+
+        return;
+      }
+
+      ++this.counterMessage;
+
+      try {
+        await handler(message);
+      } catch (error) {
+        this.logger.error(`Error handling message from ${subscriptionName}`, error);
+        message.nack();
+      } finally {
+        --this.counterMessage;
+      }
     };
   }
 }
