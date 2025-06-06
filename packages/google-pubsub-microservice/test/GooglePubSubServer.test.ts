@@ -189,7 +189,7 @@ describe('GooglePubSubServer', () => {
     await server.gcClient.emit(SUBSCRIPTION_NAME_5, {
       hello: 'world',
     });
-    await delay(100);
+    await setTimeout(100);
 
     expect(server.counterMessage).toBe(1);
 
