@@ -37,9 +37,9 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    * Wait a maximum of 5 seconds to close the pubsub connection if messages are in process
    */
   // eslint-disable-next-line no-magic-numbers
-  private readonly MAX_RETRY_INTERVAL_CLOSE = 50;
+  private static readonly MAX_RETRY_BEFORE_CLOSING = 50;
   // eslint-disable-next-line no-magic-numbers
-  private readonly INTERVAL_CLOSE = 100;
+  private static readonly CLOSE_RETRY_INTERVAL = 100;
 
   constructor(
     private readonly options?: GooglePubSubOptions & { listenOptions?: GCListenOptions; topicsNames?: string[] },
@@ -93,10 +93,10 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   public async close(): Promise<void> {
     this.shuttingDown = true;
 
-    let reintentInterval = 0;
-    while (this.counterMessage > 0 && reintentInterval < this.MAX_RETRY_INTERVAL_CLOSE) {
-      ++reintentInterval;
-      await new Promise((resolve) => setTimeout(resolve, this.INTERVAL_CLOSE));
+    let retry = 0;
+    while (this.counterMessage > 0 && retry < GCPubSubServer.MAX_RETRY_BEFORE_CLOSING) {
+      ++retry;
+      await new Promise((resolve) => setTimeout(resolve, GCPubSubServer.CLOSE_RETRY_INTERVAL));
     }
 
     for (const mapValue of this.gcClient.subscriptions) {
@@ -145,9 +145,6 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
 
       try {
         await handler(message);
-      } catch (error) {
-        this.logger.error(`Error handling message from ${subscriptionName}`, error);
-        message.nack();
       } finally {
         --this.counterMessage;
       }
