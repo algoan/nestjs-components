@@ -191,11 +191,11 @@ describe('GooglePubSubServer', () => {
     });
     await setTimeout(100);
 
-    expect(server.counterMessage).toBe(1);
+    expect(server['counterMessage']).toBe(1);
 
     await server.close();
 
-    expect(server.counterMessage).toBe(0);
+    expect(server['counterMessage']).toBe(0);
 
     expect(spy).toHaveBeenCalledTimes(1);
 

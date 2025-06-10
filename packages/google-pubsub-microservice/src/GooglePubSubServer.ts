@@ -31,7 +31,7 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   /**
    * Message counter to manage the connection closing logic with pubsub
    */
-  public counterMessage = 0;
+  private counterMessage = 0;
 
   /**
    * Wait a maximum of 5 seconds to close the pubsub connection if messages are in process
