@@ -6,6 +6,7 @@ import {
   SUBSCRIPTION_NAME_2,
   SUBSCRIPTION_NAME_3,
   SUBSCRIPTION_NAME_4,
+  SUBSCRIPTION_NAME_5,
   TOPIC_NAME,
 } from './test-app/app.controller';
 import { AppService } from './test-app/app.service';
@@ -166,6 +167,37 @@ describe('GooglePubSubServer', () => {
     expect(spy).toHaveBeenCalledTimes(2);
 
     await topic.delete();
+
+    await app.close();
+  });
+
+  it('GCPSS06 - Emit an event and test if it wait to have 0 messages to close subscriptions', async () => {
+    const server: GCPubSubServer = new GCPubSubServer({
+      projectId: 'algoan-test',
+      topicsNames: [SUBSCRIPTION_NAME_5],
+    });
+
+    const { app, module } = await getTestingApplication(server);
+    const appService: AppService = module.get(AppService);
+    const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
+
+    /**
+     * After the application starts, an event is emitted and a check is made to see if the application service has been called.
+     * After receiving a signal to close the server, it waits until it has no messages to close the subscriptions.
+     */
+    await app.listen();
+    await server.gcClient.emit(SUBSCRIPTION_NAME_5, {
+      hello: 'world',
+    });
+    await setTimeout(100);
+
+    expect(server['counterMessage']).toBe(1);
+
+    await server.close();
+
+    expect(server['counterMessage']).toBe(0);
+
+    expect(spy).toHaveBeenCalledTimes(1);
 
     await app.close();
   });
