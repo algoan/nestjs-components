@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.3...@algoan/nestjs-google-pubsub-microservice@3.1.4) (2025-06-11)
+
+
+### Bug Fixes
+
+*  convert counterMessage to private property ([9d6ee61](https://github.com/algoan/nestjs-components/commit/9d6ee61bf6b39000e5369f8f3356428495ac22d0))
+* rename properties and remove catch in handleMessage ([76dfbfe](https://github.com/algoan/nestjs-components/commit/76dfbfe33393980a31420a59d5670b0cd8a30435))
+* use setTimeout for delay ([a481057](https://github.com/algoan/nestjs-components/commit/a481057e02f614f8c8b589294d6b49d2be4fb990))
+* wait to have 0 messages to close subscriptions ([8a5b7b7](https://github.com/algoan/nestjs-components/commit/8a5b7b73b175169f85403941089daaae13b78c22))
+
+
+
 ## [3.1.3](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.2...@algoan/nestjs-google-pubsub-microservice@3.1.3) (2024-09-16)
 
 
