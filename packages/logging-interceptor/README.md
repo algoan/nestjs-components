@@ -296,9 +296,12 @@ The body in the logged request will be:
 ```json
 {
   "firstName": "John",
-  "lastName": "****",
-  "maritalSituation": "****",
-  "contact": { "email": "john.doe@email.com", "phone": "****" },
+  "lastName": "Doe",
+  "maritalSituation": {
+    "status": "MARRIED",
+    "wife": { "firstName": "Jane", "lastName": "Doe" }
+  },
+  "contact": { "email": "john.doe@email.com", "phone": "+330102030405" },
   "friends": "TRUNCATED"
 }
 ```
