@@ -46,6 +46,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [GET ${url}] has thrown an HTTP client error`,
+      rawErrorMessage: 'The request is malformed.',
       exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
@@ -65,6 +66,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `400 [POST ${url}] has thrown an HTTP client error`,
+      rawErrorMessage: 'name should not be empty',
       exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
@@ -85,6 +87,7 @@ describe('Http Exception Filter', () => {
     expect(errorSpy).toHaveBeenCalledWith(
       {
         message: `500 [GET ${url}] has thrown a critical error`,
+        rawErrorMessage: 'A critical error happened.',
         headers: expect.anything(),
       },
       expect.any(String),
@@ -106,6 +109,7 @@ describe('Http Exception Filter', () => {
     expect(errorSpy).toHaveBeenCalledWith(
       {
         message: `500 [GET ${url}] has thrown a critical error`,
+        rawErrorMessage: 'An internal server error occurred',
         headers: expect.anything(),
       },
       expect.any(String),
@@ -126,6 +130,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `404 [GET ${url}] has thrown an HTTP client error`,
+      rawErrorMessage: 'Id notfound could not be found',
       exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
@@ -153,6 +158,10 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `413 [POST ${url}] has thrown an HTTP client error`,
+      rawErrorMessage: `
+        Your request entity size is too big for the server to process it:
+          - request size: 590001;
+          - request limit: 102400.`,
       exceptionStack: expect.any(String),
       headers: expect.anything(),
     });
@@ -185,6 +194,7 @@ describe('Http Exception Filter', () => {
 
     expect(warnSpy).toHaveBeenCalledWith({
       message: `404 [GET ${url}] has thrown an HTTP client error`,
+      rawErrorMessage: 'Id notfound could not be found',
       exceptionStack: expect.any(String),
       headers: expect.objectContaining({
         authorization: 'Bearer',

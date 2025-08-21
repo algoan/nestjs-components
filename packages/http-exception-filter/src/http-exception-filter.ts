@@ -104,6 +104,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       this.logger.error(
         {
           message: `${status} [${request.method} ${request.url}] has thrown a critical error`,
+          rawErrorMessage: message,
           headers: this.maskHeaders(request.headers),
         },
         exceptionStack,
@@ -111,6 +112,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (status >= HttpStatus.BAD_REQUEST) {
       this.logger.warn({
         message: `${status} [${request.method} ${request.url}] has thrown an HTTP client error`,
+        rawErrorMessage: message,
         exceptionStack,
         headers: this.maskHeaders(request.headers),
       });
