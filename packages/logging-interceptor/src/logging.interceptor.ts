@@ -13,7 +13,7 @@ import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { parse, stringify } from 'flatted';
-import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
+import { LogOptions, METHOD_LOG_METADATA, TruncationOptions } from './log.decorator';
 
 /**
  * Logging interceptor options
@@ -35,6 +35,10 @@ export interface LoggingInterceptorOptions {
    * Masking options to apply to all routes
    */
   mask?: LoggingInterceptorMaskingOptions;
+  /**
+   * Truncation options to apply to all routes
+   */
+  truncation?: TruncationOptions;
 }
 
 /**
@@ -68,12 +72,14 @@ export class LoggingInterceptor implements NestInterceptor {
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
   private mask: LoggingInterceptorMaskingOptions | undefined;
+  private truncation: TruncationOptions | undefined;
 
   constructor(@Optional() options?: LoggingInterceptorOptions) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
     this.mask = options?.mask;
+    this.truncation = options?.truncation;
   }
 
   /**
@@ -137,6 +143,21 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Return the truncation options
+   */
+  public getTruncation(): TruncationOptions | undefined {
+    return this.truncation;
+  }
+
+  /**
+   * Set the truncation options
+   * @param truncate
+   */
+  public setTruncation(truncate: TruncationOptions): void {
+    this.truncation = truncate;
+  }
+
+  /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
    * @param call$ implements the handle method that returns an Observable
@@ -149,7 +170,9 @@ export class LoggingInterceptor implements NestInterceptor {
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    let maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    maskedBody = this.truncate(maskedBody, options);
+
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedHeaders = options?.mask?.disableHeaderMasking ? headers : this.maskHeaders(headers);
 
@@ -190,7 +213,8 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
+    let maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
+    maskedBody = this.truncate(maskedBody, options);
 
     this.logger.log(
       {
@@ -218,7 +242,8 @@ export class LoggingInterceptor implements NestInterceptor {
       const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
 
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+      let maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+      maskedBody = this.truncate(maskedBody, options);
 
       if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
         this.logger.error(
@@ -340,5 +365,26 @@ export class LoggingInterceptor implements NestInterceptor {
       },
       headers,
     );
+  }
+
+  /**
+   * Truncate the request body if it exceeds the specified limit.
+   * @param body The request body to truncate.
+   * @param options The truncation options.
+   * @returns The truncated request body.
+   */
+  private truncate(body: unknown, options?: LogOptions): unknown {
+    const { limit, truncate } = options?.truncation ?? this.truncation ?? {};
+
+    if (limit === undefined || body === undefined) {
+      return body;
+    }
+
+    const buffer = Buffer.isBuffer(body) ? body : Buffer.from(JSON.stringify(body));
+    if (buffer.length > limit) {
+      return truncate ? truncate(body) : buffer.subarray(0, limit).toString('utf-8');
+    }
+
+    return body;
   }
 }

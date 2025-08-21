@@ -10,6 +10,24 @@ export interface LogOptions {
    * Masking options
    */
   mask?: MaskingOptions;
+  /**
+   * Truncation options
+   */
+  truncation?: TruncationOptions;
+}
+
+export interface TruncationOptions {
+  /**
+   * Maximum size of the request body in bytes.
+   * If the request body exceeds this size, it will be truncated.
+   */
+  limit: number;
+  /**
+   * Truncation method
+   *
+   * If undefined, it will return a buffer truncated at the size of the limit.
+   */
+  truncate?: (body: unknown) => unknown;
 }
 
 /**

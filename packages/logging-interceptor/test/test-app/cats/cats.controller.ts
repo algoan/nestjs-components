@@ -64,6 +64,31 @@ export class CatsController {
     return { id: 1, ...payload };
   }
 
+  @Post('truncate-default')
+  @Log({ truncation: { limit: 20 } })
+  public createCatTruncationBodyDefault(@Body() payload: CreateCatDto) {
+    if (payload.name === 'dog') {
+      throw new BadRequestException({ message: 'You cannot name a cat dog' });
+    }
+
+    return { id: 1, ...payload };
+  }
+
+  @Post('truncate-custom')
+  @Log({
+    truncation: {
+      limit: 20,
+      truncate: (v) => ({ ...(v as CreateCatDto), name: (v as CreateCatDto).name.substring(0, 1) }),
+    },
+  })
+  public createCatTruncationBody(@Body() payload: CreateCatDto) {
+    if (payload.name === 'dog') {
+      throw new BadRequestException({ message: 'You cannot name a cat dog' });
+    }
+
+    return { id: 1, ...payload };
+  }
+
   @Get()
   @Log({
     mask: {
