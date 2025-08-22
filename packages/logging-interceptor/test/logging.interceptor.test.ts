@@ -597,5 +597,25 @@ describe('Logging interceptor', () => {
 
       expect(logSpy.mock.calls[0][0].body.name).toHaveLength(1);
     });
+
+    it('should not fail if the body is not serializable', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/truncate-default`;
+
+      const body = {
+        name: 'Very long cat name that exceeds the default truncation limit',
+        owner: {
+          name: 'Owner Name',
+          pets: [] as unknown[],
+        },
+      };
+
+      // Create a circular reference
+      body.owner.pets.push(body);
+
+      await request(app.getHttpServer()).post(url).send(body).expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].body).toBe('{"name":"Very long c');
+    });
   });
 });

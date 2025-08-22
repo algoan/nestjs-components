@@ -400,9 +400,16 @@ export class LoggingInterceptor implements NestInterceptor {
       return body;
     }
 
-    const buffer = Buffer.isBuffer(body) ? body : Buffer.from(JSON.stringify(body));
-    if (buffer.length > limit) {
-      return truncate ? truncate(body) : buffer.subarray(0, limit).toString('utf-8');
+    // Convert body to string safely
+    let stringifiedBody: string;
+    try {
+      stringifiedBody = JSON.stringify(body);
+    } catch {
+      stringifiedBody = String(body);
+    }
+
+    if (stringifiedBody.length > limit) {
+      return truncate ? truncate(body) : stringifiedBody.substring(0, limit);
     }
 
     return body;
