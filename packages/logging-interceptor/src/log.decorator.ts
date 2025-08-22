@@ -18,10 +18,14 @@ export interface LogOptions {
 
 export interface TruncationOptions {
   /**
+   * If true, it will disable the truncation.
+   */
+  disable?: boolean;
+  /**
    * Maximum size of the request or response body in bytes.
    * If the body exceeds this size, it will be truncated.
    */
-  limit: number;
+  limit?: number;
   /**
    * Truncation method
    *

@@ -443,6 +443,12 @@ describe('Logging interceptor', () => {
       interceptor.setTruncation(truncation);
       expect(interceptor.getTruncation()).toEqual(truncation);
     });
+
+    it('allows to set and get the disable truncation flag', async () => {
+      const interceptor = new LoggingInterceptor();
+      interceptor.setDisableTruncation(true);
+      expect(interceptor.getDisableTruncation()).toEqual(true);
+    });
   });
 
   describe('LoggingInterceptor - Masking options', () => {

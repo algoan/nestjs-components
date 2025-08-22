@@ -158,6 +158,22 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Return the disable truncation flag
+   */
+  public getDisableTruncation(): boolean {
+    return this.truncation?.disable === true;
+  }
+
+  /**
+   * Set the disable truncation flag
+   * @param disableTruncation
+   */
+  public setDisableTruncation(disableTruncation: boolean): void {
+    this.truncation ??= {};
+    this.truncation.disable = disableTruncation;
+  }
+
+  /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
    * @param call$ implements the handle method that returns an Observable
@@ -374,9 +390,13 @@ export class LoggingInterceptor implements NestInterceptor {
    * @returns The truncated request body.
    */
   private truncate(body: unknown, options?: LogOptions): unknown {
-    const { limit, truncate } = options?.truncation ?? this.truncation ?? {};
+    if (this.truncation?.disable === true) {
+      return body;
+    }
 
-    if (limit === undefined || body === undefined) {
+    const { disable, limit, truncate } = options?.truncation ?? this.truncation ?? {};
+
+    if (disable === true || limit === undefined || body === undefined) {
       return body;
     }
 
