@@ -169,8 +169,7 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param disableTruncation
    */
   public setDisableTruncation(disableTruncation: boolean): void {
-    this.truncation ??= {};
-    this.truncation.disable = disableTruncation;
+    this.truncation = { ...this.truncation, disable: disableTruncation };
   }
 
   /**
@@ -400,7 +399,24 @@ export class LoggingInterceptor implements NestInterceptor {
       return body;
     }
 
-    // Convert body to string safely
+    // If body is a string or Buffer, check its length directly
+    if (typeof body === 'string' || body instanceof String) {
+      if ((body as string).length > limit) {
+        return truncate ? truncate(body) : (body as string).substring(0, limit);
+      }
+
+      return body;
+    }
+
+    if (Buffer.isBuffer(body)) {
+      if ((body as Buffer).length > limit) {
+        return truncate ? truncate(body) : (body as Buffer).subarray(0, limit);
+      }
+
+      return body;
+    }
+
+    // For other types (objects, arrays, numbers, booleans, etc.), stringify and check the length
     let stringifiedBody: string;
     try {
       stringifiedBody = JSON.stringify(body);

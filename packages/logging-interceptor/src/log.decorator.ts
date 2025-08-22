@@ -22,7 +22,7 @@ export interface TruncationOptions {
    */
   disable?: boolean;
   /**
-   * Maximum size of the request or response body in bytes.
+   * Maximum size of the request or response body in characters.
    * If the body exceeds this size, it will be truncated.
    */
   limit?: number;
