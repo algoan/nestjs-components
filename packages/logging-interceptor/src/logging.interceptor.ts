@@ -170,8 +170,8 @@ export class LoggingInterceptor implements NestInterceptor {
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    let maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
-    maskedBody = this.truncate(maskedBody, options);
+    const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    const truncatedMaskedBody = this.truncate(maskedBody, options);
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedHeaders = options?.mask?.disableHeaderMasking ? headers : this.maskHeaders(headers);
@@ -180,7 +180,7 @@ export class LoggingInterceptor implements NestInterceptor {
       {
         message,
         method,
-        body: maskedBody,
+        body: truncatedMaskedBody,
         headers: maskedHeaders,
       },
       ctx,
@@ -213,13 +213,13 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    let maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
-    maskedBody = this.truncate(maskedBody, options);
+    const maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
+    const truncatedMaskedBody = this.truncate(maskedBody, options);
 
     this.logger.log(
       {
         message,
-        body: maskedBody,
+        body: truncatedMaskedBody,
       },
       ctx,
     );
@@ -242,15 +242,15 @@ export class LoggingInterceptor implements NestInterceptor {
       const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
 
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      let maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
-      maskedBody = this.truncate(maskedBody, options);
+      const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+      const truncatedMaskedBody = this.truncate(maskedBody, options);
 
       if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
         this.logger.error(
           {
             method,
             url,
-            body: maskedBody,
+            body: truncatedMaskedBody,
             message,
             error,
           },
@@ -263,7 +263,7 @@ export class LoggingInterceptor implements NestInterceptor {
             method,
             url,
             error,
-            body: maskedBody,
+            body: truncatedMaskedBody,
             message,
           },
           ctx,
