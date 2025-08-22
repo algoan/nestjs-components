@@ -18,8 +18,8 @@ export interface LogOptions {
 
 export interface TruncationOptions {
   /**
-   * Maximum size of the request body in bytes.
-   * If the request body exceeds this size, it will be truncated.
+   * Maximum size of the request or response body in bytes.
+   * If the body exceeds this size, it will be truncated.
    */
   limit: number;
   /**
