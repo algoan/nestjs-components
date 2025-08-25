@@ -430,6 +430,25 @@ describe('Logging interceptor', () => {
       interceptor.setMask(mask);
       expect(interceptor.getMask()).toEqual(mask);
     });
+
+    it('allows to set and get the truncation options', async () => {
+      const interceptor = new LoggingInterceptor();
+      const truncation = {
+        limit: 100,
+        truncate: (v: unknown) => ({
+          ...(v as Record<string, string>),
+          name: (v as Record<'name', string>).name.substring(0, 1),
+        }),
+      };
+      interceptor.setTruncation(truncation);
+      expect(interceptor.getTruncation()).toEqual(truncation);
+    });
+
+    it('allows to set and get the disable truncation flag', async () => {
+      const interceptor = new LoggingInterceptor();
+      interceptor.setDisableTruncation(true);
+      expect(interceptor.getDisableTruncation()).toEqual(true);
+    });
   });
 
   describe('LoggingInterceptor - Masking options', () => {
@@ -543,6 +562,60 @@ describe('Logging interceptor', () => {
       await request(app.getHttpServer()).get(url).set('authorization', 'Bearer JWT').expect(HttpStatus.OK);
 
       expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
+    });
+  });
+
+  describe('@Log - Truncation options', () => {
+    it('should not apply truncation if the limit has not been exceeded', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/truncate-default`;
+      const body = { name: 'short' };
+
+      await request(app.getHttpServer()).post(url).send(body).expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].body).toEqual(body);
+    });
+
+    it('should apply default truncation if no custom truncation is provided', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/truncate-default`;
+
+      const longName = 'Very long cat name that exceeds the default truncation limit';
+
+      await request(app.getHttpServer()).post(url).send({ name: longName }).expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].body).toBe('{"name":"Very long c');
+    });
+
+    it('should apply custom truncation if defined', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/truncate-custom`;
+
+      const longName = 'Very long cat name that exceeds the default truncation limit';
+
+      await request(app.getHttpServer()).post(url).send({ name: longName }).expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].body.name).toHaveLength(1);
+    });
+
+    it('should not fail if the body is not serializable', async () => {
+      const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
+      const url: string = `/cats/truncate-default`;
+
+      const body = {
+        name: 'Very long cat name that exceeds the default truncation limit',
+        owner: {
+          name: 'Owner Name',
+          pets: [] as unknown[],
+        },
+      };
+
+      // Create a circular reference
+      body.owner.pets.push(body);
+
+      await request(app.getHttpServer()).post(url).send(body).expect(HttpStatus.CREATED);
+
+      expect(logSpy.mock.calls[0][0].body).toBe('{"name":"Very long c');
     });
   });
 });

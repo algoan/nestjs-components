@@ -247,6 +247,91 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
 export class CoreModule {}
 ```
 
+### Truncation
+By default, the whole body of the request and of the response is logged. However, the monitoring platform you may use to store and access your logs can have a log size limit being lower than your body request. The `Log` decorator provides truncation options which allow to truncate the default truncation options for each endpoint. You just need to provide the limit. The log of body will be truncated at the limit set or if you have provided a `truncate` function as you have defined it.
+
+For example:
+
+```typescript
+import { Log } from '@algoan/nestjs-logging-interceptor'
+import { Body, Controller } from '@nestjs/common';
+
+@Controller('users')
+export class UsersController {
+
+  @Post()
+  @Log({
+    truncation: {
+      limit: 10000,
+      truncate: (body) => ({
+        ...body,
+        friends: 'TRUNCATED'
+      }),
+    }
+  })
+  public createUser(@Body() payload: UserDto) {
+    // create and return the new user
+  }
+}
+```
+
+If the endpoint is called with:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "maritalSituation": {
+    "status": "MARRIED",
+    "wife": { "firstName": "Jane", "lastName": "Doe" }
+  },
+  "contact": { "email": "john.doe@email.com", "phone": "+330102030405" },
+  "friends": [
+    { "firstName": "James", "lastName": "Smith" },
+    { "firstName": "Emma", "lastName": "Cole" }
+    // ... thousands of other friends
+  ]
+}
+```
+The body in the logged request will be:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "maritalSituation": {
+    "status": "MARRIED",
+    "wife": { "firstName": "Jane", "lastName": "Doe" }
+  },
+  "contact": { "email": "john.doe@email.com", "phone": "+330102030405" },
+  "friends": "TRUNCATED"
+}
+```
+
+Without the truncate options, it would be converted to a string and cut at the limit.
+
+The option can also be for all routes at once:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
+
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: () =>
+        new LoggingInterceptor({
+          truncation: {
+            limit: 10000
+          }
+        }),
+    },
+  ],
+})
+export class CoreModule {}
+```
+
+
 ### Use a custom Logger
 
 #### Nest-pino

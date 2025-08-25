@@ -13,7 +13,7 @@ import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { parse, stringify } from 'flatted';
-import { LogOptions, METHOD_LOG_METADATA } from './log.decorator';
+import { LogOptions, METHOD_LOG_METADATA, TruncationOptions } from './log.decorator';
 
 /**
  * Logging interceptor options
@@ -35,6 +35,10 @@ export interface LoggingInterceptorOptions {
    * Masking options to apply to all routes
    */
   mask?: LoggingInterceptorMaskingOptions;
+  /**
+   * Truncation options to apply to all routes
+   */
+  truncation?: TruncationOptions;
 }
 
 /**
@@ -68,12 +72,14 @@ export class LoggingInterceptor implements NestInterceptor {
   private disableMasking: boolean;
   private maskingPlaceholder: string | undefined;
   private mask: LoggingInterceptorMaskingOptions | undefined;
+  private truncation: TruncationOptions | undefined;
 
   constructor(@Optional() options?: LoggingInterceptorOptions) {
     this.userPrefix = options?.userPrefix ?? '';
     this.disableMasking = options?.disableMasking ?? false;
     this.maskingPlaceholder = options?.maskingPlaceholder ?? '****';
     this.mask = options?.mask;
+    this.truncation = options?.truncation;
   }
 
   /**
@@ -137,6 +143,36 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
+   * Return the truncation options
+   */
+  public getTruncation(): TruncationOptions | undefined {
+    return this.truncation;
+  }
+
+  /**
+   * Set the truncation options
+   * @param truncate
+   */
+  public setTruncation(truncate: TruncationOptions): void {
+    this.truncation = truncate;
+  }
+
+  /**
+   * Return the disable truncation flag
+   */
+  public getDisableTruncation(): boolean {
+    return this.truncation?.disable === true;
+  }
+
+  /**
+   * Set the disable truncation flag
+   * @param disableTruncation
+   */
+  public setDisableTruncation(disableTruncation: boolean): void {
+    this.truncation = { ...this.truncation, disable: disableTruncation };
+  }
+
+  /**
    * Intercept method, logs before and after the request being processed
    * @param context details about the current request
    * @param call$ implements the handle method that returns an Observable
@@ -150,6 +186,8 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+    const truncatedMaskedBody = this.truncate(maskedBody, options);
+
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedHeaders = options?.mask?.disableHeaderMasking ? headers : this.maskHeaders(headers);
 
@@ -157,7 +195,7 @@ export class LoggingInterceptor implements NestInterceptor {
       {
         message,
         method,
-        body: maskedBody,
+        body: truncatedMaskedBody,
         headers: maskedHeaders,
       },
       ctx,
@@ -191,11 +229,12 @@ export class LoggingInterceptor implements NestInterceptor {
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const maskedBody = options?.mask?.response ? this.maskData(body, options.mask.response) : body;
+    const truncatedMaskedBody = this.truncate(maskedBody, options);
 
     this.logger.log(
       {
         message,
-        body: maskedBody,
+        body: truncatedMaskedBody,
       },
       ctx,
     );
@@ -219,13 +258,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       const maskedBody = options?.mask?.request ? this.maskData(body, options.mask.request) : body;
+      const truncatedMaskedBody = this.truncate(maskedBody, options);
 
       if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
         this.logger.error(
           {
             method,
             url,
-            body: maskedBody,
+            body: truncatedMaskedBody,
             message,
             error,
           },
@@ -238,7 +278,7 @@ export class LoggingInterceptor implements NestInterceptor {
             method,
             url,
             error,
-            body: maskedBody,
+            body: truncatedMaskedBody,
             message,
           },
           ctx,
@@ -340,5 +380,54 @@ export class LoggingInterceptor implements NestInterceptor {
       },
       headers,
     );
+  }
+
+  /**
+   * Truncate the request body if it exceeds the specified limit.
+   * @param body The request body to truncate.
+   * @param options The truncation options.
+   * @returns The truncated request body.
+   */
+  private truncate(body: unknown, options?: LogOptions): unknown {
+    if (this.truncation?.disable === true) {
+      return body;
+    }
+
+    const { disable, limit, truncate } = options?.truncation ?? this.truncation ?? {};
+
+    if (disable === true || limit === undefined || body === undefined) {
+      return body;
+    }
+
+    // If body is a string or Buffer, check its length directly
+    if (typeof body === 'string' || body instanceof String) {
+      if ((body as string).length > limit) {
+        return truncate ? truncate(body) : (body as string).substring(0, limit);
+      }
+
+      return body;
+    }
+
+    if (Buffer.isBuffer(body)) {
+      if ((body as Buffer).length > limit) {
+        return truncate ? truncate(body) : (body as Buffer).subarray(0, limit);
+      }
+
+      return body;
+    }
+
+    // For other types (objects, arrays, numbers, booleans, etc.), stringify and check the length
+    let stringifiedBody: string;
+    try {
+      stringifiedBody = JSON.stringify(body);
+    } catch {
+      stringifiedBody = String(body);
+    }
+
+    if (stringifiedBody.length > limit) {
+      return truncate ? truncate(body) : stringifiedBody.substring(0, limit);
+    }
+
+    return body;
   }
 }
