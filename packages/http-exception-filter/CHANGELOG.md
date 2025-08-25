@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.1.0...@algoan/nestjs-http-exception-filter@1.2.0) (2025-08-25)
+
+
+### Features
+
+* **http-exception-filter:** add raw error message to logs ([48cc36c](https://github.com/algoan/nestjs-components/commit/48cc36cb431ec9f684d021a1e16d23854bdc7fbf))
+
+
+
 ## [1.1.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-http-exception-filter@1.0.21...@algoan/nestjs-http-exception-filter@1.1.0) (2024-09-16)
 
 

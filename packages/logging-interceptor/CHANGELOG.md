@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.7.0...@algoan/nestjs-logging-interceptor@2.8.0) (2025-08-25)
+
+
+### Features
+
+* **logging-interceptor:** add request/response body truncation ([4a1944f](https://github.com/algoan/nestjs-components/commit/4a1944fb356483b6b840f83c76af081dfab41f9c))
+
+
+
 ## [2.7.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.6.0...@algoan/nestjs-logging-interceptor@2.7.0) (2024-09-16)
 
 
