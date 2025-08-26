@@ -7,5 +7,3 @@ updates:
     time: "04:00"
   open-pull-requests-limit: 5
   versioning-strategy: increase
-  reviewers:
-    - g-ongenae
