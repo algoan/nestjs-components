@@ -60,7 +60,7 @@
     "class-validator": "^0.14.1",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.55.0",
+    "eslint": "^9.38.0",
     "express": "^4.21.2",
     "google-pubsub-emulator": "^5.0.0",
     "husky": "^9.1.7",
