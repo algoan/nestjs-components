@@ -23,9 +23,9 @@ jobs:
     strategy:
       matrix:
         version: [
-          { node: "16.x", npm: "9" },
-          { node: "18.x", npm: "10" },
-          { node: "20.x", npm: "10" }
+          { node: "20.x", npm: "10" },
+          { node: "22.x", npm: "10" },
+          { node: "24.x", npm: "10" }
         ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
