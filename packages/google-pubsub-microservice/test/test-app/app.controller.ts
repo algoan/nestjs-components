@@ -1,13 +1,15 @@
 import { EmittedMessage } from '@algoan/pubsub';
-import { Controller } from '@nestjs/common';
+import { Controller, UseInterceptors } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
+import { PassThroughInterceptor } from './pass-through.interceptor';
 
 export const SUBSCRIPTION_NAME: string = 'test_event';
 export const SUBSCRIPTION_NAME_2: string = 'test_event_2';
 export const SUBSCRIPTION_NAME_3: string = 'test_event_3';
 export const SUBSCRIPTION_NAME_4: string = 'test_event_4';
 export const SUBSCRIPTION_NAME_5: string = 'test_event_5';
+export const SUBSCRIPTION_NAME_6: string = 'test_event_6';
 export const TOPIC_NAME: string = 'my_topic';
 
 /**
@@ -61,6 +63,18 @@ export class AppController {
   public async handleTestEvent5(@Payload() data: EmittedMessage<{ hello: string }>): Promise<void> {
     // eslint-disable-next-line no-magic-numbers
     await new Promise((r) => setTimeout(r, 1000));
+    this.appService.handleTestEvent(data);
+  }
+
+  /**
+   * Handle the test event (6) — decorated with an interceptor so NestJS wraps the return value in
+   * a cold Observable. Used in GCPSS07 to verify that the transport subscribes to that Observable
+   * before the message is acked.
+   * @param data Payload sent
+   */
+  @UseInterceptors(PassThroughInterceptor)
+  @EventPattern(SUBSCRIPTION_NAME_6)
+  public async handleTestEvent6(@Payload() data: EmittedMessage<{ hello: string }>): Promise<void> {
     this.appService.handleTestEvent(data);
   }
 }
