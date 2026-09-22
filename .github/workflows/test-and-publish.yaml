@@ -72,7 +72,7 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
-    - run: npm i -g npm@10 && npm i
+    - run: npm i -g npm@10 && npm ci
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
     - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release github --include-merged-tags --yes
