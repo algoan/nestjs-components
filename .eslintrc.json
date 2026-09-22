@@ -6,6 +6,7 @@
         "camelcase": "off",
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/tslint/config": "off",
+        "@typescript-eslint/ban-types": "off",
         "prefer-arrow/prefer-arrow-functions": "off"
     }
 }

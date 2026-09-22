@@ -39,6 +39,6 @@
     "rxjs": ">=6"
   },
   "dependencies": {
-    "flatted": "^3.4.2"
+    "flatted": "^3.4.4"
   }
 }
