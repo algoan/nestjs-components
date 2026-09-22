@@ -16,7 +16,7 @@
     "publish": "lerna publish --yes",
     "commit": "git-cz",
     "prettier": "prettier --write 'packages/*/{src,test}/**/*.ts'",
-    "lint": "eslint ./packages/*/src/*.ts ./packages/*/src/**/*.ts --ignore-pattern \"**/*.test.ts\"",
+    "lint": "eslint ./packages/*/src/*.ts ./packages/*/src/**/*.ts",
     "prepare": "husky install"
   },
   "publishConfig": {
@@ -37,7 +37,7 @@
   "author": "algoan",
   "license": "ISC",
   "devDependencies": {
-    "@algoan/eslint-config": "^2.2.2",
+    "@algoan/eslint-config": "^3.0.0",
     "@algoan/nestjs-google-pubsub-microservice": "file:../google-pubsub-microservice",
     "@algoan/pubsub": "^6.4.0",
     "@commitlint/cli": "^19.8.1",
@@ -60,7 +60,7 @@
     "class-validator": "^0.14.4",
     "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.57.1",
+    "eslint": "^10.11.0",
     "express": "^4.22.2",
     "google-pubsub-emulator": "^5.0.0",
     "husky": "^9.1.7",
@@ -80,7 +80,7 @@
   "lint-staged": {
     "**/*.ts": [
       "prettier --list-different",
-      "eslint --ignore-pattern \"**/*.test.ts\" --ignore-pattern \"**/helpers.ts\""
+      "eslint"
     ]
   },
   "config": {
