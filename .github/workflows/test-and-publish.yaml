@@ -16,6 +16,10 @@ on:
         required: false
         default: master
 
+# Least privilege by default; the publish job widens this for itself only.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
