@@ -52,6 +52,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch' }}
     needs: test
+    permissions:
+      # Push the version commit and tags, and create the GitHub Releases
+      contents: write
+      # Publish to GitHub Packages
+      packages: write
+      # Mint the OIDC token used to publish to npmjs.com without a long-lived token
+      id-token: write
     steps:
     - uses: actions/checkout@v3
       with:
@@ -67,16 +74,12 @@ jobs:
     - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release github --include-merged-tags --yes
       name: Run Lerna version
       env:
-        GH_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
-    - name: Setting NPM configs to publish to NPM
-      run: |
-        echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > .npmrc
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # No .npmrc and no NODE_AUTH_TOKEN here: lerna (>= 9) performs the OIDC
+    # token exchange itself and sets the resulting auth token, so npmjs.com
+    # needs no long-lived credential. It also enables provenance.
     - name: Publishing to NPM
       run: npx lerna publish from-git --yes --registry=https://registry.npmjs.org
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Setting NPM configs to publish to GitHub Packages
       run: |
         echo "@algoan:registry=https://npm.pkg.github.com" > .npmrc
