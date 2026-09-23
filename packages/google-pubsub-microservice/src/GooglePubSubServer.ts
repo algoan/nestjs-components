@@ -95,7 +95,10 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
    * nothing to subscribe to here. Same stance as NestJS' own gRPC server.
    */
   // eslint-disable-next-line class-methods-use-this
-  public on(): never {
+  public on<EventKey extends string = string, EventCallback = unknown>(
+    _event: EventKey,
+    _callback: EventCallback,
+  ): never {
     throw new Error('Method is not supported by the GoogleCloudPubSub transport');
   }
 
