@@ -3,12 +3,12 @@ import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
-export const SUBSCRIPTION_NAME: string = 'test_event';
-export const SUBSCRIPTION_NAME_2: string = 'test_event_2';
-export const SUBSCRIPTION_NAME_3: string = 'test_event_3';
-export const SUBSCRIPTION_NAME_4: string = 'test_event_4';
-export const SUBSCRIPTION_NAME_5: string = 'test_event_5';
-export const TOPIC_NAME: string = 'my_topic';
+export const SUBSCRIPTION_NAME = 'test_event';
+export const SUBSCRIPTION_NAME_2 = 'test_event_2';
+export const SUBSCRIPTION_NAME_3 = 'test_event_3';
+export const SUBSCRIPTION_NAME_4 = 'test_event_4';
+export const SUBSCRIPTION_NAME_5 = 'test_event_5';
+export const TOPIC_NAME = 'my_topic';
 
 /**
  * Fake app controller
