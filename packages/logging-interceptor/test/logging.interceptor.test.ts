@@ -508,7 +508,11 @@ describe('Logging interceptor', () => {
       const logSpy: jest.SpyInstance = jest.spyOn(Logger.prototype, 'log');
       const url: string = `/cats/header`;
 
-      await request(app.getHttpServer()).post(url).set('authorization', 'Bearer JWT').expect(HttpStatus.CREATED);
+      await request(app.getHttpServer())
+        .post(url)
+        .send({ name: 'Kitty' })
+        .set('authorization', 'Bearer JWT')
+        .expect(HttpStatus.CREATED);
 
       expect(logSpy.mock.calls[0][0].headers.authorization).toBe('Bearer JWT');
     });

@@ -1,4 +1,5 @@
 const Emulator = require('google-pubsub-emulator');
+import { GCPubSub } from '@algoan/pubsub';
 import { GCPubSubServer } from '@algoan/nestjs-google-pubsub-microservice';
 import { INestApplication, INestMicroservice } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
@@ -7,6 +8,7 @@ import * as request from 'supertest';
 import { getTestingApplication } from './client-app/main';
 import { AppService } from './server-app/app.service';
 import { getTestingServer } from './server-app/main';
+import { GCPubSubClient } from '../src';
 
 describe('GooglePubSubServer', () => {
   const projectId: string = 'algoan-test';
@@ -71,5 +73,17 @@ describe('GooglePubSubServer', () => {
 
   it('GCPSC02 - should throw an error - method send not implemented', async () => {
     return request(server.getHttpServer()).post('/send').send({}).expect(500);
+  });
+
+  it('GCPSC03 - should expose the underlying client through unwrap()', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+
+    expect(() => client.unwrap()).toThrow('Not initialized. Please call the "connect" method first.');
+
+    await client.connect();
+
+    expect(client.unwrap<GCPubSub>()).toBeDefined();
+
+    await client.unwrap<GCPubSub>().client.close();
   });
 });

@@ -201,4 +201,26 @@ describe('GooglePubSubServer', () => {
 
     await app.close();
   });
+
+  it('GCPSS07 - should expose the underlying PubSub client through unwrap()', async () => {
+    const server: GCPubSubServer = new GCPubSubServer({
+      projectId: 'algoan-test',
+    });
+
+    expect(server.unwrap()).toBe(server.gcClient);
+
+    await server.gcClient.client.close();
+  });
+
+  it('GCPSS08 - should reject the broker-level on() listener API', async () => {
+    const server: GCPubSubServer = new GCPubSubServer({
+      projectId: 'algoan-test',
+    });
+
+    expect(() => server.on('some-event', () => undefined)).toThrow(
+      'Method is not supported by the GoogleCloudPubSub transport',
+    );
+
+    await server.gcClient.client.close();
+  });
 });

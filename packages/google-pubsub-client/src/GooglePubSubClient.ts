@@ -64,6 +64,17 @@ export class GCPubSubClient extends ClientProxy {
   }
 
   /**
+   * Return the underlying Algoan PubSub client
+   */
+  public unwrap<T>(): T {
+    if (this.pubSub === undefined) {
+      throw new Error('Not initialized. Please call the "connect" method first.');
+    }
+
+    return this.pubSub as T;
+  }
+
+  /**
    * Override the abstract "dispatchEvent" by simply emitting an Event
    * @param _packet Containing the event pattern and the payload sent
    */

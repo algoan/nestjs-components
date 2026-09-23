@@ -88,6 +88,28 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
   }
 
   /**
+   * Register a listener on a broker-level event.
+   *
+   * Google PubSub exposes no connection-level event emitter — events are
+   * emitted per subscription, which `listen` already wires up — so there is
+   * nothing to subscribe to here. Same stance as NestJS' own gRPC server.
+   */
+  // eslint-disable-next-line class-methods-use-this
+  public on<EventKey extends string = string, EventCallback = unknown>(
+    _event: EventKey,
+    _callback: EventCallback,
+  ): never {
+    throw new Error('Method is not supported by the GoogleCloudPubSub transport');
+  }
+
+  /**
+   * Return the underlying Algoan PubSub client
+   */
+  public unwrap<T>(): T {
+    return this.gcClient as T;
+  }
+
+  /**
    * Close all subscriptions when subscriptions is closing
    */
   public async close(): Promise<void> {

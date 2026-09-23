@@ -3,7 +3,7 @@ import { Controller, Logger } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
-export const SUBSCRIPTION_NAME: string = 'test_event';
+export const SUBSCRIPTION_NAME = 'test_event';
 
 /**
  * Fake app controller
