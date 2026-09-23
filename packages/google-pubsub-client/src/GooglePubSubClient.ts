@@ -56,11 +56,13 @@ export class GCPubSubClient extends ClientProxy {
   public async close(): Promise<void> {
     if (this.options?.debug === true) {
       this.logger.debug('Closing the GooglePubSubClient Proxy');
-      if (this.pubSub !== undefined) {
-        await this.pubSub.client.close();
-      }
-      this.pubSub = undefined;
     }
+
+    if (this.pubSub !== undefined) {
+      await this.pubSub.client.close();
+    }
+
+    this.pubSub = undefined;
   }
 
   /**

@@ -86,4 +86,17 @@ describe('GooglePubSubServer', () => {
 
     await client.unwrap<GCPubSub>().client.close();
   });
+
+  it('GCPSC04 - should close the underlying client when debug is disabled', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+    await client.connect();
+
+    const pubSub: GCPubSub = client.unwrap<GCPubSub>();
+    const spy: jest.SpyInstance = jest.spyOn(pubSub.client, 'close');
+
+    await client.close();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(() => client.unwrap()).toThrow('Not initialized. Please call the "connect" method first.');
+  });
 });
