@@ -115,4 +115,24 @@ describe('GooglePubSubServer', () => {
 
     await pubSub.client.close();
   });
+
+  it('GCPSC06 - should not clear a connection opened while close() is still pending', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+    await client.connect();
+
+    const closing: GCPubSub = client.unwrap<GCPubSub>();
+    jest.spyOn(closing.client, 'close').mockImplementationOnce(async () => {
+      await setTimeout(50);
+    });
+
+    const closePromise: Promise<void> = client.close();
+    await client.connect();
+    await closePromise;
+
+    const reconnected: GCPubSub = client.unwrap<GCPubSub>();
+    expect(reconnected).not.toBe(closing);
+
+    await closing.client.close();
+    await reconnected.client.close();
+  });
 });

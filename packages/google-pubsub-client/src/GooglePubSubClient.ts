@@ -58,12 +58,16 @@ export class GCPubSubClient extends ClientProxy {
       this.logger.debug('Closing the GooglePubSubClient Proxy');
     }
 
-    try {
-      if (this.pubSub !== undefined) {
-        await this.pubSub.client.close();
-      }
-    } finally {
-      this.pubSub = undefined;
+    /**
+     * Release the reference before awaiting: a concurrent "connect" must be able to
+     * install a replacement, and this close must not clear it when it completes.
+     * Doing it first also means a rejecting "close" cannot skip the reset.
+     */
+    const closingPubSub: GCPubSub | undefined = this.pubSub;
+    this.pubSub = undefined;
+
+    if (closingPubSub !== undefined) {
+      await closingPubSub.client.close();
     }
   }
 
