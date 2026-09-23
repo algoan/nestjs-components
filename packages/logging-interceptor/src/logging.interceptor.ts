@@ -181,9 +181,9 @@ export class LoggingInterceptor implements NestInterceptor {
     const req: Request = context.switchToHttp().getRequest();
     const { method, url, headers } = req;
     // Express 5 leaves `req.body` undefined when the request carries no body, where
-    // Express 4 defaulted it to an empty object. Normalise it so the logged record
-    // keeps the same shape it had before.
-    const body: unknown = req.body ?? {};
+    // Express 4 defaulted it to an empty object. Normalise that one case so the logged
+    // record keeps the same shape it had before, without rewriting an explicit null body.
+    const body: unknown = req.body === undefined ? {} : req.body;
     const ctx: string = `${this.userPrefix}${this.ctxPrefix} - ${method} - ${url}`;
     const message: string = `Incoming request - ${method} - ${url}`;
     const options: LogOptions | undefined = Reflect.getMetadata(METHOD_LOG_METADATA, context.getHandler());
@@ -253,9 +253,9 @@ export class LoggingInterceptor implements NestInterceptor {
     const req: Request = context.switchToHttp().getRequest<Request>();
     const { method, url } = req;
     // Express 5 leaves `req.body` undefined when the request carries no body, where
-    // Express 4 defaulted it to an empty object. Normalise it so the logged record
-    // keeps the same shape it had before.
-    const body: unknown = req.body ?? {};
+    // Express 4 defaulted it to an empty object. Normalise that one case so the logged
+    // record keeps the same shape it had before, without rewriting an explicit null body.
+    const body: unknown = req.body === undefined ? {} : req.body;
 
     if (error instanceof HttpException) {
       const statusCode: number = error.getStatus();
