@@ -7,6 +7,7 @@ import {
   SUBSCRIPTION_NAME_3,
   SUBSCRIPTION_NAME_4,
   SUBSCRIPTION_NAME_5,
+  SUBSCRIPTION_NAME_6,
   TOPIC_NAME,
 } from './test-app/app.controller';
 import { AppService } from './test-app/app.service';
@@ -167,6 +168,31 @@ describe('GooglePubSubServer', () => {
     expect(spy).toHaveBeenCalledTimes(2);
 
     await topic.delete();
+
+    await app.close();
+  });
+
+  it('GCPSS07 - Emit an event to an interceptor-decorated handler and confirm handler body runs', async () => {
+    /**
+     * A handler carrying an interceptor causes NestJS to return a cold Observable from
+     * `handler(message)`. Without subscribing to it, the handler body never runs yet the
+     * message is still acked (silent data-loss). This test verifies the transport subscribes
+     * before acking.
+     */
+    const server: GCPubSubServer = new GCPubSubServer({
+      projectId: 'algoan-test',
+      topicsNames: [SUBSCRIPTION_NAME_6],
+    });
+    const { app, module } = await getTestingApplication(server);
+    const appService: AppService = module.get(AppService);
+    const spy: jest.SpyInstance = jest.spyOn(appService, 'handleTestEvent');
+
+    await app.listen();
+    await server.gcClient.emit(SUBSCRIPTION_NAME_6, {
+      hello: 'world',
+    });
+    await setTimeout(100);
+    expect(spy).toHaveBeenCalledTimes(1);
 
     await app.close();
   });

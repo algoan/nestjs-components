@@ -8,6 +8,7 @@ import {
 } from '@algoan/pubsub';
 import { Logger } from '@nestjs/common';
 import { CustomTransportStrategy, MessageHandler, Server } from '@nestjs/microservices';
+import { isObservable, lastValueFrom } from 'rxjs';
 
 /**
  * Google Pub Sub Server class extending NestJS Microservice strategy
@@ -144,7 +145,13 @@ export class GCPubSubServer extends Server implements CustomTransportStrategy {
       ++this.counterMessage;
 
       try {
-        await handler(message);
+        const result: unknown = await handler(message);
+
+        // When the handler carries interceptors, NestJS returns a cold Observable that must be
+        // subscribed for the handler body to run. `defaultValue` avoids EmptyError on void handlers.
+        if (isObservable(result)) {
+          await lastValueFrom(result, { defaultValue: undefined });
+        }
       } finally {
         --this.counterMessage;
       }
