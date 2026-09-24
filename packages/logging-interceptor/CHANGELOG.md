@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.8.1...@algoan/nestjs-logging-interceptor@2.9.0) (2026-09-24)
+
+
+### Features
+
+* **deps:** migrate @nestjs/* from v9 to v11 ([effd2db](https://github.com/algoan/nestjs-components/commit/effd2dbb4c311dfdd89b02a84b7c7d857d1be1aa))
+
+
+
 ## [2.8.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.8.0...@algoan/nestjs-logging-interceptor@2.8.1) (2026-09-22)
 
 **Note:** Version bump only for package @algoan/nestjs-logging-interceptor

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.4...@algoan/nestjs-google-pubsub-microservice@3.2.0) (2026-09-24)
+
+
+### Features
+
+* **deps:** migrate @nestjs/* from v9 to v11 ([effd2db](https://github.com/algoan/nestjs-components/commit/effd2dbb4c311dfdd89b02a84b7c7d857d1be1aa))
+
+
+
 ## [3.1.4](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-microservice@3.1.3...@algoan/nestjs-google-pubsub-microservice@3.1.4) (2025-06-11)
 
 

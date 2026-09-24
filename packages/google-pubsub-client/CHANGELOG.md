@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.4.13...@algoan/nestjs-google-pubsub-client@0.5.0) (2026-09-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **google-pubsub-client:** close() now really closes the underlying client and releases
+it. Previously, with `debug` unset, close() was a complete no-op: the gRPC
+connection was left open and the proxy stayed connected. Callers that relied on
+the connection surviving close(), or that kept using a client obtained from
+unwrap() before it, are affected - unwrap() now throws until connect() is called
+again.
+
+Note: emit() still works after close(); ClientProxy.emit() auto-connects, so it
+transparently opens a new client.
+
+### Features
+
+* **deps:** migrate @nestjs/* from v9 to v11 ([effd2db](https://github.com/algoan/nestjs-components/commit/effd2dbb4c311dfdd89b02a84b7c7d857d1be1aa))
+
+
+### Bug Fixes
+
+* **google-pubsub-client:** actually close the client on close() ([2671dd0](https://github.com/algoan/nestjs-components/commit/2671dd07194e03a758e7527207a02d5b25b2a89e)), closes [#992](https://github.com/algoan/nestjs-components/issues/992)
+
+
+
 ## [0.4.13](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-google-pubsub-client@0.4.12...@algoan/nestjs-google-pubsub-client@0.4.13) (2025-06-11)
 
 **Note:** Version bump only for package @algoan/nestjs-google-pubsub-client
