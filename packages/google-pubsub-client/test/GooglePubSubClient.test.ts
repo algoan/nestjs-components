@@ -86,4 +86,53 @@ describe('GooglePubSubServer', () => {
 
     await client.unwrap<GCPubSub>().client.close();
   });
+
+  it('GCPSC04 - should close the underlying client when debug is disabled', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+    await client.connect();
+
+    const pubSub: GCPubSub = client.unwrap<GCPubSub>();
+    const spy: jest.SpyInstance = jest.spyOn(pubSub.client, 'close');
+
+    await client.close();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(() => client.unwrap()).toThrow('Not initialized. Please call the "connect" method first.');
+  });
+
+  it('GCPSC05 - should release the client even if the underlying close() rejects', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+    await client.connect();
+
+    const pubSub: GCPubSub = client.unwrap<GCPubSub>();
+    jest.spyOn(pubSub.client, 'close').mockImplementationOnce(async () => {
+      throw new Error('close failed');
+    });
+
+    await expect(client.close()).rejects.toThrow('close failed');
+
+    expect(() => client.unwrap()).toThrow('Not initialized. Please call the "connect" method first.');
+
+    await pubSub.client.close();
+  });
+
+  it('GCPSC06 - should not clear a connection opened while close() is still pending', async () => {
+    const client: GCPubSubClient = new GCPubSubClient({ projectId, port: 4000 });
+    await client.connect();
+
+    const closing: GCPubSub = client.unwrap<GCPubSub>();
+    jest.spyOn(closing.client, 'close').mockImplementationOnce(async () => {
+      await setTimeout(50);
+    });
+
+    const closePromise: Promise<void> = client.close();
+    await client.connect();
+    await closePromise;
+
+    const reconnected: GCPubSub = client.unwrap<GCPubSub>();
+    expect(reconnected).not.toBe(closing);
+
+    await closing.client.close();
+    await reconnected.client.close();
+  });
 });
