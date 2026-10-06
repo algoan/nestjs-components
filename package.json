@@ -103,10 +103,14 @@
     "@grpc/grpc-js": "^1.14.4",
     "tar": "^7.5.22",
     "lerna": {
-      "js-yaml": "^4.3.1"
+      "js-yaml": "^4.3.1",
+      "pacote": "^21.5.1"
     },
     "nx": {
-      "brace-expansion": "^5.0.9"
+      ".": "^22.7.12",
+      "axios": "^1.20.0",
+      "brace-expansion": "^5.0.9",
+      "smol-toml": "^1.9.0"
     },
     "@typescript-eslint/typescript-estree@7": {
       "minimatch": "^9.0.9"
