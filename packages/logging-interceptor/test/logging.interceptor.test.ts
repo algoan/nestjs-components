@@ -50,7 +50,7 @@ describe('Logging interceptor', () => {
       /**
        * Info level
        */
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {},
@@ -85,7 +85,7 @@ describe('Logging interceptor', () => {
       /**
        * Info level
        */
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {},
@@ -96,7 +96,7 @@ describe('Logging interceptor', () => {
         ctx,
       ]);
 
-      expect(warnSpy).toBeCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy.mock.calls[0]).toEqual([
         {
           message: outgoingMsg,
@@ -127,7 +127,7 @@ describe('Logging interceptor', () => {
       /**
        * Info level
        */
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {},
@@ -138,7 +138,7 @@ describe('Logging interceptor', () => {
         ctx,
       ]);
 
-      expect(errorSpy).toBeCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledTimes(1);
       expect(errorSpy.mock.calls[0]).toEqual([
         {
           message: outgoingMsg,
@@ -179,7 +179,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - POST - ${url}`;
       const incomingMsg: string = `Incoming request - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {
@@ -209,7 +209,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - POST - ${url}`;
       const incomingMsg: string = `Incoming request - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: placeholder,
@@ -242,7 +242,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - 201 - POST - ${url}`;
       const outgoingMsg: string = `Outgoing response - 201 - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[1]).toEqual([
         {
           body: {
@@ -271,7 +271,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - 201 - POST - ${url}`;
       const outgoingMsg: string = `Outgoing response - 201 - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[1]).toEqual([
         {
           body: placeholder,
@@ -287,7 +287,7 @@ describe('Logging interceptor', () => {
 
       await request(app.getHttpServer()).get(url).expect(HttpStatus.OK);
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[1][0].body).toEqual([
         {
           id: 1,
@@ -324,7 +324,7 @@ describe('Logging interceptor', () => {
 
       await request(app.getHttpServer()).post(url).send(newCat).expect(HttpStatus.CREATED);
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[0][0].body).toEqual(newCat);
 
       expect(logSpy.mock.calls[1][0].body).toEqual({ ...newCat, id: 1 });
@@ -351,7 +351,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - POST - ${url}`;
       const incomingMsg: string = `Incoming request - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledTimes(2);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {
@@ -383,7 +383,7 @@ describe('Logging interceptor', () => {
       const ctx: string = `LoggingInterceptor - POST - ${url}`;
       const incomingMsg: string = `Incoming request - POST - ${url}`;
 
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
       expect(logSpy.mock.calls[0]).toEqual([
         {
           body: {
