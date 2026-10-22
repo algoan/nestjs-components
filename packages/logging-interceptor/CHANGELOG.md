@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.1](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.9.0...@algoan/nestjs-logging-interceptor@2.9.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* **deps:** upgrade jest to v30 ([6270cb5](https://github.com/algoan/nestjs-components/commit/6270cb5e566679cb17657b8663a567e11098bb85))
+
+
+
 ## [2.9.0](https://github.com/algoan/nestjs-components/compare/@algoan/nestjs-logging-interceptor@2.8.1...@algoan/nestjs-logging-interceptor@2.9.0) (2026-09-24)
 
 
