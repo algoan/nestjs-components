@@ -67,6 +67,8 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        # No git credentials during npm ci and the build: the bot token is only set for the lerna version push
+        persist-credentials: false
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
@@ -75,10 +77,21 @@ jobs:
     - run: npm i -g npm@10 && npm ci
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
+    # lerna version pushes the release commit and tags to master: the bot bypasses the master branch ruleset, github-actions does not
+    - name: Set the bot credentials for the release push
+      run: |
+        basic=$(printf 'x-access-token:%s' "$BOT_TOKEN" | base64 -w0)
+        echo "::add-mask::$basic"
+        git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basic"
+      env:
+        BOT_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
     - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release github --include-merged-tags --yes
       name: Run Lerna version
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Remove the bot credentials
+      if: always()
+      run: git config --local --unset-all http.https://github.com/.extraheader || true
     # No .npmrc and no NODE_AUTH_TOKEN here: lerna (>= 9) performs the OIDC
     # token exchange itself and sets the resulting auth token, so npmjs.com
     # needs no long-lived credential. It also enables provenance.
