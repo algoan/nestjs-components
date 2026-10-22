@@ -67,6 +67,8 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        # lerna version pushes the release commit and tags with these credentials: the bot bypasses the master branch ruleset, github-actions does not
+        token: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
