@@ -1,0 +1,70 @@
+name: Renovate triage
+
+# Scores the vulnerabilities a Renovate PR fixes and routes it, with algoan/private-actions
+# (renovate-security). The hotfix flow is off: nothing is deployed from this repository, the
+# packages are published to npm by a manual run of "Test and Publish Workflow" (lerna) on master.
+# See docs/RENOVATE.md.
+#
+# pull_request_target: the workflow always comes from the base branch, so a Renovate PR (or a push
+# to its branch) cannot change what runs with REPO_GHA_PAT and NOTION_TOKEN before review. The job
+# only runs for PRs opened by renovate[bot]: a PR from a fork never reaches the secrets.
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, labeled]
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: renovate-triage-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    name: Score vulnerabilities and route the PR
+    if: github.event.pull_request.user.login == 'renovate[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # The PR head is only read as git objects: nothing from it runs here.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout private actions
+        uses: actions/checkout@v7
+        with:
+          repository: algoan/private-actions
+          ref: 24d09ca03fa69115d50721d7a1ef123bc905f42b # v2.3.0
+          path: .github/private-actions
+          token: ${{ secrets.REPO_GHA_PAT }}
+          persist-credentials: false
+
+      - name: Triage
+        id: triage
+        uses: ./.github/private-actions/renovate-triage
+        with:
+          hotfix_enabled: "false"
+          cvss_hotfix_threshold: ${{ vars.CVSS_HOTFIX_THRESHOLD || '9.0' }}
+          cvss_automerge_threshold: ${{ vars.CVSS_AUTOMERGE_THRESHOLD || '4.0' }}
+          # npm: the single root package-lock.json of the npm workspaces (packages/*).
+          ecosystems: npm
+          notion_token: ${{ secrets.NOTION_TOKEN }}
+          notion_sub_tech_team: ${{ vars.NOTION_SUB_TECH_TEAM || 'Back' }}
+
+      # pull_request_target runs don't trigger renovate-automerge through workflow_run (they belong
+      # to the base branch), and labels set with the GITHUB_TOKEN trigger nothing: start it here.
+      # It waits for CI on its own, and runs again when CI completes.
+      - name: Start the automerge
+        if: steps.triage.outputs.tier == 'automerge'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh workflow run renovate-automerge.yml -R "$GITHUB_REPOSITORY" --ref "$GITHUB_BASE_REF" -f pr_number="$PR_NUMBER"

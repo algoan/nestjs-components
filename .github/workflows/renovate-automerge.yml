@@ -1,0 +1,69 @@
+name: Renovate automerge
+
+# Merges, once every required check is green, Renovate PRs in the automerge tier that only bump
+# patch versions. The merge is done with the algoan-merger GitHub App, a bypass actor of the master
+# branch ruleset. A merge publishes nothing: the fixed packages reach npm at the next manual run of
+# "Test and Publish Workflow" (lerna version + publish from master).
+
+on:
+  workflow_run:
+    # Renovate triage starts it with workflow_dispatch once a PR is in the automerge tier.
+    workflows: ["Test and Publish Workflow"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Renovate PR to merge"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: read
+
+concurrency:
+  group: renovate-automerge-${{ github.event.workflow_run.head_branch || inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    name: Merge green Renovate security PR
+    # Public repository: a fork can name its branch renovate/*, so only runs of this repository count.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.event == 'pull_request'
+        && github.event.workflow_run.head_repository.full_name == github.repository
+        && startsWith(github.event.workflow_run.head_branch, 'renovate/'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout private actions
+        uses: actions/checkout@v7
+        with:
+          repository: algoan/private-actions
+          ref: 24d09ca03fa69115d50721d7a1ef123bc905f42b # v2.3.0
+          path: .github/private-actions
+          token: ${{ secrets.REPO_GHA_PAT }}
+          persist-credentials: false
+
+      - name: Merge
+        uses: ./.github/private-actions/renovate-automerge
+        with:
+          app_id: ${{ secrets.ALGOAN_MERGER_APP_ID }}
+          private_key: ${{ secrets.ALGOAN_MERGER_PRIVATE_KEY }}
+          pr_number: ${{ inputs.pr_number }}
+          # "Tests" sums up the Node.js matrix of test-and-publish.yaml (any other failed check blocks the
+          # merge too); Socket scans the dependencies the PR brings.
+          required_checks: "${{ vars.AUTOMERGE_REQUIRED_CHECKS || 'Tests,Socket Security: Pull Request Alerts' }}"
+          hotfix_enabled: "false"
+          cvss_hotfix_threshold: ${{ vars.CVSS_HOTFIX_THRESHOLD || '9.0' }}
+          cvss_automerge_threshold: ${{ vars.CVSS_AUTOMERGE_THRESHOLD || '4.0' }}
+          ecosystems: npm
