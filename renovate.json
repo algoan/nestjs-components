@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits"],
+  "timezone": "Europe/Paris",
+  "labels": ["dependencies"],
+  "enabledManagers": ["npm", "github-actions"],
+  "automerge": false,
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "description": "Security fixes are opened immediately, at the lowest fixing version, and routed by renovate-triage.yml (CVSS) between automerge and manual review. The packages are published libraries: a fixed dependency keeps its range (bump of the floor), never an exact pin that would force one version on every consumer.",
+    "labels": ["dependencies", "security"],
+    "schedule": ["at any time"],
+    "prCreation": "immediate",
+    "rangeStrategy": "bump",
+    "vulnerabilityFixStrategy": "lowest",
+    "minimumReleaseAge": null,
+    "automerge": false
+  },
+  "lockFileMaintenance": {
+    "description": "One root package-lock.json for every package (npm workspaces): a weekly re-lock keeps transitive dependencies fresh.",
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+  "packageRules": [
+    {
+      "description": "Batch routine updates once a week, instead of the daily Dependabot PRs.",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "schedule": ["before 6am on monday"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "schedule": ["before 6am on monday"]
+    }
+  ]
+}
