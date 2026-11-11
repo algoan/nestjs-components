@@ -52,6 +52,19 @@ jobs:
       - run: npm run test:cov:all
         name: Launch tests for each packages
 
+  # One stable check name for the whole matrix: the matrix job names change with the Node.js
+  # versions and contain a comma, so neither a ruleset nor renovate-automerge can list them.
+  tests:
+    name: Tests
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check every matrix job succeeded
+        env:
+          RESULT: ${{ needs.test.result }}
+        run: test "$RESULT" = success
+
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch' }}
