@@ -53,8 +53,8 @@ Not scored by the triage:
 flowchart TD
     PR[Renovate PR] --> T[renovate-triage.yml<br/>max CVSS of the advisories fixed in package-lock.json]
     T -->|no advisory| N[Regular PR<br/>human review]
-    T -->|CVSS < 4.0| M[label needs-review<br/>Notion ticket, human review]
-    T -->|CVSS ≥ 4.0| A[label automerge + Notion ticket<br/>+ critical and P1 from 9.0]
+    T -->|CVSS < 4.0| M[label needs-review<br/>human review]
+    T -->|CVSS ≥ 4.0| A[label automerge<br/>+ critical from 9.0]
     A --> AM{renovate-automerge.yml<br/>patch only?}
     AM -->|yes, checks green| MM[merged on master]
     AM -->|minor / major| R[human review]
@@ -65,12 +65,12 @@ flowchart TD
 
 - **`renovate-triage.yml`** (`pull_request_target`) scores the packages changed in
   `package-lock.json` with the GitHub Advisory Database. The highest CVSS decides the tier. For a
-  security PR it creates or updates a `Vulnerability` ticket in Notion, sets the `security` label
-  plus `automerge` or `needs-review` (and `critical` from 9.0), and comments the advisories with the
-  ticket (`[ALG-NNNN]`). The PR title stays Renovate's: Renovate rewrites it, and recognises a PR
-  closed on purpose by its exact title. The triage runs again when Renovate pushes to the PR or adds
-  the `security` label. It only runs for PRs opened by `renovate[bot]`, from the base commit:
-  nothing from the PR runs with the secrets, which matters on this public repository.
+  security PR it sets the `security` label plus `automerge` or `needs-review` (and `critical` from
+  9.0), and comments the advisories. The PR title stays Renovate's: Renovate rewrites it, and
+  recognises a PR closed on purpose by its exact title. The triage runs again when Renovate pushes
+  to the PR or adds the `security` label. It only runs for PRs opened by `renovate[bot]`, from the
+  base commit: nothing from the PR runs with the write `GITHUB_TOKEN`, which matters on this public
+  repository.
 - **`renovate-automerge.yml`** merges PRs labelled `automerge` with a merge commit, like the other
   PRs here, with the `GITHUB_TOKEN`: the branch ruleset requires no approval, so no bypass app is
   needed (a merge by the `GITHUB_TOKEN` starts no workflow on `master`). It recomputes
@@ -95,12 +95,11 @@ flowchart TD
 | `CVSS_AUTOMERGE_THRESHOLD`  | `4.0`                                        |                                     |
 | `CVSS_HOTFIX_THRESHOLD`     | `9.0`                                        | Unused while the hotfix flow is off |
 | `AUTOMERGE_REQUIRED_CHECKS` | `Tests,Socket Security: Pull Request Alerts` | Comma-separated check names         |
-| `NOTION_SUB_TECH_TEAM`      | `Back`                                       | Sub-tech-team of the Notion tickets |
 
-Org secret used: `NOTION_TOKEN` (the triage's Notion ticket). The actions are public: the workflows
-call them with `uses:`, pinned by commit SHA with the tag in a comment, which Renovate's
-`github-actions` manager keeps up to date. No token reads a private repository, and no key of a
-GitHub App installed on private repositories reaches this public one.
+No secret used. The actions are public: the workflows call them with `uses:`, pinned by commit SHA
+with the tag in a comment, which Renovate's `github-actions` manager keeps up to date. No token
+reads a private repository, and no key of a GitHub App installed on private repositories reaches
+this public one.
 
 Repository settings: Renovate app installed, Dependabot alerts on, merge commits allowed (the
 automerge merges like the other PRs). The ruleset must keep requiring no approval, or the

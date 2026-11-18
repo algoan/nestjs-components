@@ -110,7 +110,7 @@ jobs:
 
       - name: Merge
         if: steps.wait.outputs.ready == 'true'
-        uses: algoan/renovate-security-actions/renovate-automerge@269cb69036e87de16cec1dabbee7867107764905 # v1.0.0
+        uses: algoan/renovate-security-actions/renovate-automerge@cd8237c464811b26d5f344c7de2f01d77d42da9a # v1.1.0
         with:
           pr_number: ${{ inputs.pr_number }}
           # Must be present and green: "Tests", which sums up the Node.js matrix of
