@@ -1,9 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommits"],
+  "extends": ["config:recommended", ":semanticCommits", "security:minimumReleaseAgeNpm"],
+  "minimumReleaseAgePackageManagerSync": true,
   "timezone": "Europe/Paris",
   "labels": ["dependencies"],
-  "enabledManagers": ["npm", "github-actions"],
+  "enabledManagers": ["npm", "github-actions", "custom.regex"],
   "automerge": false,
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
@@ -21,6 +22,18 @@
     "enabled": true,
     "schedule": ["before 6am on monday"]
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "The algoan/private-actions checkout of the Renovate workflows: a public repository can't call the actions of a private one with `uses:`, so they are checked out at a commit, with its tag in a comment.",
+      "managerFilePatterns": ["/^\\.github/workflows/renovate-[^/]+\\.ya?ml$/"],
+      "matchStrings": [
+        "repository: algoan/private-actions\\s+ref: (?<currentDigest>[0-9a-f]{40}) # (?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "algoan/private-actions",
+      "datasourceTemplate": "github-tags"
+    }
+  ],
   "packageRules": [
     {
       "description": "Batch routine updates once a week, instead of the daily Dependabot PRs.",
@@ -32,6 +45,17 @@
     {
       "matchUpdateTypes": ["major"],
       "schedule": ["before 6am on monday"]
+    },
+    {
+      "description": "Our own @algoan packages skip the 3-day release-age wait of security:minimumReleaseAgeNpm.",
+      "matchPackageNames": ["@algoan/*"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "algoan/private-actions runs the Renovate triage and automerge: its updates come in their own PR, for a human review.",
+      "matchPackageNames": ["algoan/private-actions"],
+      "groupName": "algoan private-actions",
+      "groupSlug": "algoan-private-actions"
     }
   ]
 }

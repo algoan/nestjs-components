@@ -6,12 +6,14 @@ name: Renovate triage
 # See docs/RENOVATE.md.
 #
 # pull_request_target: the workflow always comes from the base branch, so a Renovate PR (or a push
-# to its branch) cannot change what runs with REPO_GHA_PAT and NOTION_TOKEN before review. The job
-# only runs for PRs opened by renovate[bot]: a PR from a fork never reaches the secrets.
+# to its branch) cannot change what runs with REPO_GHA_PAT, NOTION_TOKEN and a write GITHUB_TOKEN
+# before review. The job only runs for PRs opened by renovate[bot]: a PR from a fork never reaches
+# the secrets.
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, edited, labeled]
+    # No `edited`: Renovate rewrites its titles and descriptions, which changes nothing to score.
+    types: [opened, reopened, synchronize, labeled]
 
 permissions:
   actions: write
@@ -19,14 +21,17 @@ permissions:
   issues: write
   pull-requests: write
 
-concurrency:
-  group: renovate-triage-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   triage:
     name: Score vulnerabilities and route the PR
-    if: github.event.pull_request.user.login == 'renovate[bot]'
+    # Renovate adds its labels right after opening the PR: of those, only `security` needs a new run.
+    if: >-
+      github.event.pull_request.user.login == 'renovate[bot]'
+      && (github.event.action != 'labeled' || github.event.label.name == 'security')
+    # At the job level, so a run skipped by the condition above doesn't cancel a triage in progress.
+    concurrency:
+      group: renovate-triage-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -38,11 +43,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      # A public repository can't call the actions of the private algoan/private-actions with
+      # `uses:`: check them out with a token that can read it. Pinned by commit, with its tag in the
+      # comment for Renovate (customManagers of renovate.json).
       - name: Checkout private actions
         uses: actions/checkout@v7
         with:
           repository: algoan/private-actions
-          ref: 24d09ca03fa69115d50721d7a1ef123bc905f42b # v2.3.0
+          ref: e104079e17d81b3e0e5ac94b4984ac2906139da8 # v2.4.0
           path: .github/private-actions
           token: ${{ secrets.REPO_GHA_PAT }}
           persist-credentials: false
@@ -60,8 +68,9 @@ jobs:
           notion_sub_tech_team: ${{ vars.NOTION_SUB_TECH_TEAM || 'Back' }}
 
       # pull_request_target runs don't trigger renovate-automerge through workflow_run (they belong
-      # to the base branch), and labels set with the GITHUB_TOKEN trigger nothing: start it here.
-      # It waits for CI on its own, and runs again when CI completes.
+      # to the base branch), and labels set with the GITHUB_TOKEN trigger nothing: start it here. It
+      # waits up to 8 minutes for the checks of the PR, so it usually merges by itself; the run the
+      # test workflow starts when it completes is the fallback.
       - name: Start the automerge
         if: steps.triage.outputs.tier == 'automerge'
         env:
