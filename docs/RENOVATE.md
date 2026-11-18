@@ -104,6 +104,7 @@ GitHub App installed on private repositories reaches this public one.
 
 Repository settings: Renovate app installed, Dependabot alerts on, merge commits allowed (the
 automerge merges like the other PRs). The ruleset must keep requiring no approval, or the
-automerge can't merge with the `GITHUB_TOKEN`. It requires no approval and no status
-check: the automerge waits for its own list of checks. _Allow GitHub Actions to create and approve
+automerge can't merge with the `GITHUB_TOKEN`. It requires no status check either: the automerge
+waits for its own list of checks, and a maintainer merging a Renovate PR by hand checks first that
+`Tests` and Socket are green. _Allow GitHub Actions to create and approve
 pull requests_ isn't needed.
