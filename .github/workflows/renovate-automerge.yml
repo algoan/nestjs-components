@@ -1,8 +1,9 @@
 name: Renovate automerge
 
 # Merges, once every check is green, Renovate PRs in the automerge tier that only bump patch
-# versions. The merge is done with the algoan-merger GitHub App, a bypass actor of the branch
-# ruleset, with a merge commit like the other PRs of this repository. A merge publishes nothing: the
+# versions. The merge is done with the GITHUB_TOKEN, as the branch ruleset requires no approval
+# (no GitHub App key in a public repository), with a merge commit like the other PRs of this
+# repository. A merge by the GITHUB_TOKEN starts no workflow on master. A merge publishes nothing: the
 # fixed packages reach npm at the next manual run of "Test and Publish Workflow" (lerna version +
 # publish from master).
 
@@ -26,8 +27,9 @@ on:
 permissions:
   # Starts a new run of itself when checks outlast the wait.
   actions: write
-  contents: read
-  pull-requests: read
+  # Merges the PR (renovate-automerge without app_id).
+  contents: write
+  pull-requests: write
   checks: read
 
 # Keyed by PR, so the run the triage starts and the one the test workflow starts take turns instead
@@ -95,25 +97,10 @@ jobs:
             echo "::warning::Checks still running after 8 minutes, no new run started: run this workflow with the PR number once they end"
           fi
 
-      # A public repository can't call the actions of the private algoan/private-actions with
-      # `uses:`: check them out with a token that can read it. Pinned by commit, with its tag in the
-      # comment for Renovate (customManagers of renovate.json).
-      - name: Checkout private actions
-        if: steps.wait.outputs.ready == 'true'
-        uses: actions/checkout@v7
-        with:
-          repository: algoan/private-actions
-          ref: e104079e17d81b3e0e5ac94b4984ac2906139da8 # v2.4.0
-          path: .github/private-actions
-          token: ${{ secrets.REPO_GHA_PAT }}
-          persist-credentials: false
-
       - name: Merge
         if: steps.wait.outputs.ready == 'true'
-        uses: ./.github/private-actions/renovate-automerge
+        uses: algoan/renovate-security-actions/renovate-automerge@269cb69036e87de16cec1dabbee7867107764905 # v1.0.0
         with:
-          app_id: ${{ secrets.ALGOAN_MERGER_APP_ID }}
-          private_key: ${{ secrets.ALGOAN_MERGER_PRIVATE_KEY }}
           pr_number: ${{ inputs.pr_number }}
           # Must be present and green: "Tests", which sums up the Node.js matrix of
           # test-and-publish.yaml, and Socket, which scans the dependencies the PR brings. Any other

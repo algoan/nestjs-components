@@ -1,12 +1,12 @@
 name: Renovate triage
 
-# Scores the vulnerabilities a Renovate PR fixes and routes it, with algoan/private-actions
+# Scores the vulnerabilities a Renovate PR fixes and routes it, with algoan/renovate-security-actions
 # (renovate-security). The hotfix flow is off: nothing is deployed from this repository, the
 # packages are published to npm by a manual run of "Test and Publish Workflow" (lerna) on master.
 # See docs/RENOVATE.md.
 #
 # pull_request_target: the workflow always comes from the base branch, so a Renovate PR (or a push
-# to its branch) cannot change what runs with REPO_GHA_PAT, NOTION_TOKEN and a write GITHUB_TOKEN
+# to its branch) cannot change what runs with NOTION_TOKEN and a write GITHUB_TOKEN
 # before review. The job only runs for PRs opened by renovate[bot]: a PR from a fork never reaches
 # the secrets.
 
@@ -43,21 +43,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      # A public repository can't call the actions of the private algoan/private-actions with
-      # `uses:`: check them out with a token that can read it. Pinned by commit, with its tag in the
-      # comment for Renovate (customManagers of renovate.json).
-      - name: Checkout private actions
-        uses: actions/checkout@v7
-        with:
-          repository: algoan/private-actions
-          ref: e104079e17d81b3e0e5ac94b4984ac2906139da8 # v2.4.0
-          path: .github/private-actions
-          token: ${{ secrets.REPO_GHA_PAT }}
-          persist-credentials: false
-
       - name: Triage
         id: triage
-        uses: ./.github/private-actions/renovate-triage
+        uses: algoan/renovate-security-actions/renovate-triage@269cb69036e87de16cec1dabbee7867107764905 # v1.0.0
         with:
           hotfix_enabled: "false"
           cvss_hotfix_threshold: ${{ vars.CVSS_HOTFIX_THRESHOLD || '9.0' }}

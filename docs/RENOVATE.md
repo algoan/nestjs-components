@@ -3,9 +3,9 @@
 Dependencies are kept up to date by the hosted [Mend Renovate](https://developer.mend.io/github/algoan/nestjs-components)
 app, configured in [`renovate.json`](../renovate.json). It replaces the Dependabot version updates;
 Dependabot alerts stay on. Security fixes are routed by the CVSS of the vulnerabilities they fix,
-with the shared actions of [`algoan/private-actions`](https://github.com/algoan/private-actions/tree/beta/renovate-security)
-(`renovate-security`), the same flow as `algoan/backend`. The **hotfix flow is off**: nothing is
-deployed from this repository.
+with the shared actions of [`algoan/renovate-security-actions`](https://github.com/algoan/renovate-security-actions),
+the public counterpart of the flow `algoan/backend` runs from `algoan/private-actions`.
+The **hotfix flow is off**: nothing is deployed from this repository.
 
 ## What happens after a merge
 
@@ -25,7 +25,6 @@ moves `package-lock.json` changes nothing for consumers, who resolve their own l
 | ---------------- | ----------------------------------------------------------------------- |
 | `npm`            | the root `package.json`, `packages/*/package.json`, `package-lock.json` |
 | `github-actions` | `.github/workflows/*.yml`                                               |
-| regex            | the `algoan/private-actions` checkout of the `renovate-*.yml` workflows |
 
 Routine updates are grouped into one weekly PR (Monday before 6am, Europe/Paris); majors come on
 the same schedule, one PR each. A new npm version is only proposed once it is 3 days old
@@ -34,8 +33,8 @@ wait, so the weekly lockfile maintenance skips younger transitive versions too. 
 packages (`@algoan/pubsub`, `@algoan/eslint-config`) don't wait. Lockfile maintenance runs weekly
 too.
 
-`algoan/private-actions` updates come in their own weekly PR (`algoan private-actions`), for a human
-review: it runs the triage and the automerge.
+`algoan/renovate-security-actions` updates come in their own weekly PR
+(`algoan renovate-security-actions`), for a human review: it runs the triage and the automerge.
 
 Security PRs are opened immediately at the **lowest fixing version**
 (`vulnerabilityFixStrategy: lowest`), without the release-age wait. They keep the range of the
@@ -73,7 +72,8 @@ flowchart TD
   the `security` label. It only runs for PRs opened by `renovate[bot]`, from the base commit:
   nothing from the PR runs with the secrets, which matters on this public repository.
 - **`renovate-automerge.yml`** merges PRs labelled `automerge` with a merge commit, like the other
-  PRs here, as the `algoan-merger` GitHub App (bypass actor of the branch ruleset). It recomputes
+  PRs here, with the `GITHUB_TOKEN`: the branch ruleset requires no approval, so no bypass app is
+  needed (a merge by the `GITHUB_TOKEN` starts no workflow on `master`). It recomputes
   the tier for the head commit, requires every commit to be authored by Renovate and signed by
   GitHub, and only accepts changes to dependency files. Only **patch** bumps merge automatically;
   minor/major wait for a human. Every check of the head commit must be green, and these must be
@@ -97,13 +97,13 @@ flowchart TD
 | `AUTOMERGE_REQUIRED_CHECKS` | `Tests,Socket Security: Pull Request Alerts` | Comma-separated check names         |
 | `NOTION_SUB_TECH_TEAM`      | `Back`                                       | Sub-tech-team of the Notion tickets |
 
-Org secrets used: `REPO_GHA_PAT`, `ALGOAN_MERGER_APP_ID`, `ALGOAN_MERGER_PRIVATE_KEY`,
-`NOTION_TOKEN`. A public repository can't call the actions of the private `algoan/private-actions`
-with `uses:`, so the workflows check them out with `REPO_GHA_PAT`, at a commit pinned with its tag
-in a comment, which a regex manager of `renovate.json` keeps up to date.
+Org secret used: `NOTION_TOKEN` (the triage's Notion ticket). The actions are public: the workflows
+call them with `uses:`, pinned by commit SHA with the tag in a comment, which Renovate's
+`github-actions` manager keeps up to date. No token reads a private repository, and no key of a
+GitHub App installed on private repositories reaches this public one.
 
-Repository settings: Renovate and `algoan-merger` apps installed, Dependabot alerts on, merge
-commits allowed (the automerge merges like the other PRs), and `algoan-merger` as bypass actor of
-the branch ruleset in _pull requests only_ mode. The ruleset requires no approval and no status
+Repository settings: Renovate app installed, Dependabot alerts on, merge commits allowed (the
+automerge merges like the other PRs). The ruleset must keep requiring no approval, or the
+automerge can't merge with the `GITHUB_TOKEN`. It requires no approval and no status
 check: the automerge waits for its own list of checks. _Allow GitHub Actions to create and approve
 pull requests_ isn't needed.

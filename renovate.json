@@ -22,18 +22,6 @@
     "enabled": true,
     "schedule": ["before 6am on monday"]
   },
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "The algoan/private-actions checkout of the Renovate workflows: a public repository can't call the actions of a private one with `uses:`, so they are checked out at a commit, with its tag in a comment.",
-      "managerFilePatterns": ["/^\\.github/workflows/renovate-[^/]+\\.ya?ml$/"],
-      "matchStrings": [
-        "repository: algoan/private-actions\\s+ref: (?<currentDigest>[0-9a-f]{40}) # (?<currentValue>v\\d+\\.\\d+\\.\\d+)"
-      ],
-      "depNameTemplate": "algoan/private-actions",
-      "datasourceTemplate": "github-tags"
-    }
-  ],
   "packageRules": [
     {
       "description": "Batch routine updates once a week, instead of the daily Dependabot PRs.",
@@ -52,10 +40,10 @@
       "minimumReleaseAge": null
     },
     {
-      "description": "algoan/private-actions runs the Renovate triage and automerge: its updates come in their own PR, for a human review.",
-      "matchPackageNames": ["algoan/private-actions"],
-      "groupName": "algoan private-actions",
-      "groupSlug": "algoan-private-actions"
+      "description": "algoan/renovate-security-actions runs the Renovate triage and automerge: its updates come in their own PR, for a human review.",
+      "matchPackageNames": ["algoan/renovate-security-actions"],
+      "groupName": "algoan renovate-security-actions",
+      "groupSlug": "algoan-renovate-security-actions"
     }
   ]
 }
