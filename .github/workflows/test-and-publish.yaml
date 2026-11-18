@@ -78,13 +78,20 @@ jobs:
     - run: npm run build
     - run: git config --global user.email "bot@algoan.com" && git config --global user.name "Algoan Bot"
     # lerna version pushes the release commit and tags to master: the bot bypasses the master branch ruleset, github-actions does not
+    # Short-lived token of the public repos bot GitHub App, minted after npm ci so no dependency script runs while it exists
+    - uses: actions/create-github-app-token@v3
+      id: app-token
+      with:
+        client-id: ${{ vars.PUBLIC_REPOS_BOT_CLIENT_ID }}
+        private-key: ${{ secrets.PUBLIC_REPOS_BOT_PRIVATE_KEY }}
+        permission-contents: write
     - name: Set the bot credentials for the release push
       run: |
         basic=$(printf 'x-access-token:%s' "$BOT_TOKEN" | base64 -w0)
         echo "::add-mask::$basic"
         git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basic"
       env:
-        BOT_TOKEN: ${{ secrets.PUBLIC_REPO_GHA_PAT }}
+        BOT_TOKEN: ${{ steps.app-token.outputs.token }}
     - run: npx lerna version --conventional-commits --changelog-preset conventionalcommits --create-release github --include-merged-tags --yes
       name: Run Lerna version
       env:
