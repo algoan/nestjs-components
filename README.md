@@ -80,3 +80,7 @@ npm install
 ```
 
 That's it!
+
+## Dependency updates
+
+Dependencies are updated by Renovate, and its security fixes are routed by CVSS: see [docs/RENOVATE.md](docs/RENOVATE.md).

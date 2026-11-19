@@ -1,0 +1,64 @@
+name: Renovate triage
+
+# Scores the vulnerabilities a Renovate PR fixes and routes it, with algoan/renovate-security-actions
+# (renovate-security). The hotfix flow is off: nothing is deployed from this repository, the
+# packages are published to npm by a manual run of "Test and Publish Workflow" (lerna) on master.
+# See docs/RENOVATE.md.
+#
+# pull_request_target: the workflow always comes from the base branch, so a Renovate PR (or a push
+# to its branch) cannot change what runs with a write GITHUB_TOKEN before review. The job only runs
+# for PRs opened by renovate[bot]: a PR from a fork never gets that token.
+
+on:
+  pull_request_target:
+    # No `edited`: Renovate rewrites its titles and descriptions, which changes nothing to score.
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  triage:
+    name: Score vulnerabilities and route the PR
+    # Renovate adds its labels right after opening the PR: of those, only `security` needs a new run.
+    if: >-
+      github.event.pull_request.user.login == 'renovate[bot]'
+      && (github.event.action != 'labeled' || github.event.label.name == 'security')
+    # At the job level, so a run skipped by the condition above doesn't cancel a triage in progress.
+    concurrency:
+      group: renovate-triage-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # The PR head is only read as git objects: nothing from it runs here.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Triage
+        id: triage
+        uses: algoan/renovate-security-actions/renovate-triage@cd8237c464811b26d5f344c7de2f01d77d42da9a # v1.1.0
+        with:
+          hotfix_enabled: "false"
+          cvss_hotfix_threshold: ${{ vars.CVSS_HOTFIX_THRESHOLD || '9.0' }}
+          cvss_automerge_threshold: ${{ vars.CVSS_AUTOMERGE_THRESHOLD || '4.0' }}
+          # npm: the single root package-lock.json of the npm workspaces (packages/*).
+          ecosystems: npm
+
+      # pull_request_target runs don't trigger renovate-automerge through workflow_run (they belong
+      # to the base branch), and labels set with the GITHUB_TOKEN trigger nothing: start it here. It
+      # waits up to 8 minutes for the checks of the PR, so it usually merges by itself; the run the
+      # test workflow starts when it completes is the fallback.
+      - name: Start the automerge
+        if: steps.triage.outputs.tier == 'automerge'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh workflow run renovate-automerge.yml -R "$GITHUB_REPOSITORY" --ref "$GITHUB_BASE_REF" -f pr_number="$PR_NUMBER"

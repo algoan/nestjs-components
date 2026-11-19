@@ -1,0 +1,125 @@
+name: Renovate automerge
+
+# Merges, once every check is green, Renovate PRs in the automerge tier that only bump patch
+# versions. The merge is done with the GITHUB_TOKEN, as the branch ruleset requires no approval
+# (no GitHub App key in a public repository), with a merge commit like the other PRs of this
+# repository. A merge by the GITHUB_TOKEN starts no workflow on master. A merge publishes nothing: the
+# fixed packages reach npm at the next manual run of "Test and Publish Workflow" (lerna version +
+# publish from master).
+
+on:
+  workflow_run:
+    # Renovate triage also starts it with workflow_dispatch once a PR is in the automerge tier.
+    workflows: ["Test and Publish Workflow"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Renovate PR to merge"
+        required: true
+        type: string
+      attempt:
+        description: "New runs already started because checks were still running"
+        required: false
+        type: number
+        default: 0
+
+permissions:
+  # Starts a new run of itself when checks outlast the wait.
+  actions: write
+  # Merges the PR (renovate-automerge without app_id).
+  contents: write
+  pull-requests: write
+  checks: read
+
+# Keyed by PR, so the run the triage starts and the one the test workflow starts take turns instead
+# of both trying to merge.
+concurrency:
+  group: renovate-automerge-${{ inputs.pr_number || github.event.workflow_run.pull_requests[0].number || github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    name: Merge green Renovate security PR
+    # Public repository: a fork can name its branch renovate/*, so only runs of this repository count.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.event == 'pull_request'
+        && github.event.workflow_run.head_repository.full_name == github.repository
+        && startsWith(github.event.workflow_run.head_branch, 'renovate/'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # The merge needs every check done, but the end of Socket or CodeRabbit starts no new run when
+      # it comes after the test workflow: wait for them here, 8 minutes at most, then start a new run
+      # of this workflow (three times at most) rather than give up.
+      - name: Wait for the running checks
+        id: wait
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.workflow_run.pull_requests[0].number }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          ATTEMPT: ${{ inputs.attempt || 0 }}
+          REQUIRED_CHECKS: "${{ vars.AUTOMERGE_REQUIRED_CHECKS || 'Tests,Socket Security: Pull Request Alerts' }}"
+        run: |
+          # The head commit of the CI run, else the one of the PR given to workflow_dispatch.
+          sha="$HEAD_SHA"
+          if [[ -z "$sha" ]]; then
+            if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+              echo "::error::pr_number must be a number"
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sha=$(gh pr view "$PR_NUMBER" -R "$GITHUB_REPOSITORY" --json headRefOid --jq .headRefOid)
+          fi
+          # A required check may not exist yet (Socket can create its run after the tests end): wait
+          # for it too, or the merge would skip the PR and nothing would start a new run.
+          IFS=',' read -ra required <<<"$REQUIRED_CHECKS"
+          for check in $(seq 1 16); do
+            runs=$(gh api "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
+              --jq '.check_runs[] | [.name, .status] | @tsv')
+            running=$(awk -F'\t' '$2 != "completed"' <<<"$runs" | wc -l | xargs)
+            missing=0
+            for name in "${required[@]}"; do
+              name="$(xargs <<<"$name")"
+              [[ -z "$name" ]] && continue
+              awk -F'\t' -v n="$name" '$1 == n { found = 1 } END { exit !found }' <<<"$runs" || missing=$((missing + 1))
+            done
+            if [[ "$running" == "0" && "$missing" == "0" ]]; then
+              echo "ready=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "$running check(s) still running, $missing required check(s) not started ($check/16)"
+            sleep 30
+          done
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+          if [[ "$PR_NUMBER" =~ ^[0-9]+$ ]] && (( ATTEMPT < 3 )); then
+            gh workflow run renovate-automerge.yml -R "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
+              -f pr_number="$PR_NUMBER" -f attempt="$((ATTEMPT + 1))"
+            echo "Checks still running or missing after 8 minutes: started a new run ($((ATTEMPT + 1))/3)"
+          else
+            echo "::warning::Checks still running or missing after 8 minutes, no new run started: run this workflow with the PR number once they end"
+          fi
+
+      - name: Merge
+        if: steps.wait.outputs.ready == 'true'
+        uses: algoan/renovate-security-actions/renovate-automerge@cd8237c464811b26d5f344c7de2f01d77d42da9a # v1.1.0
+        with:
+          pr_number: ${{ inputs.pr_number }}
+          # Must be present and green: "Tests", which sums up the Node.js matrix of
+          # test-and-publish.yaml, and Socket, which scans the dependencies the PR brings. Any other
+          # red check blocks the merge too.
+          required_checks: "${{ vars.AUTOMERGE_REQUIRED_CHECKS || 'Tests,Socket Security: Pull Request Alerts' }}"
+          # A merge commit, like the other PRs here: lerna version reads the conventional commits of master.
+          merge_method: merge
+          hotfix_enabled: "false"
+          cvss_hotfix_threshold: ${{ vars.CVSS_HOTFIX_THRESHOLD || '9.0' }}
+          cvss_automerge_threshold: ${{ vars.CVSS_AUTOMERGE_THRESHOLD || '4.0' }}
+          ecosystems: npm
